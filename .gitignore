@@ -1,0 +1,6 @@
+data/
+node_modules/
+bot/sii/downloads/*
+
+.env
+.DS_Store
