@@ -1,0 +1,469 @@
+---
+import Layout from "../../layouts/LayoutMenu.astro";
+import { menuData } from "./menu.js";
+import DataTable from "./components/DataTable.astro";
+import SkeletonCard from "./components/SkeletonCard.astro";
+import CompanyFormComponent from "./company/CompanyFormComponent.astro";
+
+// Datos de ejemplo para empresas
+const empresasData = {
+  stats: {
+    total_empresas: 3,
+    activas: 2,
+    suspendidas: 1,
+    total_usuarios: 24,
+  },
+  empresas: [
+    {
+      id: 1,
+      rut: "76.123.456-9",
+      razon_social: "Tecnología y Servicios SpA",
+      nombre_fantasia: "TechServe",
+      giro_comercial: "Consultoría Tecnológica",
+      direccion: "Av. Providencia 1234",
+      ciudad: "Santiago",
+      region: "Región Metropolitana",
+      email: "contacto@techserve.cl",
+      telefono: "+56223456789",
+      estado: "activa",
+      usuarios_count: 12,
+      fecha_creacion: "2024-01-15T10:30:00Z",
+    },
+    {
+      id: 2,
+      rut: "11.222.333-4",
+      razon_social: "Comercial del Sur Ltda.",
+      nombre_fantasia: "SurComercial",
+      giro_comercial: "Comercio Minorista",
+      direccion: "Calle Sur 567",
+      ciudad: "Concepción",
+      region: "Bío Bío",
+      email: "info@surcomercial.cl",
+      telefono: "+56412345678",
+      estado: "activa",
+      usuarios_count: 8,
+      fecha_creacion: "2024-01-10T09:15:00Z",
+    },
+    {
+      id: 3,
+      rut: "88.999.000-7",
+      razon_social: "Servicios Financieros SA",
+      nombre_fantasia: "FinServ",
+      giro_comercial: "Servicios Financieros",
+      direccion: "Las Condes 890",
+      ciudad: "Santiago",
+      region: "Región Metropolitana",
+      email: "servicios@finserv.cl",
+      telefono: "+56234567890",
+      estado: "suspendida",
+      usuarios_count: 4,
+      fecha_creacion: "2024-01-05T11:00:00Z",
+    },
+  ],
+};
+
+const tableColumns: any[] = [
+  {
+    key: "razon_social",
+    label: "Empresa",
+    sortable: true,
+    visible: true,
+    width: "250px",
+  },
+  {
+    key: "rut",
+    label: "RUT",
+    sortable: true,
+    visible: true,
+    width: "120px",
+  },
+  {
+    key: "giro_comercial",
+    label: "Giro",
+    sortable: true,
+    visible: true,
+    width: "180px",
+  },
+  {
+    key: "region",
+    label: "Región",
+    sortable: true,
+    visible: true,
+    width: "150px",
+  },
+  {
+    key: "estado",
+    label: "Estado",
+    sortable: true,
+    visible: true,
+    width: "100px",
+    type: "badge",
+    badgeColors: (value: any) => {
+      switch (value) {
+        case "activa":
+          return "bg-core-light text-core-dark border border-core-primary dark:bg-core-dark dark:text-core-light dark:border-core-primary";
+        case "suspendida":
+          return "bg-core-light text-core-gray border border-core-gray dark:bg-core-dark dark:text-core-gray dark:border-core-gray";
+        case "inactiva":
+          return "bg-core-dark text-core-light dark:bg-core-light dark:text-core-dark";
+        default:
+          return "bg-core-light text-core-dark dark:bg-core-dark dark:text-core-light";
+      }
+    },
+  },
+  {
+    key: "usuarios_count",
+    label: "Usuarios",
+    sortable: true,
+    visible: true,
+    width: "100px",
+    type: "number",
+  },
+];
+
+const actionButtons = [
+  {
+    label: "Editar",
+    icon: "M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z",
+    action: (item: any) =>
+      `window.handleAction('Editar', ${JSON.stringify(item).replace(/"/g, "&quot;")})`,
+  },
+  {
+    label: "Eliminar",
+    icon: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16",
+    class:
+      "text-core-dark hover:text-core-primary hover:opacity-80 dark:text-core-gray dark:hover:text-core-primary",
+    action: (item: any) =>
+      `window.handleAction('Eliminar', ${JSON.stringify(item).replace(/"/g, "&quot;")})`,
+  },
+];
+---
+
+<Layout menuData={menuData}>
+  <div
+    id="content"
+    class="md:ps-0 lg:ps-40 mainmenu-open:pt-10 2xl:hs-overlay-layout-open:pe-2 xl:ps-80 transition-all duration-300"
+  >
+    <div class="max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto">
+      <div class="py-2 sm:pb-0 sm:pt-5 space-y-8">
+        <!-- Header -->
+        <div class="flex flex-wrap justify-between items-center gap-2">
+          <div>
+            <h1
+              class="text-lg md:text-xl font-semibold text-core-dark dark:text-core-light"
+            >
+              Gestión de Clientes y Proveedores
+            </h1>
+            <p class="text-sm text-core-gray dark:text-core-gray">
+              Administra las organizaciones registradas y sus perfiles
+              comerciales
+            </p>
+          </div>
+          <div class="flex gap-2">
+            <button
+              type="button"
+              onclick="openModal('empresaModal')"
+              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-core-primary text-core-dark hover:opacity-80 focus:outline-hidden focus:opacity-80 disabled:opacity-50 disabled:pointer-events-none"
+            >
+              <svg
+                class="size-4"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M12 5v14M5 12l7 7 7-7"></path>
+              </svg>
+              Nuevo Cliente o Proveedor
+            </button>
+          </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div
+            class="p-4 bg-core-light border border-core-gray/30 rounded-xl shadow-2xs dark:bg-core-dark dark:border-core-gray/20"
+          >
+            <div class="flex items-center gap-3">
+              <div
+                class="shrink-0 w-12 h-12 bg-core-light rounded-lg flex items-center justify-center dark:bg-neutral-800"
+              >
+                <svg
+                  class="w-6 h-6 text-core-primary"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  ><path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                  ></path></svg
+                >
+              </div>
+              <div>
+                <p
+                  class="text-xs font-medium text-core-dark/60 dark:text-core-gray"
+                >
+                  Total Empresas
+                </p>
+                <p
+                  class="text-xl font-bold text-core-dark dark:text-core-light"
+                >
+                  {empresasData.stats.total_empresas}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="p-4 bg-core-light border border-core-gray/30 rounded-xl shadow-2xs dark:bg-core-dark dark:border-core-gray/20"
+          >
+            <div class="flex items-center gap-3">
+              <div
+                class="shrink-0 w-12 h-12 bg-core-light rounded-lg flex items-center justify-center dark:bg-neutral-800"
+              >
+                <svg
+                  class="w-6 h-6 text-core-primary"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  ><path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path></svg
+                >
+              </div>
+              <div>
+                <p
+                  class="text-xs font-medium text-core-dark/60 dark:text-core-gray"
+                >
+                  Activas
+                </p>
+                <p
+                  class="text-xl font-bold text-core-dark dark:text-core-light"
+                >
+                  {empresasData.stats.activas}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="p-4 bg-core-light border border-core-gray/30 rounded-xl shadow-2xs dark:bg-core-dark dark:border-core-gray/20"
+          >
+            <div class="flex items-center gap-3">
+              <div
+                class="shrink-0 w-12 h-12 bg-core-light rounded-lg flex items-center justify-center dark:bg-neutral-800"
+              >
+                <svg
+                  class="w-6 h-6 text-core-primary"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  ><path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path></svg
+                >
+              </div>
+              <div>
+                <p
+                  class="text-xs font-medium text-core-dark/60 dark:text-core-gray"
+                >
+                  Suspendidas
+                </p>
+                <p
+                  class="text-xl font-bold text-core-dark dark:text-core-light"
+                >
+                  {empresasData.stats.suspendidas}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="p-4 bg-core-light border border-core-gray/30 rounded-xl shadow-2xs dark:bg-core-dark dark:border-core-gray/20"
+          >
+            <div class="flex items-center gap-3">
+              <div
+                class="shrink-0 w-12 h-12 bg-core-light rounded-lg flex items-center justify-center dark:bg-neutral-800"
+              >
+                <svg
+                  class="w-6 h-6 text-core-primary"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  ><path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                  ></path></svg
+                >
+              </div>
+              <div>
+                <p
+                  class="text-xs font-medium text-core-dark/60 dark:text-core-gray"
+                >
+                  Usuarios Totales
+                </p>
+                <p
+                  class="text-xl font-bold text-core-dark dark:text-core-light"
+                >
+                  {empresasData.stats.total_usuarios}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <DataTable
+          data={empresasData.empresas}
+          columns={tableColumns}
+          title="Listado de Empresas"
+          searchPlaceholder="Buscar por nombre, RUT o región..."
+          actionButtons={actionButtons}
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Empresa -->
+  <div
+    id="empresaModal"
+    class="hs-overlay hidden w-full h-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto bg-black/50"
+  >
+    <div
+      class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-5xl sm:w-full m-3 sm:mx-auto"
+    >
+      <div
+        class="bg-core-light border border-core-gray/30 rounded-xl shadow-2xs dark:bg-core-dark dark:border-core-gray/20"
+      >
+        <div
+          class="py-3 px-5 border-b border-core-gray/30 dark:border-core-gray/20"
+        >
+          <h3 class="font-semibold text-core-dark dark:text-core-light">
+            Registrar Nueva Empresa
+          </h3>
+        </div>
+        <div class="p-5">
+          <CompanyFormComponent />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import {
+      FormValidator,
+      validationRules,
+    } from "./components/ValidationUtils.js";
+
+    let validator: any;
+    document.addEventListener("DOMContentLoaded", () => {
+      validator = new FormValidator(validationRules.empresa);
+    });
+
+    const w = window as any;
+
+    w.openModal = function (modalId: string) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.remove("hidden");
+        // modal.classList.add("flex"); // Removed to respect original layout
+
+        // Handle content visibility explicitly
+        const content = modal.querySelector("div");
+        if (content) {
+          // Force reflow
+          void content.offsetWidth;
+          requestAnimationFrame(() => {
+            content.classList.remove("opacity-0", "mt-0");
+            content.classList.add("opacity-100", "mt-7");
+          });
+        }
+
+        document.body.style.overflow = "hidden";
+        const form = document.getElementById("empresaForm") as HTMLFormElement;
+        if (form) form.reset();
+      }
+    };
+
+    w.closeModal = function (modalId: string) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        const content = modal.querySelector("div");
+        if (content) {
+          content.classList.remove("opacity-100", "mt-7");
+          content.classList.add("opacity-0", "mt-0");
+        }
+
+        // Wait for transition
+        setTimeout(() => {
+          modal.classList.add("hidden");
+          // modal.classList.remove("flex"); // Removed
+          document.body.style.overflow = "auto";
+        }, 300);
+      }
+    };
+
+    w.saveEmpresa = function () {
+      const form = document.getElementById("empresaForm") as HTMLFormElement;
+      if (!form) return;
+
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      if (validator) {
+        validator.clearErrors(form);
+        const v = validator.validate(data);
+        if (!v.isValid) {
+          validator.showErrors(form);
+          return;
+        }
+      }
+
+      console.log("Saving empresa:", data);
+      w.closeModal("empresaModal");
+      w.showToast("Empresa registrada exitosamente", "success");
+      setTimeout(() => location.reload(), 1000);
+    };
+
+    w.showToast = function (message: string, type = "success") {
+      const toast = document.createElement("div");
+      // Updated colors: success -> core-primary/dark, error -> core-dark/light
+      const colorClasses =
+        type === "success"
+          ? "bg-core-primary text-core-dark"
+          : "bg-core-dark text-core-light";
+
+      toast.className = `fixed top-4 right-4 z-50 ${colorClasses} px-6 py-3 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.classList.remove("translate-x-full"), 100);
+      setTimeout(() => {
+        toast.classList.add("translate-x-full");
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    };
+
+    w.handleAction = function (action: string, item: any) {
+      if (action === "Eliminar") {
+        if (confirm(`¿Eliminar la empresa ${item.razon_social}?`)) {
+          w.showToast("Empresa eliminada", "success");
+          setTimeout(() => location.reload(), 1000);
+        }
+      } else if (action === "Editar") {
+        w.openModal("empresaModal");
+        // Pre-fill form...
+      }
+    };
+  </script>
+</Layout>

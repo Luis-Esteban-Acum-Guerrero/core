@@ -1,0 +1,83 @@
+---
+import Ticket from "./ticket.astro";
+import Layout from "../../layouts/LayoutMenu.astro";
+
+const menuData = {
+  menuHead: {
+    title: "JELP! ",
+    createButton: { label: "Nuevo", action: () => {} },
+  },
+  menuSearch: { placeholder: "Buscar..." },
+  menuItems: [
+    {
+      key: "All",
+      label: "Todo",
+      icon: "Inbox",
+      action: () => {},
+      notification: 12,
+      visible: true,
+    },
+    {
+      key: "Mi Actividad",
+      label: "Mi actividad",
+      icon: "Activity",
+      action: () => {},
+      notification: null,
+      visible: true,
+    },
+    {
+      key: "Menciones",
+      label: "menciones",
+      icon: "AtSign",
+      action: () => {},
+      notification: null,
+      visible: true,
+    },
+    {
+      key: "Porti",
+      label: "Creados por ti",
+      icon: "UserPlus",
+      action: () => {},
+      notification: 12,
+      visible: true,
+    },
+    {
+      key: "Asignados",
+      label: "Asignados a ti",
+      icon: "CheckCircle",
+      action: () => {},
+      notification: 12,
+      visible: true,
+    },
+    {
+      key: "SinAsignar",
+      label: "Sin Asignar",
+      icon: "HelpCircle",
+      action: () => {},
+      notification: null,
+      visible: true,
+    },
+    {
+      key: "Trash",
+      label: "Trash",
+      icon: "Trash2",
+      action: () => {},
+      notification: null,
+      visible: false,
+    },
+    {
+      key: "Spam",
+      label: "Spam",
+      icon: "AlertOctagon",
+      action: () => {},
+      notification: null,
+      visible: false,
+    },
+  ],
+  menuGroups: [],
+};
+---
+
+<Layout menuData={menuData}>
+  <Ticket />
+</Layout>

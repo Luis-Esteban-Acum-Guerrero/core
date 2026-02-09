@@ -1,0 +1,461 @@
+---
+import Layout from "../../layouts/LayoutMenu.astro";
+import { menuData } from "./menu.js";
+import DataTable from "./components/DataTable.astro";
+import SkeletonCard from "./components/SkeletonCard.astro";
+
+// Datos de ejemplo para planes y contratos
+const planesData = {
+  "stats": {
+    "total_contratos": 25,
+    "activos": 22,
+    "suspendidos": 2,
+    "prox_vencer": 3,
+    "ingreso_mensual_estimado": 2500000,
+    "valor_promedio_contrato": 100000
+  },
+  "contratos": [
+    {
+      "id": 1,
+      "plan_id": 1,
+      "empresa_id": 1,
+      "cliente_rut": "12.345.678-9",
+      "cliente_nombre": "Juan Pérez González",
+      "cliente_email": "juan.perez@email.com",
+      "fecha_inicio": "2024-02-01",
+      "monto_mensual": 50000,
+      "moneda": "CLP",
+      "forma_pago": "transferencia",
+      "dia_pago": 5,
+      "estado": "activo"
+    },
+    {
+      "id": 2,
+      "plan_id": 2,
+      "empresa_id": 1,
+      "cliente_rut": "98.765.432-1",
+      "cliente_nombre": "María López Soto",
+      "cliente_email": "maria.lopez@empresa.cl",
+      "fecha_inicio": "2024-02-01",
+      "monto_mensual": 150000,
+      "moneda": "CLP",
+      "forma_pago": "debito_automatico",
+      "dia_pago": 5,
+      "estado": "activo"
+    },
+    {
+      "id": 3,
+      "plan_id": 3,
+      "empresa_id": 2,
+      "cliente_rut": "55.666.777-2",
+      "cliente_nombre": "Carlos Silva Muñoz",
+      "cliente_email": "carlos.silva@retail.cl",
+      "fecha_inicio": "2024-02-01",
+      "monto_mensual": 35000,
+      "moneda": "CLP",
+      "forma_pago": "transferencia",
+      "dia_pago": 10,
+      "estado": "activo"
+    },
+    {
+      "id": 4,
+      "plan_id": 1,
+      "empresa_id": 1,
+      "cliente_rut": "77.888.999-0",
+      "cliente_nombre": "Empresa Test Ltda",
+      "cliente_email": "admin@test.cl",
+      "fecha_inicio": "2024-01-01",
+      "monto_mensual": 50000,
+      "moneda": "CLP",
+      "forma_pago": "tarjeta",
+      "dia_pago": 15,
+      "estado": "suspendido"
+    }
+  ]
+};
+
+// Columnas para la tabla de contratos
+const tableColumns = [
+  {
+    key: "cliente_nombre",
+    label: "Cliente",
+    sortable: true,
+    visible: true,
+    width: "200px"
+  },
+  {
+    key: "cliente_rut",
+    label: "RUT",
+    sortable: true,
+    visible: true,
+    width: "120px"
+  },
+  {
+    key: "fecha_inicio",
+    label: "Fecha Inicio",
+    sortable: true,
+    visible: true,
+    width: "120px",
+    type: "date"
+  },
+  {
+    key: "monto_mensual",
+    label: "Monto",
+    sortable: true,
+    visible: true,
+    width: "120px",
+    type: "number",
+    format: (value) => new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(value)
+  },
+  {
+    key: "forma_pago",
+    label: "Pago",
+    sortable: true,
+    visible: true,
+    width: "130px",
+    format: (value) => value.replace('_', ' ')
+  },
+  {
+    key: "dia_pago",
+    label: "Día",
+    sortable: true,
+    visible: true,
+    width: "80px"
+  },
+  {
+    key: "estado",
+    label: "Estado",
+    sortable: true,
+    visible: true,
+    width: "100px",
+    type: "badge",
+    badgeColors: (value) => {
+      switch(value) {
+        case 'activo': return "bg-core-primary/20 text-core-dark dark:bg-green-900 dark:text-green-200";
+        case 'suspendido': return "bg-core-gray/20 text-core-dark dark:bg-yellow-900 dark:text-yellow-200";
+        case 'terminado': return "bg-core-dark/10 text-core-dark dark:bg-red-900 dark:text-red-200";
+        default: return "bg-core-light text-core-dark dark:bg-core-dark dark:text-gray-200";
+      }
+    }
+  }
+];
+
+const actionButtons = [
+  {
+    label: "Editar",
+    icon: "M11 17H9a1 1 0 01-1-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1zm0 6H9a1 1 0 01-1-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1zm6-6h-2a1 1 0 01-1-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1zm0 6h-2a1 1 0 01-1-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1z"
+  },
+  {
+    label: "Descargar Contrato",
+    icon: "M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+  }
+];
+---
+
+<Layout menuData={menuData}>
+  <div id="content" class="md:ps-0 lg:ps-40 mainmenu-open:pt-10 2xl:hs-overlay-layout-open:pe-2 xl:ps-80 transition-all duration-300">
+    <div class="max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto">
+      <div class="py-2 sm:pb-0 sm:pt-5 space-y-5">
+        <!-- Header -->
+        <div class="flex flex-wrap justify-between items-center gap-2">
+          <div>
+            <h1 class="text-lg md:text-xl font-semibold text-core-dark dark:text-neutral-200">
+              Planes Recurrentes y Contratos
+            </h1>
+            <p class="text-sm text-core-gray dark:text-core-gray">
+              Administra los contratos activos y planes de servicios de tus clientes
+            </p>
+          </div>
+          <div class="flex gap-2">
+            <button 
+              type="button" 
+              onclick="openModal('contratoModal')"
+              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-core-primary text-white hover:opacity-80 focus:outline-hidden focus:opacity-80 disabled:opacity-50 disabled:pointer-events-none"
+            >
+              <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v14M5 12l7 7 7-7"/>
+              </svg>
+              Nuevo Contrato
+            </button>
+          </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="p-4 bg-core-light border border-core-gray rounded-xl shadow-2xs dark:bg-neutral-800 dark:border-neutral-700">
+            <div class="flex items-center gap-3">
+              <div class="flex-shrink-0 w-12 h-12 bg-core-primary/20 rounded-lg flex items-center justify-center dark:bg-blue-900">
+                <svg class="w-6 h-6 text-core-primary dark:text-blue-300" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                  <polyline points="10 9 9 9 8 9"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-core-dark/80 dark:text-core-gray">Total Contratos</p>
+                <p class="text-2xl font-bold text-core-dark dark:text-white">{planesData.stats.total_contratos}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="p-4 bg-core-light border border-core-gray rounded-xl shadow-2xs dark:bg-neutral-800 dark:border-neutral-700">
+            <div class="flex items-center gap-3">
+              <div class="flex-shrink-0 w-12 h-12 bg-core-primary/20 rounded-lg flex items-center justify-center dark:bg-green-900">
+                <svg class="w-6 h-6 text-core-primary dark:text-green-300" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                  <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-core-dark/80 dark:text-core-gray">Activos</p>
+                <p class="text-2xl font-bold text-core-dark dark:text-white">{planesData.stats.activos}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="p-4 bg-core-light border border-core-gray rounded-xl shadow-2xs dark:bg-neutral-800 dark:border-neutral-700">
+            <div class="flex items-center gap-3">
+              <div class="flex-shrink-0 w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center dark:bg-orange-900">
+                <svg class="w-6 h-6 text-orange-600 dark:text-orange-300" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                  <line x1="12" y1="9" x2="12" y2="13"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-core-dark/80 dark:text-core-gray">Prox. Vencimiento</p>
+                <p class="text-2xl font-bold text-core-dark dark:text-white">{planesData.stats.prox_vencer}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="p-4 bg-core-light border border-core-gray rounded-xl shadow-2xs dark:bg-neutral-800 dark:border-neutral-700">
+            <div class="flex items-center gap-3">
+              <div class="flex-shrink-0 w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center dark:bg-emerald-900">
+                <svg class="w-6 h-6 text-emerald-600 dark:text-emerald-300" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="1" x2="12" y2="23"/>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-core-dark/80 dark:text-core-gray">Ingreso Mensual</p>
+                <p class="text-2xl font-bold text-core-dark dark:text-white">$2.5M</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabla de contratos -->
+        <DataTable 
+          data={planesData.contratos} 
+          columns={tableColumns} 
+          title="Contratos Vigentes"
+          searchPlaceholder="Buscar por cliente o RUT..."
+          actionButtons={actionButtons}
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para nuevo contrato -->
+  <div id="contratoModal" class="hs-overlay hidden w-full h-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto">
+    <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto">
+      <div class="bg-core-light border border-core-gray rounded-xl shadow-2xs dark:bg-neutral-800 dark:border-neutral-700">
+        <div class="py-3 px-5 border-b border-core-gray dark:border-neutral-700">
+          <h3 class="font-semibold text-core-dark dark:text-neutral-200">
+            Nuevo Contrato / Plan
+          </h3>
+        </div>
+        <div class="p-5">
+          <form id="contratoForm" class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">RUT Cliente *</label>
+                <input 
+                  type="text" 
+                  name="cliente_rut" 
+                  required
+                  class="py-2 px-3 border-core-gray rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 w-full dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray"
+                  placeholder="12.345.678-9"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Nombre Cliente *</label>
+                <input 
+                  type="text" 
+                  name="cliente_nombre" 
+                  required
+                  class="py-2 px-3 border-core-gray rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 w-full dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray"
+                  placeholder="Razón Social o Nombre"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Email Cliente</label>
+              <input 
+                type="email" 
+                name="cliente_email" 
+                class="py-2 px-3 border-core-gray rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 w-full dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray"
+                placeholder="email@cliente.com"
+              />
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Plan a Contratar *</label>
+                <select 
+                  name="plan_id" 
+                  required
+                  class="py-2 px-3 border-core-gray rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 w-full dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray"
+                >
+                  <option value="1">Plan Emprendedor - $50.000</option>
+                  <option value="2">Plan Profesional - $150.000</option>
+                  <option value="3">Plan Retail - $35.000</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Monto Mensual *</label>
+                <input 
+                  type="number" 
+                  name="monto_mensual" 
+                  required
+                  class="py-2 px-3 border-core-gray rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 w-full dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray"
+                  placeholder="50000"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Forma de Pago *</label>
+                <select 
+                  name="forma_pago" 
+                  required
+                  class="py-2 px-3 border-core-gray rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 w-full dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray"
+                >
+                  <option value="transferencia">Transferencia</option>
+                  <option value="debito_automatico">Débito Automático (PAT)</option>
+                  <option value="tarjeta">Tarjeta de Crédito</option>
+                  <option value="otro">Otro</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Día de Pago *</label>
+                <input 
+                  type="number" 
+                  name="dia_pago" 
+                  min="1" 
+                  max="31"
+                  required
+                  class="py-2 px-3 border-core-gray rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 w-full dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray"
+                  placeholder="5"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Fecha Inicio *</label>
+              <input 
+                type="date" 
+                name="fecha_inicio" 
+                required
+                class="py-2 px-3 border-core-gray rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 w-full dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray"
+              />
+            </div>
+          </form>
+        </div>
+        <div class="py-3 px-5 border-t border-core-gray dark:border-neutral-700">
+          <div class="flex justify-end gap-2">
+            <button 
+              type="button" 
+              onclick="closeModal('contratoModal')"
+              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-core-gray bg-core-light text-core-dark shadow-2xs hover:bg-core-light focus:outline-hidden focus:bg-core-light disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+            >
+              Cancelar
+            </button>
+            <button 
+              type="button"
+              onclick="saveContrato()"
+              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-core-primary text-white hover:opacity-80 focus:outline-hidden focus:opacity-80 disabled:opacity-50 disabled:pointer-events-none"
+            >
+              Crear Contrato
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import { FormValidator, validationRules } from './components/ValidationUtils.js';
+    let contratoValidator;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      contratoValidator = new FormValidator(validationRules.contrato);
+    });
+
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.classList.remove('hidden');
+      modal.classList.add('hs-overlay-open');
+      document.body.style.overflow = 'hidden';
+      document.getElementById('contratoForm').reset();
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.classList.add('hidden');
+      modal.classList.remove('hs-overlay-open');
+      document.body.style.overflow = 'auto';
+    }
+
+    function saveContrato() {
+      const form = document.getElementById('contratoForm');
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      
+      data.monto_mensual = parseFloat(data.monto_mensual) || 0;
+      data.dia_pago = parseInt(data.dia_pago) || 0;
+
+      if (contratoValidator) {
+        contratoValidator.clearErrors(form);
+        const validation = contratoValidator.validate(data);
+        if (!validation.isValid) {
+          contratoValidator.showErrors(form);
+          return;
+        }
+      }
+
+      console.log('Saving contrato:', data);
+      closeModal('contratoModal');
+      showToast('Contrato creado exitosamente', 'success');
+      setTimeout(() => location.reload(), 1000);
+    }
+
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      const bgColor = type === 'success' ? 'bg-core-primary' : 'bg-red-500';
+      toast.className = `fixed top-4 right-4 z-50 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.classList.remove('translate-x-full'), 100);
+      setTimeout(() => {
+        toast.classList.add('translate-x-full');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    window.handleAction = function(action, item) {
+      if (action === 'Editar') {
+        openModal('contratoModal');
+        // Fill data...
+      } else if (action === 'Descargar Contrato') {
+        showToast('Generando PDF del contrato...', 'info');
+        setTimeout(() => showToast('Descarga iniciada', 'success'), 1500);
+      }
+    };
+  </script>
+</Layout>

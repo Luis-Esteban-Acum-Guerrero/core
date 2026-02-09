@@ -1,0 +1,770 @@
+---
+// Props del componente
+export interface Props {
+  data: Array<{
+    id: number;
+    sku: string;
+    codigo: string;
+    nombre: string;
+    descripcion: string;
+    valor: number;
+    moneda: string;
+    stock: number | null;
+    imagen: Array<{
+      ruta: string;
+      principal: boolean;
+    }>;
+  }>;
+}
+
+import { QrCode, CircleCheck } from "lucide-react";
+
+const { data = [], onScanComplete } = Astro.props;
+---
+
+<!-- Botón principal -->
+<button
+  id="scanner-btn"
+  class="px-2 py-2 bg-core-primary text-core-dark hover:opacity-80 rounded-lg transition-colors top-0"
+>
+  <QrCode className="w-6 h-6" />
+</button>
+
+<!-- Audio para el sonido de escaneo -->
+<audio id="audioScaner" src="/sounds/sonido.mp3" preload="auto"></audio>
+
+<!-- Modal fullscreen -->
+<div id="scanner-modal" class="fixed inset-0 z-99 bg-black hidden">
+  <!-- Header -->
+  <div
+    class="absolute top-0 left-0 right-0 z-10 flex justify-between items-center p-4"
+  >
+    <div></div>
+    <button
+      id="close-btn"
+      class="w-10 h-10 bg-black/50 rounded-full flex items-center justify-center text-white"
+    >
+      <svg
+        class="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="h-full flex flex-col">
+    <!-- Área de escáner/input -->
+    <div class="flex-1 relative flex flex-col items-center justify-center p-6">
+      <!-- Modo manual -->
+      <div id="manual-mode" class="w-full max-w-sm space-y-6 hidden">
+        <div class="text-center text-white">
+          <h2 class="text-2xl font-bold mb-2">Ingresar código</h2>
+          <p class="text-gray-300">
+            Ingresa el código del producto manualmente
+          </p>
+        </div>
+
+        <div class="bg-core-light rounded-lg p-4">
+          <label class="block text-sm font-medium text-core-dark/60 mb-2"
+            >CÓDIGO DEL PRODUCTO</label
+          >
+          <div class="flex gap-2">
+            <input
+              id="manual-input"
+              type="text"
+              placeholder="Ej. 6797-439543"
+              class="flex-1 px-3 py-2 border border-core-gray rounded-md focus:outline-none focus:ring-2 focus:ring-core-primary"
+            />
+            <button
+              id="manual-submit"
+              class="w-12 h-12 bg-core-primary hover:opacity-80 rounded-full flex items-center justify-center text-white"
+            >
+              ✓
+            </button>
+          </div>
+        </div>
+
+        <div
+          id="manual-error"
+          class="bg-red-500/20 border border-red-500 rounded-lg p-3 text-center hidden"
+        >
+          <p class="text-red-200 text-sm"></p>
+        </div>
+      </div>
+
+      <!-- Modo escáner -->
+      <div
+        id="scanner-mode"
+        class="w-full h-full flex flex-col items-center justify-center text-white relative"
+      >
+        <div id="camera-view" class="w-full h-full relative hidden">
+          <video
+            id="scanner-video"
+            class="w-full h-full object-cover rounded-4xl"
+            autoplay
+            playsinline
+            muted></video>
+
+          <!-- Instrucciones -->
+          <div class="absolute top-20 left-4 right-4 text-center">
+            <h2 class="text-2xl font-bold mb-2 text-white drop-shadow-lg">
+              Escanear código QR
+            </h2>
+            <p class="text-white/90 drop-shadow-lg">
+              Centra el código QR dentro del marco
+            </p>
+          </div>
+
+          <!-- Botón de simulación temporal -->
+          <button
+            id="simulate-scan"
+            class="absolute bottom-32 left-1/2 transform -translate-x-1/2 bg-core-primary/80 hover:opacity-80/80 text-white px-4 py-2 rounded-lg text-sm"
+          >
+            Simular escaneo (temporal)
+          </button>
+        </div>
+
+        <!-- Fallback cuando no hay cámara -->
+        <div
+          id="camera-fallback"
+          class="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex flex-col items-center justify-center rounded-4xl"
+        >
+          <div class="text-center space-y-4">
+            <svg
+              class="w-16 h-16 text-white/50 mx-auto"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+              ></path>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            <h2 id="camera-status" class="text-2xl font-bold">
+              Iniciando cámara...
+            </h2>
+            <p id="camera-message" class="text-gray-300 max-w-xs">
+              Preparando el escáner QR
+            </p>
+            <button
+              id="retry-camera"
+              class="bg-core-primary hover:opacity-80 text-white px-4 py-2 rounded-lg hidden"
+            >
+              Reintentar
+            </button>
+            <button
+              id="simulate-fallback"
+              class="bg-core-primary/80 hover:opacity-80/80 text-white px-4 py-2 rounded-lg text-sm"
+            >
+              Simular escaneo (temporal)
+            </button>
+          </div>
+        </div>
+
+        <div
+          id="scanner-error"
+          class="absolute top-1/2 left-4 right-4 bg-red-500/60 border border-red-500 rounded-lg p-3 hidden"
+        >
+          <p class="text-red-200 text-sm text-center"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Último producto escaneado -->
+    <div
+      id="last-scanned"
+      class="bg-core-light/10 backdrop-blur-sm border-t border-white/20 p-4 cursor-pointer hidden"
+    >
+      <div class="flex items-center gap-3">
+        <img
+          id="last-product-image"
+          class="w-12 h-12 rounded-lg object-cover"
+          alt=""
+        />
+
+        <div class="flex-1 min-w-0 text-left">
+          <p id="last-product-name" class="text-white font-medium truncate"></p>
+          <p id="last-product-quantity" class="text-gray-300 text-sm"></p>
+        </div>
+
+        <CircleCheck className="w-5 h-5 text-white" />
+      </div>
+    </div>
+
+    <!-- Botones inferiores -->
+    <div class="p-4 space-y-3">
+      <div class="flex gap-3">
+        <button
+          id="scan-mode-btn"
+          class="flex-1 py-3 rounded-lg font-medium transition-colors bg-core-light text-black"
+        >
+          Escanear código
+        </button>
+        <button
+          id="manual-mode-btn"
+          class="flex-1 py-3 rounded-lg font-medium transition-colors bg-core-light/20 text-white border border-white/30"
+        >
+          Ingresar código
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Drawer del historial -->
+<div id="history-drawer" class="fixed inset-0 z-99 bg-black/50 hidden">
+  <div
+    class="absolute bottom-0 left-0 right-0 bg-core-light rounded-t-2xl max-h-[80vh] overflow-hidden"
+  >
+    <div class="p-4 border-b">
+      <div class="flex justify-between items-center">
+        <h3 class="text-lg font-semibold">Productos escaneados</h3>
+        <button
+          id="close-history"
+          class="w-8 h-8 rounded-full bg-core-light flex items-center justify-center"
+        >
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="products-list" class="overflow-y-auto max-h-96 p-4 space-y-3">
+      <!-- Los productos se insertan dinámicamente aquí -->
+    </div>
+
+    <div class="p-4 border-t">
+      <button
+        id="send-results"
+        class="w-full bg-core-primary hover:opacity-80 text-white py-3 rounded-lg font-medium flex items-center justify-center gap-2"
+      >
+        <svg
+          class="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+        </svg>
+        <span id="send-count">Enviar resultados (0 productos)</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de confirmación de salida -->
+<div
+  id="confirm-exit"
+  class="fixed inset-0 z-99 bg-black/50 flex items-center justify-center p-4 hidden"
+>
+  <div class="bg-core-light rounded-lg p-6 max-w-sm w-full text-center">
+    <h3 class="text-lg font-semibold mb-2">¿Salir del escáner?</h3>
+    <p id="confirm-message" class="text-core-dark/60 mb-4"></p>
+    <div class="flex gap-3">
+      <button
+        id="cancel-exit"
+        class="flex-1 py-2 px-4 border border-core-gray rounded-lg text-core-dark/80 hover:bg-core-light"
+      >
+        Cancelar
+      </button>
+      <button
+        id="confirm-exit-btn"
+        class="flex-1 py-2 px-4 bg-red-600 hover:bg-red-700 text-white rounded-lg"
+      >
+        Salir
+      </button>
+    </div>
+  </div>
+</div>
+
+<script type="module" define:vars={{ data }}>
+  // Importar QrScanner como ES module
+  import QrScanner from "/js/qr-scanner.min.js";
+
+  // Variables globales
+  let isOpen = false;
+  let isManualMode = false;
+  let scannedProducts = [];
+  let lastScanned = null;
+  let qrScanner = null;
+  let stream = null;
+  let cameraError = "";
+
+  // Elementos del DOM (agregar estas líneas)
+  const historyCount = document.getElementById("history-count");
+
+  const scannerBtn = document.getElementById("scanner-btn");
+  const scannerModal = document.getElementById("scanner-modal");
+  const closeBtn = document.getElementById("close-btn");
+  const manualMode = document.getElementById("manual-mode");
+  const scannerMode = document.getElementById("scanner-mode");
+  const manualInput = document.getElementById("manual-input");
+  const manualSubmit = document.getElementById("manual-submit");
+  const manualError = document.getElementById("manual-error");
+  const cameraView = document.getElementById("camera-view");
+  const cameraFallback = document.getElementById("camera-fallback");
+  const scannerVideo = document.getElementById("scanner-video");
+  const scannerError = document.getElementById("scanner-error");
+  const lastScannedDiv = document.getElementById("last-scanned");
+  const scanModeBtn = document.getElementById("scan-mode-btn");
+  const manualModeBtn = document.getElementById("manual-mode-btn");
+  const historyDrawer = document.getElementById("history-drawer");
+  const closeHistory = document.getElementById("close-history");
+  const productsList = document.getElementById("products-list");
+  const sendResults = document.getElementById("send-results");
+  const sendCount = document.getElementById("send-count");
+  const confirmExit = document.getElementById("confirm-exit");
+  const confirmMessage = document.getElementById("confirm-message");
+  const cancelExit = document.getElementById("cancel-exit");
+  const confirmExitBtn = document.getElementById("confirm-exit-btn");
+  const simulateScan = document.getElementById("simulate-scan");
+  const simulateFallback = document.getElementById("simulate-fallback");
+  const retryCamera = document.getElementById("retry-camera");
+  const cameraStatus = document.getElementById("camera-status");
+  const cameraMessage = document.getElementById("camera-message");
+
+  // Funciones auxiliares
+  function findProductByCode(code) {
+    return (
+      data.find((product) => product.codigo === code || product.sku === code) ||
+      null
+    );
+  }
+
+  function getProductImage(product) {
+    const mainImage = product.imagen.find((img) => img.principal);
+    return mainImage?.ruta || product.imagen[0]?.ruta || "/default.svg";
+  }
+
+  function updateHistoryCount() {
+    if (historyCount) {
+      historyCount.textContent = `Ver productos (${scannedProducts.length})`;
+    }
+    // Mostrar/ocultar el botón según si hay productos
+    /*
+    if (historyBtn) {
+      if (scannedProducts.length > 0) {
+        historyBtn.classList.remove("hidden");
+      } else {
+        historyBtn.classList.add("hidden");
+      }
+    }
+      */
+  }
+
+  function resetScanner() {
+    scannedProducts = [];
+    lastScanned = null;
+    isManualMode = false;
+    if (manualInput) manualInput.value = "";
+    if (lastScannedDiv) lastScannedDiv.classList.add("hidden");
+    //if (historyBtn) historyBtn.classList.add("hidden");
+    hideError();
+    cameraError = "";
+    updateModeDisplay();
+    updateHistoryCount();
+  }
+
+  function addScannedProduct(product) {
+    const existingIndex = scannedProducts.findIndex(
+      (p) => p.codigo === product.codigo,
+    );
+
+    if (existingIndex >= 0) {
+      scannedProducts[existingIndex].cantidad += 1;
+      lastScanned = scannedProducts[existingIndex];
+    } else {
+      const newScanned = { ...product, cantidad: 1 };
+      lastScanned = newScanned;
+      scannedProducts.push(newScanned);
+    }
+
+    // ejecutar sonido OK de escaneo
+    const audio = document.getElementById("audioScaner");
+    if (audio) {
+      audio.play();
+    }
+
+    updateLastScannedDisplay();
+    updateHistoryCount();
+    hideError();
+  }
+
+  function updateLastScannedDisplay() {
+    if (lastScanned) {
+      document.getElementById("last-product-image").src =
+        getProductImage(lastScanned);
+      document.getElementById("last-product-name").textContent =
+        lastScanned.nombre;
+      document.getElementById("last-product-quantity").textContent =
+        `Cantidad: ${lastScanned.cantidad}`;
+      lastScannedDiv.classList.remove("hidden");
+    }
+  }
+
+  function showError(message, isManual = false) {
+    if (isManual) {
+      manualError.querySelector("p").textContent = message;
+      manualError.classList.remove("hidden");
+    } else {
+      scannerError.querySelector("p").textContent = message;
+      scannerError.classList.remove("hidden");
+    }
+  }
+
+  // Agregar esta función que falta
+  function hideError() {
+    manualError.classList.add("hidden");
+    scannerError.classList.add("hidden");
+  }
+
+  function handleScanCode(code) {
+    const product = findProductByCode(code);
+    if (product) {
+      addScannedProduct(product);
+    } else {
+      showError("Código no encontrado en la base de datos");
+    }
+  }
+
+  function updateModeDisplay() {
+    if (isManualMode) {
+      manualMode.classList.remove("hidden");
+      scannerMode.classList.add("hidden");
+      scanModeBtn.className =
+        "flex-1 py-3 rounded-lg font-medium transition-colors bg-core-light/20 text-white border border-white/30";
+      manualModeBtn.className =
+        "flex-1 py-3 rounded-lg font-medium transition-colors bg-core-light text-black";
+      setTimeout(() => manualInput.focus(), 100);
+    } else {
+      manualMode.classList.add("hidden");
+      scannerMode.classList.remove("hidden");
+      scanModeBtn.className =
+        "flex-1 py-3 rounded-lg font-medium transition-colors bg-core-light text-black";
+      manualModeBtn.className =
+        "flex-1 py-3 rounded-lg font-medium transition-colors bg-core-light/20 text-white border border-white/30";
+      startCamera();
+    }
+  }
+
+  async function startCamera() {
+    try {
+      cameraError = "";
+      cameraStatus.textContent = "Iniciando cámara...";
+      cameraMessage.textContent = "Preparando el escáner QR";
+      retryCamera.classList.add("hidden");
+
+      if (scannerVideo) {
+        // Crear instancia del escáner QR usando la clase importada
+        qrScanner = new QrScanner(
+          scannerVideo,
+          (result) => {
+            if (result.data.length > 0) {
+              console.log("QR Code detected:", result);
+              handleScanCode(result);
+              //playBeepSound();
+            }
+          },
+          {
+            returnDetailedScanResult: false,
+            highlightScanRegion: true,
+            highlightCodeOutline: true,
+          },
+        );
+
+        // Iniciar el escáner
+        await qrScanner.start();
+        cameraView.classList.remove("hidden");
+        cameraFallback.classList.add("hidden");
+      }
+    } catch (err) {
+      console.error("Error accessing camera:", err);
+      cameraError = "No se pudo acceder a la cámara. Verifica los permisos.";
+      cameraStatus.textContent = "Error de cámara";
+      cameraMessage.textContent = cameraError;
+      retryCamera.classList.remove("hidden");
+      cameraView.classList.add("hidden");
+      cameraFallback.classList.remove("hidden");
+    }
+  }
+
+  function stopCamera() {
+    if (qrScanner) {
+      qrScanner.stop();
+      qrScanner = null;
+    }
+    if (stream && typeof stream.stop === "function") {
+      stream.stop();
+    }
+    stream = null;
+    cameraError = "";
+  }
+
+  function playBeepSound() {
+    const audio = new Audio("/sounds/sonido.mp3");
+    audio
+      .play()
+      .catch((e) => console.log("No se pudo reproducir el sonido:", e));
+  }
+
+  function simulateQRScan() {
+    if (data.length > 0) {
+      const randomProduct = data[Math.floor(Math.random() * data.length)];
+      handleScanCode(randomProduct.codigo);
+    }
+  }
+
+  // Agregar estas nuevas funciones después de updateHistoryCount
+  function increaseQuantity(productCode) {
+    const productIndex = scannedProducts.findIndex(
+      (p) => p.codigo === productCode,
+    );
+
+    if (productIndex >= 0) {
+      scannedProducts[productIndex].cantidad += 1;
+
+      updateHistoryDrawer();
+      updateHistoryCount();
+      updateLastScannedDisplay();
+    }
+  }
+
+  function decreaseQuantity(productCode) {
+    const productIndex = scannedProducts.findIndex(
+      (p) => p.codigo === productCode,
+    );
+    if (productIndex >= 0) {
+      if (scannedProducts[productIndex].cantidad > 1) {
+        scannedProducts[productIndex].cantidad -= 1;
+      } else {
+        // Si la cantidad es 1, eliminar el producto
+        scannedProducts.splice(productIndex, 1);
+        // Si era el último producto escaneado, actualizar
+        if (lastScanned && lastScanned.codigo === productCode) {
+          lastScanned =
+            scannedProducts.length > 0
+              ? scannedProducts[scannedProducts.length - 1]
+              : null;
+        }
+      }
+      updateHistoryDrawer();
+      updateHistoryCount();
+      updateLastScannedDisplay();
+    }
+  }
+
+  function removeProduct(productCode) {
+    const productIndex = scannedProducts.findIndex(
+      (p) => p.codigo === productCode,
+    );
+    if (productIndex >= 0) {
+      scannedProducts.splice(productIndex, 1);
+      // Si era el último producto escaneado, actualizar
+      if (lastScanned && lastScanned.codigo === productCode) {
+        lastScanned =
+          scannedProducts.length > 0
+            ? scannedProducts[scannedProducts.length - 1]
+            : null;
+      }
+      updateHistoryDrawer();
+      updateHistoryCount();
+      updateLastScannedDisplay();
+    }
+  }
+
+  // Hacer las funciones accesibles globalmente
+  window.increaseQuantity = increaseQuantity;
+  window.decreaseQuantity = decreaseQuantity;
+  window.removeProduct = removeProduct;
+
+  function updateHistoryDrawer() {
+    productsList.innerHTML = "";
+    scannedProducts.forEach((product, index) => {
+      const productDiv = document.createElement("div");
+      productDiv.className =
+        "flex items-center gap-3 p-3 bg-core-light rounded-lg";
+      productDiv.innerHTML = `
+      <div class="flex flex-col gap-1 ml-2">
+            <button 
+              onclick="removeProduct('${product.codigo}')"
+              class="w-7 h-7 bg-red-400 hover:bg-red-500 text-white rounded-full flex items-center justify-center text-sm font-bold transition-colors"
+              title="Eliminar producto"
+            >
+              ×
+            </button>
+          </div>
+        <img src="${getProductImage(product)}" alt="${product.nombre}" class="w-16 h-16 rounded-lg object-cover">
+        <div class="flex-1 text-left">
+          <h4 class="font-medium">${product.nombre}</h4>
+          <p class="text-sm text-core-dark/60">SKU: ${product.sku}</p>
+          <p class="text-sm text-core-dark/60">Código: ${product.codigo}</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="text-center">
+            <p class="font-semibold">Cant: ${product.cantidad}</p>
+            <p class="text-sm text-core-dark/60">${product.valor} ${product.moneda}</p>
+          </div>
+          
+          <div class="grid sm:inline-flex rounded-lg shadow-2xs">
+            <button 
+                type="button" 
+                class="py-2 px-3 inline-flex justify-center items-center gap-x-2 -mt-px sm:mt-0 sm:-ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-start text-sm font-medium border border-core-gray bg-core-light text-core-dark shadow-2xs hover:bg-core-light disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-dark focus:text-white dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-200 dark:focus:text-neutral-800"
+                onclick="decreaseQuantity('${product.codigo}')"
+            >
+            -
+            </button>
+            <button 
+                type="button" 
+                class="py-2 px-3 inline-flex justify-center items-center gap-x-2 -mt-px sm:mt-0 sm:-ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-start text-sm font-medium border border-core-gray bg-core-light text-core-dark shadow-2xs hover:bg-core-light disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-dark focus:text-white dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-200 dark:focus:text-neutral-800"
+                onclick="increaseQuantity('${product.codigo}')"
+            >
+            +
+            </button>
+         </div>
+        </div>
+      `;
+      productsList.appendChild(productDiv);
+    });
+    sendCount.textContent = `ENVIAR (${scannedProducts.length} PRODUCTOS)`;
+  }
+
+  function handleClose() {
+    stopCamera();
+    if (scannedProducts.length > 0) {
+      confirmMessage.textContent = `Tienes ${scannedProducts.length} productos escaneados. ¿Estás seguro de que quieres salir sin enviar?`;
+      confirmExit.classList.remove("hidden");
+    } else {
+      isOpen = false;
+      scannerModal.classList.add("hidden");
+      resetScanner();
+    }
+  }
+
+  function handleSendResults() {
+    const productsToSend = scannedProducts.map((product) => ({ ...product }));
+    const event = new CustomEvent("scanComplete", { detail: productsToSend });
+    document.dispatchEvent(event);
+
+    // Si hay un callback onScanComplete, ejecutarlo también
+    if (window.onScanCompleteCallback) {
+      window.onScanCompleteCallback(productsToSend);
+    }
+
+    isOpen = false;
+    scannerModal.classList.add("hidden");
+    historyDrawer.classList.add("hidden");
+    resetScanner();
+  }
+
+  if (typeof onScanComplete === "function") {
+    window.onScanCompleteCallback = onScanComplete;
+  }
+
+  // Event listeners
+  scannerBtn.addEventListener("click", () => {
+    isOpen = true;
+    scannerModal.classList.remove("hidden");
+    if (!isManualMode) {
+      startCamera();
+    }
+  });
+
+  closeBtn.addEventListener("click", handleClose);
+
+  scanModeBtn.addEventListener("click", () => {
+    isManualMode = false;
+    hideError();
+    updateModeDisplay();
+  });
+
+  manualModeBtn.addEventListener("click", () => {
+    isManualMode = true;
+    hideError();
+    stopCamera();
+    updateModeDisplay();
+  });
+
+  manualSubmit.addEventListener("click", () => {
+    const code = manualInput.value.trim();
+    if (!code) return;
+
+    const product = findProductByCode(code);
+    if (product) {
+      addScannedProduct(product);
+      manualInput.value = "";
+      isManualMode = false;
+      updateModeDisplay();
+    } else {
+      showError("Código no encontrado en la base de datos", true);
+    }
+  });
+
+  manualInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      manualSubmit.click();
+    }
+  });
+
+  lastScannedDiv.addEventListener("click", () => {
+    updateHistoryDrawer();
+    historyDrawer.classList.remove("hidden");
+  });
+
+  closeHistory.addEventListener("click", () => {
+    historyDrawer.classList.add("hidden");
+  });
+
+  sendResults.addEventListener("click", handleSendResults);
+
+  cancelExit.addEventListener("click", () => {
+    confirmExit.classList.add("hidden");
+  });
+
+  confirmExitBtn.addEventListener("click", () => {
+    isOpen = false;
+    scannerModal.classList.add("hidden");
+    confirmExit.classList.add("hidden");
+    resetScanner();
+  });
+
+  simulateScan.addEventListener("click", simulateQRScan);
+  simulateFallback.addEventListener("click", simulateQRScan);
+  retryCamera.addEventListener("click", startCamera);
+
+  // Cerrar modal al hacer clic fuera del historial
+  historyDrawer.addEventListener("click", (e) => {
+    if (e.target === historyDrawer) {
+      historyDrawer.classList.add("hidden");
+    }
+  });
+</script>

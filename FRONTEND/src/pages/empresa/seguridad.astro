@@ -1,0 +1,386 @@
+---
+import Layout from "../../layouts/LayoutMenu.astro";
+import { menuData } from "./menu.js";
+import DataTable from "./components/DataTable.astro";
+import SkeletonCard from "./components/SkeletonCard.astro";
+
+// Datos de ejemplo para seguridad y permisos
+const seguridadData = {
+  "usuarios": [
+    {
+      "id": 1,
+      "nombre": "Boris",
+      "email": "boris@empresa.cl",
+      "tipo_acceso": "admin",
+      "estado": "activo",
+      "ultimo_acceso": "2024-01-20T10:30:00Z"
+    },
+    {
+      "id": 2,
+      "nombre": "Juan Pérez",
+      "email": "juan.perez@colaborador.cl",
+      "tipo_acceso": "editor",
+      "estado": "activo",
+      "ultimo_acceso": "2024-01-18T15:45:00Z"
+    },
+    {
+      "id": 3,
+      "nombre": "María López",
+      "email": "m.lopez@consultora.cl",
+      "tipo_acceso": "visualizador",
+      "estado": "activo",
+      "ultimo_acceso": "2024-01-15T09:20:00Z"
+    }
+  ],
+  "invitaciones": [
+    {
+      "id": 1,
+      "email_invitado": "nuevo.contabilidad@empresa.cl",
+      "nombre_invitado": "Roberto Díaz",
+      "tipo_acceso": "editor",
+      "estado": "pendiente",
+      "fecha_envio": "2024-01-20T11:00:00Z",
+      "fecha_expiracion": "2024-01-27T11:00:00Z"
+    },
+    {
+      "id": 2,
+      "email_invitado": "externo@auditoria.cl",
+      "nombre_invitado": "Auditor Externo",
+      "tipo_acceso": "visualizador",
+      "estado": "expirada",
+      "fecha_envio": "2024-01-10T14:30:00Z",
+      "fecha_expiracion": "2024-01-17T14:30:00Z"
+    }
+  ]
+};
+
+const userColumns = [
+  {
+    key: "nombre",
+    label: "Usuario",
+    sortable: true,
+    visible: true,
+    width: "200px"
+  },
+  {
+    key: "email",
+    label: "Email",
+    sortable: true,
+    visible: true,
+    width: "250px"
+  },
+  {
+    key: "tipo_acceso",
+    label: "Acceso",
+    sortable: true,
+    visible: true,
+    width: "120px",
+    type: "badge",
+    badgeColors: (value) => {
+      switch(value) {
+        case 'admin': return "bg-core-dark/10 text-purple-800 dark:bg-purple-900 dark:text-purple-200";
+        case 'editor': return "bg-core-primary/20 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
+        default: return "bg-core-light text-core-dark dark:bg-core-dark dark:text-gray-200";
+      }
+    }
+  },
+  {
+    key: "ultimo_acceso",
+    label: "Último Acceso",
+    sortable: true,
+    visible: true,
+    width: "180px",
+    format: (value) => value ? new Date(value).toLocaleString('es-CL') : 'Nunca'
+  },
+  {
+    key: "estado",
+    label: "Estado",
+    sortable: true,
+    visible: true,
+    width: "100px",
+    type: "badge",
+    badgeColors: (value) => value === 'activo' ? "bg-core-primary/20 text-core-dark dark:bg-green-900 dark:text-green-200" : "bg-core-dark/10 text-core-dark dark:bg-red-900 dark:text-red-200"
+  }
+];
+
+const invitationColumns = [
+  {
+    key: "email_invitado",
+    label: "Invitado",
+    sortable: true,
+    visible: true,
+    width: "250px"
+  },
+  {
+    key: "tipo_acceso",
+    label: "Acceso",
+    sortable: true,
+    visible: true,
+    width: "120px",
+    type: "badge"
+  },
+  {
+    key: "fecha_envio",
+    label: "Enviada",
+    sortable: true,
+    visible: true,
+    width: "150px",
+    type: "date"
+  },
+  {
+    key: "estado",
+    label: "Estado",
+    sortable: true,
+    visible: true,
+    width: "120px",
+    type: "badge",
+    badgeColors: (value) => {
+      switch(value) {
+        case 'pendiente': return "bg-core-gray/20 text-core-dark dark:bg-yellow-900 dark:text-yellow-200";
+        case 'aceptada': return "bg-core-primary/20 text-core-dark dark:bg-green-900 dark:text-green-200";
+        case 'expirada': return "bg-core-dark/10 text-core-dark dark:bg-red-900 dark:text-red-200";
+        default: return "bg-core-light text-core-dark dark:bg-core-dark dark:text-gray-200";
+      }
+    }
+  }
+];
+
+const userActions = [
+  {
+    label: "Editar Permisos",
+    icon: "M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+  },
+  {
+    label: "Revocar Acceso",
+    icon: "M13 7a4 4 0 11-8 0 4 4 0 018 0zM9 14a6 6 0 00-6 6v1h12v-1a6 6 0 00-6-6zM21 12h-6",
+    class: "text-core-dark hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+  }
+];
+
+const invitationActions = [
+  {
+    label: "Reenviar Invitación",
+    icon: "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+  },
+  {
+    label: "Cancelar",
+    icon: "M6 18L18 6M6 6l12 12",
+    class: "text-core-dark hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+  }
+];
+---
+
+<Layout menuData={menuData}>
+  <div id="content" class="md:ps-0 lg:ps-40 mainmenu-open:pt-10 2xl:hs-overlay-layout-open:pe-2 xl:ps-80 transition-all duration-300">
+    <div class="max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto">
+      <div class="py-2 sm:pb-0 sm:pt-5 space-y-8">
+        <!-- Header -->
+        <div class="flex flex-wrap justify-between items-center gap-2">
+          <div>
+            <h1 class="text-lg md:text-xl font-semibold text-core-dark dark:text-neutral-200">
+              Seguridad y Permisos
+            </h1>
+            <p class="text-sm text-core-gray dark:text-core-gray">
+              Administra los usuarios autorizados y controla sus niveles de acceso
+            </p>
+          </div>
+          <div class="flex gap-2">
+            <button 
+              type="button" 
+              onclick="openModal('invitacionModal')"
+              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-core-primary text-white hover:opacity-80 focus:outline-hidden focus:opacity-80 disabled:opacity-50 disabled:pointer-events-none"
+            >
+              <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <line x1="19" y1="8" x2="19" y2="14"/>
+                <line x1="22" y1="11" x2="16" y2="11"/>
+              </svg>
+              Invitar Usuario
+            </button>
+          </div>
+        </div>
+
+        <!-- Sección Usuarios -->
+        <div class="space-y-4">
+          <DataTable 
+            data={seguridadData.usuarios} 
+            columns={userColumns} 
+            title="Usuarios Autorizados"
+            searchPlaceholder="Buscar por nombre o email..."
+            actionButtons={userActions}
+          />
+        </div>
+
+        <!-- Sección Invitaciones -->
+        <div class="space-y-4">
+          <DataTable 
+            data={seguridadData.invitaciones} 
+            columns={invitationColumns} 
+            title="Invitaciones Pendientes"
+            searchPlaceholder="Buscar invitados..."
+            actionButtons={invitationActions}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Invitación -->
+  <div id="invitacionModal" class="hs-overlay hidden w-full h-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto">
+    <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto">
+      <div class="bg-core-light border border-core-gray rounded-xl shadow-2xs dark:bg-neutral-800 dark:border-neutral-700">
+        <div class="py-3 px-5 border-b border-core-gray dark:border-neutral-700">
+          <h3 class="font-semibold text-core-dark dark:text-neutral-200">
+            Invitar Colaborador
+          </h3>
+        </div>
+        <div class="p-5">
+          <form id="invitacionForm" class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Nombre Completo *</label>
+              <input 
+                type="text" 
+                name="nombre_invitado" 
+                required
+                class="py-2 px-3 border-core-gray rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 w-full dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray"
+                placeholder="Nombre del colaborador"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Email *</label>
+              <input 
+                type="email" 
+                name="email_invitado" 
+                required
+                class="py-2 px-3 border-core-gray rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 w-full dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray"
+                placeholder="email@colaborador.cl"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Tipo de Acceso *</label>
+              <select 
+                name="tipo_acceso" 
+                required
+                class="py-2 px-3 border-core-gray rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 w-full dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray"
+              >
+                <option value="visualizador">Visualizador (Solo lectura)</option>
+                <option value="editor">Editor (Puede modificar datos)</option>
+                <option value="admin">Administrador (Control total)</option>
+              </select>
+              <p class="mt-1 text-xs text-core-gray">
+                Podrás cambiar estos permisos en cualquier momento después de que acepten la invitación.
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Fecha de Expiración</label>
+              <input 
+                type="date" 
+                name="fecha_expiracion" 
+                class="py-2 px-3 border-core-gray rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 w-full dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray"
+              />
+            </div>
+          </form>
+        </div>
+        <div class="py-3 px-5 border-t border-core-gray dark:border-neutral-700">
+          <div class="flex justify-end gap-2">
+            <button 
+              type="button" 
+              onclick="closeModal('invitacionModal')"
+              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-core-gray bg-core-light text-core-dark shadow-2xs hover:bg-core-light focus:outline-hidden focus:bg-core-light disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+            >
+              Cancelar
+            </button>
+            <button 
+              type="button"
+              onclick="sendInvitacion()"
+              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-core-primary text-white hover:opacity-80 focus:outline-hidden focus:opacity-80 disabled:opacity-50 disabled:pointer-events-none"
+            >
+              Enviar Invitación
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import { FormValidator, validationRules } from './components/ValidationUtils.js';
+    let invitacionValidator;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      invitacionValidator = new FormValidator(validationRules.invitacion);
+      
+      // Default exp date (7 days from now)
+      const dateInput = document.querySelector('input[name="fecha_expiracion"]');
+      if (dateInput) {
+        const nextWeek = new Date();
+        nextWeek.setDate(nextWeek.getDate() + 7);
+        dateInput.value = nextWeek.toISOString().split('T')[0];
+      }
+    });
+
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.classList.remove('hidden');
+      modal.classList.add('hs-overlay-open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.classList.add('hidden');
+      modal.classList.remove('hs-overlay-open');
+      document.body.style.overflow = 'auto';
+    }
+
+    function sendInvitacion() {
+      const form = document.getElementById('invitacionForm');
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      if (invitacionValidator) {
+        invitacionValidator.clearErrors(form);
+        const validation = invitacionValidator.validate(data);
+        if (!validation.isValid) {
+          invitacionValidator.showErrors(form);
+          return;
+        }
+      }
+
+      console.log('Sending invitation:', data);
+      closeModal('invitacionModal');
+      showToast('Invitación enviada correctamente', 'success');
+      setTimeout(() => location.reload(), 1500);
+    }
+
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      const bgColor = type === 'success' ? 'bg-core-primary' : 'bg-red-500';
+      toast.className = `fixed top-4 right-4 z-50 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.classList.remove('translate-x-full'), 100);
+      setTimeout(() => {
+        toast.classList.add('translate-x-full');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    window.handleAction = function(action, item) {
+      if (action === 'Revocar Acceso' || action === 'Cancelar') {
+        if (confirm(`¿Estás seguro de realizar esta acción para ${item.nombre || item.email_invitado}?`)) {
+          showToast('Acción realizada', 'success');
+          setTimeout(() => location.reload(), 1000);
+        }
+      } else if (action === 'Reenviar Invitación') {
+        showToast('Invitación reenviada', 'success');
+      } else if (action === 'Editar Permisos') {
+        alert('Cargando editor de permisos...');
+      }
+    };
+  </script>
+</Layout>

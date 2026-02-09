@@ -1,0 +1,908 @@
+<!-- Tickets -->
+<div
+  class="sm:w-72 size-full truncate bg-core-light border-x border-core-gray dark:bg-neutral-800 dark:border-neutral-700"
+>
+  <div class="h-full flex flex-col">
+    <!-- Header -->
+    <div class="p-2 ps-5 flex justify-between items-center gap-x-2">
+      <span
+        id="hs-pro-chat-sidebar-label"
+        class="block truncate font-semibold text-core-dark dark:text-neutral-200"
+      >
+        Tickets
+      </span>
+
+      <div class="flex items-center">
+        <!-- Button -->
+        <button
+          type="button"
+          class="flex justify-center items-center gap-x-3 size-8 text-sm text-core-dark hover:bg-core-light rounded-full disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:text-core-gray dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
+          data-hs-overlay="#hs-pro-chhcp"
+        >
+          <svg
+            class="shrink-0 size-4"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+            ></path>
+            <path d="M18.375 2.625a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4Z"
+            ></path>
+          </svg>
+          <span class="sr-only">Compose</span>
+        </button>
+        <!-- End Button -->
+
+        <!-- Button -->
+        <div
+          class="lg:hidden relative flex items-center gap-x-1 ps-2 ms-2 before:absolute before:top-1/2 before:start-0 before:w-px before:h-4 before:bg-core-gray before:-translate-y-1/2 dark:before:bg-neutral-700"
+        >
+          <button
+            type="button"
+            class="flex justify-center items-center gap-x-3 size-8 text-sm text-core-dark hover:bg-core-light rounded-full disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:text-core-gray dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
+            data-hs-overlay="#hs-pro-chat-sidebar"
+          >
+            <svg
+              class="shrink-0 size-4"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M18 6 6 18"></path>
+              <path d="m6 6 12 12"></path>
+            </svg>
+            <span class="sr-only">Compose</span>
+          </button>
+        </div>
+        <!-- End Button -->
+      </div>
+    </div>
+    <!-- End Header -->
+
+    <!-- Search Input -->
+    <div class="p-2 pb-0">
+      <div class="relative">
+        <input
+          type="text"
+          class="py-2 px-2.5 block w-full bg-core-light border-transparent rounded-lg sm:text-sm text-base hover:border-core-gray hover:bg-core-light placeholder:text-core-dark focus:bg-core-light focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-700/50 dark:hover:bg-neutral-800 dark:hover:border-neutral-700 dark:text-neutral-300 dark:placeholder:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800 dark:focus:ring-neutral-600 dark:focus:border-neutral-600"
+          placeholder="Search"
+        />
+        <div
+          class="hidden absolute inset-y-0 end-0 flex items-center z-20 pe-1"
+        >
+          <button
+            type="button"
+            class="inline-flex shrink-0 justify-center items-center size-6 rounded-full text-core-gray hover:text-core-primary focus:outline-hidden focus:text-core-primary dark:text-neutral-500 dark:hover:text-core-primary dark:focus:text-core-primary"
+            aria-label="Close"
+          >
+            <span class="sr-only">Close</span>
+            <svg
+              class="shrink-0 size-4"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="m15 9-6 6"></path>
+              <path d="m9 9 6 6"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- End Search Input -->
+
+    <div
+      class="h-full flex flex-col overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-core-light [&::-webkit-scrollbar-thumb]:bg-core-gray/50 dark:[&::-webkit-scrollbar-track]:bg-neutral-700/50 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500"
+    >
+      <!-- List -->
+      <div class="p-2 flex flex-col gap-y-0.5">
+        <a
+          class="flex items-center gap-x-2.5 py-1.5 px-2 text-[13px] text-core-dark rounded-lg bg-core-light focus:outline-hidden dark:bg-neutral-700/50 dark:text-neutral-300"
+          href="tickets.html"
+        >
+          <span class="w-5">
+            <svg
+              class="shrink-0 size-3.5 mx-auto"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </span>
+          <span class="truncate">All</span>
+          <span class="ms-auto">
+            <span class="text-xs opacity-60"> 199 </span>
+          </span>
+        </a>
+
+        <a
+          class="flex items-center gap-x-2.5 py-1.5 px-2 text-[13px] text-core-dark rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700/50 dark:text-neutral-200 dark:focus:bg-neutral-700/50"
+          href="activity.html"
+        >
+          <span class="w-5">
+            <svg
+              class="shrink-0 size-3.5 mx-auto"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"
+              ></path>
+            </svg>
+          </span>
+          <span class="truncate">My Activity</span>
+          <span class="ms-auto">
+            <span class="text-xs opacity-60"> 20 </span>
+          </span>
+        </a>
+
+        <a
+          class="flex items-center gap-x-2.5 py-1.5 px-2 text-[13px] text-core-dark rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700/50 dark:text-neutral-200 dark:focus:bg-neutral-700/50"
+          href="#"
+        >
+          <span class="w-5">
+            <svg
+              class="shrink-0 size-3.5 mx-auto"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8"></path>
+            </svg>
+          </span>
+          <span class="truncate">Mentions</span>
+          <span class="ms-auto">
+            <span class="text-xs opacity-60"> 8 </span>
+          </span>
+        </a>
+
+        <a
+          class="flex items-center gap-x-2.5 py-1.5 px-2 text-[13px] text-core-dark rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700/50 dark:text-neutral-200 dark:focus:bg-neutral-700/50"
+          href="#"
+        >
+          <span class="w-5">
+            <svg
+              class="shrink-0 size-3.5 mx-auto"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"
+              ></path>
+              <path d="m15 5 4 4"></path>
+            </svg>
+          </span>
+          <span class="truncate">Created by you</span>
+          <span class="ms-auto">
+            <span class="text-xs opacity-60"> 14 </span>
+          </span>
+        </a>
+
+        <a
+          class="flex items-center gap-x-2.5 py-1.5 px-2 font-semibold text-[13px] text-core-dark rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700/50 dark:text-neutral-200 dark:focus:bg-neutral-700/50"
+          href="#"
+        >
+          <span class="w-5">
+            <svg
+              class="shrink-0 size-3.5 mx-auto"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <line x1="19" x2="19" y1="8" y2="14"></line>
+              <line x1="22" x2="16" y1="11" y2="11"></line>
+            </svg>
+          </span>
+          <span class="truncate">Assigned</span>
+          <span class="ms-auto">
+            <span class="text-xs"> 62 </span>
+          </span>
+        </a>
+
+        <a
+          class="flex items-center gap-x-2.5 py-1.5 px-2 text-[13px] text-core-dark rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700/50 dark:text-neutral-300 dark:focus:bg-neutral-700/50"
+          href="#"
+        >
+          <span class="w-5">
+            <svg
+              class="shrink-0 size-3.5 mx-auto"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="10" cy="7" r="4"></circle>
+              <path d="M10.3 15H7a4 4 0 0 0-4 4v2"></path>
+              <circle cx="17" cy="17" r="3"></circle>
+              <path d="m21 21-1.9-1.9"></path>
+            </svg>
+          </span>
+          <span class="truncate">Unassigned</span>
+          <span class="ms-auto">
+            <span class="text-xs opacity-60"> 28 </span>
+          </span>
+        </a>
+
+        <!-- List -->
+        <div class="hs-accordion" id="show-more-accordion">
+          <button
+            type="button"
+            class="hs-accordion-toggle flex shrink-0 justify-center items-center gap-x-3 py-1.5 px-3 text-xs text-core-gray rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700 dark:text-neutral-500 dark:focus:bg-neutral-700"
+            aria-expanded="true"
+            aria-controls="show-more-accordion-sub"
+          >
+            <svg
+              class="hs-accordion-force-active hs-accordion-active:rotate-90 shrink-0 size-3.5 transition"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="m9 18 6-6-6-6"></path>
+            </svg>
+            Show more
+          </button>
+
+          <!-- Accordion -->
+          <div
+            id="show-more-accordion-sub"
+            class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden"
+            role="region"
+            aria-labelledby="show-more-accordion"
+          >
+            <!-- List -->
+            <div
+              class="hs-accordion-group mt-0.5 space-y-0.5"
+              data-hs-accordion-always-open
+            >
+              <a
+                class="flex items-center gap-x-2.5 py-1.5 px-2 text-[13px] text-core-dark rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700/50 dark:text-neutral-300 dark:focus:bg-neutral-700/50"
+                href="#"
+              >
+                <span class="w-5">
+                  <svg
+                    class="shrink-0 size-3.5 mx-auto"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M3 6h18"></path>
+                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                    <line x1="10" x2="10" y1="11" y2="17"></line>
+                    <line x1="14" x2="14" y1="11" y2="17"></line>
+                  </svg>
+                </span>
+                <span class="truncate">Trash</span>
+              </a>
+
+              <a
+                class="flex items-center gap-x-2.5 py-1.5 px-2 font-semibold text-[13px] text-core-dark rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700/50 dark:text-neutral-200 dark:focus:bg-neutral-700/50"
+                href="#"
+              >
+                <span class="w-5">
+                  <svg
+                    class="shrink-0 size-3.5 mx-auto"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"
+                    ></path>
+                    <path d="M12 9v4"></path>
+                    <path d="M12 17h.01"></path>
+                  </svg>
+                </span>
+                <span class="truncate">Spam</span>
+                <span class="ms-auto">
+                  <span class="text-xs"> 3 </span>
+                </span>
+              </a>
+            </div>
+            <!-- End List -->
+          </div>
+          <!-- End Accordion -->
+        </div>
+        <!-- End List -->
+      </div>
+      <!-- End List -->
+
+      <!-- List -->
+      <div class="hs-accordion p-2 group active" id="teams-accordion">
+        <!-- Heading -->
+        <div class="flex items-center gap-x-2 ps-1.5">
+          <button
+            type="button"
+            class="hs-accordion-toggle flex shrink-0 justify-center items-center size-6 text-core-gray rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700 dark:text-neutral-500 dark:focus:bg-neutral-700"
+            aria-expanded="true"
+            aria-controls="teams-accordion-sub"
+          >
+            <svg
+              class="hs-accordion-force-active hs-accordion-active:rotate-90 shrink-0 size-3.5 transition"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="m9 18 6-6-6-6"></path>
+            </svg>
+            <span class="sr-only">Toggle Button</span>
+          </button>
+
+          <span class="truncate text-xs text-core-gray dark:text-neutral-500"
+            >Teams</span
+          >
+
+          <div
+            class="hs-tooltip [--placement:left] inline-block ms-auto group-hover:opacity-100 opacity-0"
+          >
+            <button
+              type="button"
+              class="flex shrink-0 justify-center items-center size-6 text-core-gray rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700 dark:text-neutral-500 dark:focus:bg-neutral-700"
+            >
+              <svg
+                class="shrink-0 size-3.5"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M5 12h14"></path>
+                <path d="M12 5v14"></path>
+              </svg>
+              <span class="sr-only">Create</span>
+            </button>
+            <span
+              class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 inline-block absolute invisible z-20 py-1.5 px-2.5 bg-core-dark text-xs text-white rounded-lg dark:bg-neutral-700"
+              role="tooltip"
+            >
+              Create new teams
+            </span>
+          </div>
+        </div>
+        <!-- End Heading -->
+
+        <!-- Accordion -->
+        <div
+          id="teams-accordion-sub"
+          class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300"
+          role="region"
+          aria-labelledby="teams-accordion"
+        >
+          <!-- List -->
+          <div
+            class="hs-accordion-group mt-0.5 space-y-0.5"
+            data-hs-accordion-always-open
+          >
+            <a
+              class="flex items-center gap-x-2.5 py-1.5 px-2 text-[13px] text-core-dark rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700/50 dark:text-neutral-300 dark:focus:bg-neutral-700/50"
+              href="#"
+            >
+              <span class="w-5">
+                <svg
+                  class="shrink-0 size-3.5 mx-auto"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <line x1="4" x2="20" y1="9" y2="9"></line>
+                  <line x1="4" x2="20" y1="15" y2="15"></line>
+                  <line x1="10" x2="8" y1="3" y2="21"></line>
+                  <line x1="16" x2="14" y1="3" y2="21"></line>
+                </svg>
+              </span>
+              <span class="truncate">General</span>
+              <span class="ms-auto">
+                <span class="text-xs opacity-60"> 70 </span>
+              </span>
+            </a>
+
+            <a
+              class="flex items-center gap-x-2.5 py-1.5 px-2 text-[13px] text-core-dark rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700/50 dark:text-neutral-300 dark:focus:bg-neutral-700/50"
+              href="#"
+            >
+              <span class="w-5">
+                <svg
+                  class="shrink-0 size-3.5 mx-auto"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect width="18" height="11" x="3" y="11" rx="2" ry="2"
+                  ></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+              </span>
+              <span class="truncate">Devs</span>
+              <span class="ms-auto">
+                <span class="text-xs opacity-60"> 8 </span>
+              </span>
+            </a>
+
+            <a
+              class="flex items-center gap-x-2.5 py-1.5 px-2 font-semibold text-[13px] text-core-dark rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700/50 dark:text-neutral-300 dark:focus:bg-neutral-700/50"
+              href="#"
+            >
+              <span class="w-5">
+                <svg
+                  class="shrink-0 size-3.5 mx-auto"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect width="18" height="11" x="3" y="11" rx="2" ry="2"
+                  ></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+              </span>
+              <span class="truncate">Slack - Internal</span>
+              <span class="ms-auto">
+                <span class="text-xs"> 50 </span>
+              </span>
+            </a>
+
+            <button
+              type="button"
+              class="flex items-center gap-x-2.5 w-full py-1.5 px-2 text-xs text-core-gray rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700/50 dark:text-neutral-500 dark:focus:bg-neutral-700/50"
+            >
+              <span
+                class="flex justify-center items-center size-5 bg-core-gray text-core-gray rounded-full dark:bg-neutral-500/10 dark:text-neutral-500"
+              >
+                <svg
+                  class="shrink-0 size-3.5 mx-auto"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M5 12h14"></path>
+                  <path d="M12 5v14"></path>
+                </svg>
+              </span>
+              <span class="truncate">Add team</span>
+            </button>
+          </div>
+          <!-- End List -->
+        </div>
+        <!-- End Accordion -->
+      </div>
+      <!-- End List -->
+
+      <!-- List -->
+      <div class="hs-accordion p-2 group active" id="teammates-accordion">
+        <!-- Heading -->
+        <div class="flex items-center gap-x-2 ps-1.5">
+          <button
+            type="button"
+            class="hs-accordion-toggle flex shrink-0 justify-center items-center size-6 text-core-gray rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700 dark:text-neutral-500 dark:focus:bg-neutral-700"
+            aria-expanded="true"
+            aria-controls="teammates-accordion-sub"
+          >
+            <svg
+              class="hs-accordion-force-active hs-accordion-active:rotate-90 shrink-0 size-3.5 transition"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="m9 18 6-6-6-6"></path>
+            </svg>
+            <span class="sr-only">Toggle Button</span>
+          </button>
+
+          <span class="truncate text-xs text-core-gray dark:text-neutral-500"
+            >Teammates</span
+          >
+
+          <div
+            class="hs-tooltip [--placement:left] inline-block ms-auto group-hover:opacity-100 opacity-0"
+          >
+            <button
+              type="button"
+              class="flex shrink-0 justify-center items-center size-6 text-core-gray rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700 dark:text-neutral-500 dark:focus:bg-neutral-700"
+            >
+              <svg
+                class="shrink-0 size-3.5"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M5 12h14"></path>
+                <path d="M12 5v14"></path>
+              </svg>
+              <span class="sr-only">Create</span>
+            </button>
+            <span
+              class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 inline-block absolute invisible z-20 py-1.5 px-2.5 bg-core-dark text-xs text-white rounded-lg dark:bg-neutral-700"
+              role="tooltip"
+            >
+              Invite teammates
+            </span>
+          </div>
+        </div>
+        <!-- End Heading -->
+
+        <!-- Accordion -->
+        <div
+          id="teammates-accordion-sub"
+          class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300"
+          role="region"
+          aria-labelledby="teammates-accordion"
+        >
+          <!-- List -->
+          <div
+            class="hs-accordion-group mt-0.5 space-y-0.5"
+            data-hs-accordion-always-open
+          >
+            <a
+              class="flex items-center gap-x-2.5 py-1.5 px-2 text-[13px] text-core-dark rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700/50 dark:text-neutral-300 dark:focus:bg-neutral-700/50"
+              href="#"
+            >
+              <img
+                class="shrink-0 size-5 rounded-full"
+                src="https://images.unsplash.com/photo-1679412330254-90cb240038c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2.5&w=320&h=320&q=80"
+                alt="Avatar"
+              />
+              <div class="grow">
+                <span
+                  class="block text-[13px] text-core-dark dark:text-neutral-200"
+                >
+                  Lewis Clarke
+                </span>
+              </div>
+            </a>
+
+            <a
+              class="flex items-center gap-x-2.5 py-1.5 px-2 text-[13px] text-core-dark rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700/50 dark:text-neutral-300 dark:focus:bg-neutral-700/50"
+              href="#"
+            >
+              <img
+                class="shrink-0 size-5 rounded-full"
+                src="https://images.unsplash.com/photo-1659482634023-2c4fda99ac0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2.5&w=320&h=320&q=80"
+                alt="Avatar"
+              />
+              <div class="grow">
+                <span
+                  class="block text-[13px] text-core-dark dark:text-neutral-200"
+                >
+                  Ella Lauda
+                </span>
+              </div>
+            </a>
+
+            <a
+              class="flex items-center gap-x-2.5 py-1.5 px-2 text-[13px] text-core-dark rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700/50 dark:text-neutral-300 dark:focus:bg-neutral-700/50"
+              href="#"
+            >
+              <span
+                class="flex shrink-0 justify-center items-center size-5 text-xs font-medium uppercase bg-indigo-500 text-white rounded-full"
+              >
+                R
+              </span>
+              <div class="grow">
+                <span
+                  class="block text-[13px] text-core-dark dark:text-neutral-200"
+                >
+                  Rachel Doe
+                </span>
+              </div>
+            </a>
+
+            <button
+              type="button"
+              class="flex items-center gap-x-2.5 w-full py-1.5 px-2 text-xs text-core-gray rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700/50 dark:text-neutral-500 dark:focus:bg-neutral-700/50"
+            >
+              <span
+                class="flex justify-center items-center size-5 bg-core-gray text-core-gray rounded-full dark:bg-neutral-500/10 dark:text-neutral-500"
+              >
+                <svg
+                  class="shrink-0 size-3.5 mx-auto"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M5 12h14"></path>
+                  <path d="M12 5v14"></path>
+                </svg>
+              </span>
+              <span class="truncate">Add teammates</span>
+            </button>
+          </div>
+          <!-- End List -->
+        </div>
+        <!-- End Accordion -->
+      </div>
+      <!-- End List -->
+
+      <!-- List -->
+      <div class="hs-accordion p-2 group active" id="records-accordion">
+        <!-- Heading -->
+        <div class="flex items-center gap-x-2 ps-1.5">
+          <button
+            type="button"
+            class="hs-accordion-toggle flex shrink-0 justify-center items-center size-6 text-core-gray rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700 dark:text-neutral-500 dark:focus:bg-neutral-700"
+            aria-expanded="true"
+            aria-controls="records-accordion-sub"
+          >
+            <svg
+              class="hs-accordion-force-active hs-accordion-active:rotate-90 shrink-0 size-3.5 transition"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="m9 18 6-6-6-6"></path>
+            </svg>
+            <span class="sr-only">Toggle Button</span>
+          </button>
+
+          <span class="truncate text-xs text-core-gray dark:text-neutral-500"
+            >Records</span
+          >
+
+          <div
+            class="hs-tooltip [--placement:left] inline-block ms-auto group-hover:opacity-100 opacity-0"
+          >
+            <button
+              type="button"
+              class="flex shrink-0 justify-center items-center size-6 text-core-gray rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700 dark:text-neutral-500 dark:focus:bg-neutral-700"
+            >
+              <svg
+                class="shrink-0 size-3.5"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M5 12h14"></path>
+                <path d="M12 5v14"></path>
+              </svg>
+              <span class="sr-only">Create</span>
+            </button>
+            <span
+              class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 inline-block absolute invisible z-20 py-1.5 px-2.5 bg-core-dark text-xs text-white rounded-lg dark:bg-neutral-700"
+              role="tooltip"
+            >
+              Create new records
+            </span>
+          </div>
+        </div>
+        <!-- End Heading -->
+
+        <!-- Accordion -->
+        <div
+          id="records-accordion-sub"
+          class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300"
+          role="region"
+          aria-labelledby="records-accordion"
+        >
+          <!-- List -->
+          <div
+            class="hs-accordion-group mt-0.5 space-y-0.5"
+            data-hs-accordion-always-open
+          >
+            <a
+              class="flex items-center gap-x-2.5 py-1.5 px-2 text-[13px] text-core-dark rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700/50 dark:text-neutral-300 dark:focus:bg-neutral-700/50"
+              href="#"
+            >
+              <span
+                class="flex justify-center items-center size-5 bg-core-primary text-white text-xs rounded-full"
+              >
+                C
+              </span>
+              Companies
+            </a>
+
+            <a
+              class="flex items-center gap-x-2.5 py-1.5 px-2 text-[13px] text-core-dark rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700/50 dark:text-neutral-300 dark:focus:bg-neutral-700/50"
+              href="#"
+            >
+              <span
+                class="flex justify-center items-center size-5 bg-yellow-500 text-white text-xs rounded-full"
+              >
+                P
+              </span>
+              People
+            </a>
+
+            <a
+              class="flex items-center gap-x-2.5 py-1.5 px-2 text-[13px] text-core-dark rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700/50 dark:text-neutral-300 dark:focus:bg-neutral-700/50"
+              href="#"
+            >
+              <span
+                class="flex justify-center items-center size-5 bg-emerald-500 text-white text-xs rounded-full"
+              >
+                W
+              </span>
+              Workspaces
+            </a>
+
+            <a
+              class="flex items-center gap-x-2.5 py-1.5 px-2 text-[13px] text-core-dark rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700/50 dark:text-neutral-300 dark:focus:bg-neutral-700/50"
+              href="#"
+            >
+              <span
+                class="flex justify-center items-center size-5 bg-gray-400 text-white text-xs rounded-full dark:bg-neutral-600"
+              >
+                P
+              </span>
+              Products
+            </a>
+
+            <button
+              type="button"
+              class="flex items-center gap-x-2.5 w-full py-1.5 px-2 text-xs text-core-gray rounded-lg hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:hover:bg-neutral-700/50 dark:text-neutral-500 dark:focus:bg-neutral-700/50"
+            >
+              <span
+                class="flex justify-center items-center size-5 bg-core-gray text-core-gray rounded-full dark:bg-neutral-500/10 dark:text-neutral-500"
+              >
+                <svg
+                  class="shrink-0 size-3.5 mx-auto"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M5 12h14"></path>
+                  <path d="M12 5v14"></path>
+                </svg>
+              </span>
+              <span class="truncate">Add record</span>
+            </button>
+          </div>
+          <!-- End List -->
+        </div>
+        <!-- End Accordion -->
+      </div>
+      <!-- End List -->
+    </div>
+  </div>
+</div>
+<!-- End Tickets -->

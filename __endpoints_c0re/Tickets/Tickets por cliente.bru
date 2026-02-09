@@ -1,0 +1,23 @@
+meta {
+  name: Tickets por cliente
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{base_url}}/ticket/cliente/:idCliente
+  body: none
+  auth: bearer
+}
+
+params:path {
+  idCliente: 
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+settings {
+  encodeUrl: true
+}

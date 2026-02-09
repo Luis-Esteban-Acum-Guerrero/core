@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 23.1.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 650 640" style="enable-background:new 0 0 650 640;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:url(#SVGID_1_);}
+	.st1{fill:#B7C52B;}
+</style>
+<title>core_dot</title>
+<radialGradient id="SVGID_1_" cx="325.5" cy="320" r="179.5" gradientUnits="userSpaceOnUse">
+	<stop  offset="0" style="stop-color:#B7C52B"/>
+	<stop  offset="1.468676e-02" style="stop-color:#B3C12A;stop-opacity:0.9853"/>
+	<stop  offset="0.2824" style="stop-color:#747D1B;stop-opacity:0.7176"/>
+	<stop  offset="0.5242" style="stop-color:#424710;stop-opacity:0.4758"/>
+	<stop  offset="0.7319" style="stop-color:#1E2107;stop-opacity:0.2681"/>
+	<stop  offset="0.8974" style="stop-color:#080902;stop-opacity:0.1026"/>
+	<stop  offset="1" style="stop-color:#000000;stop-opacity:0"/>
+</radialGradient>
+<circle class="st0" cx="325.5" cy="320" r="179.5"/>
+<circle class="st1" cx="325.5" cy="319.4" r="122"/>
+</svg>

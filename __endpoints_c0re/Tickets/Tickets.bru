@@ -1,0 +1,19 @@
+meta {
+  name: Tickets
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/ticket
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+settings {
+  encodeUrl: true
+}

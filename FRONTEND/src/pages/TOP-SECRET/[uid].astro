@@ -1,0 +1,548 @@
+---
+export const prerender = false;
+
+const { uid } = Astro.params;
+if (!uid) {
+  return Astro.redirect("/404");
+}
+
+import Layout from "../../layouts/Layout.astro";
+import Logo from "./components/Logo.astro";
+import Cover from "./components/Cover.astro";
+import Module from "./components/Module.astro";
+import Table from "./components/Table.astro";
+import Pagos from "./components/Pagos.astro";
+import Action from "./components/Action.astro";
+import Footer from "./components/Footer.astro";
+import ReportMenu from "./components/ReportMenu.astro";
+
+// Fetch de datos desde la API (SSR)
+
+try {
+  import { data } from "./js/data.js";
+} catch (error) {
+  console.error("Error cargando informe:", error);
+  return Astro.redirect("/404");
+}
+
+// Menu data for the Layout
+const menuData = {
+  title: "Informes",
+  items: [{ label: "Informe Actual", href: "/#", active: true }],
+};
+---
+
+<Layout menuData={menuData}>
+  <ReportMenu data={data} />
+  <div class="flex flex-col items-center bg-gray-100 min-h-screen py-10">
+    <!-- Report Container -->
+    <div id="report-content" class="page shadow-2xl">
+      <Logo emisor={data.emisor} />
+      <Cover data={data} />
+
+      {
+        data.paginas.map((p, i) => (
+          <div id={`page-${i}`} class="section-content">
+            <h2 class="mod-title">{p.titulo}</h2>
+            {p.contenido.map((c) => (
+              <Module mod={c} />
+            ))}
+          </div>
+        ))
+      }
+
+      {
+        data.detalle && (
+          <div id="details" class="section-content">
+            <Table detalle={data.detalle} />
+          </div>
+        )
+      }
+
+      {
+        data.pagos && (
+          <div class="section-content">
+            <Pagos pagos={data.pagos} />
+          </div>
+        )
+      }
+
+      <div class="section-content footer-group">
+        <Action
+          emisor={data.emisor}
+          cliente={data.cliente}
+          firma={data.firma}
+        />
+        <Footer emisor={data.emisor} header={data.header} />
+      </div>
+    </div>
+  </div>
+</Layout>
+<script
+  is:inline
+  src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+></script>
+<script
+  is:inline
+  src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
+></script>
+
+<script define:vars={{ data }}>
+  // Initialize TextScramble effect (simplified version or imported)
+  // For now, we skip TextScramble unless explicitly requested or move it to a script
+
+  // Generate QR
+  window.addEventListener("load", () => {
+    if (window.QRCode) {
+      const qrContainer = document.getElementById("qrcode");
+      if (qrContainer) {
+        qrContainer.innerHTML = ""; // Clear previous
+        new QRCode(qrContainer, {
+          text: data.header.qr,
+          width: 100,
+          height: 100,
+          colorDark: "#000000",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.H,
+        });
+      }
+    }
+  });
+
+  // Generate PDF Logic
+  const btnPdf = document.getElementById("btn-pdf");
+  if (btnPdf) {
+    btnPdf.addEventListener("click", () => {
+      if (typeof html2pdf === "undefined") {
+        alert(
+          "La librería de PDF no se ha cargado correctamente. Por favor recarga la página.",
+        );
+        return;
+      }
+      // Clone the element to avoid modifying the visible report
+      const element = document.getElementById("report-content");
+      const clone = element.cloneNode(true);
+
+      // Override CSS variables in the clone to force hex colors
+      // This is the CRITICAL fix for Tailwind v4 + html2canvas
+
+      clone.style.cssText = `
+        --color-core-primary: #bcca25
+        --color-core-light: #fafafa; 
+        --color-core-gray: #c6c6c6; 
+        --color-core-dark: #131313;
+        --color-white: #ffffff;
+        --color-black: #000000;
+        
+        /* Override Tailwind gray palette to hex (example values) */
+        --color-gray-50: #f9fafb;
+        --color-gray-100: #f3f4f6;
+        --color-gray-200: #e5e7eb;
+        --color-gray-300: #d1d5db;
+        --color-gray-400: #9ca3af;
+        --color-gray-500: #6b7280;
+        --color-gray-600: #4b5563;
+        --color-gray-700: #374151;
+        --color-gray-800: #1f2937;
+        --color-gray-900: #111827;
+        
+        /* Override Tailwind green palette to hex (for signed state) */
+        --color-green-50: #f0fdf4;
+        --color-green-100: #dcfce7;
+        --color-green-200: #bbf7d0;
+        --color-green-300: #86efac;
+        --color-green-400: #4ade80;
+        --color-green-500: #22c55e;
+        --color-green-600: #16a34a;
+        --color-green-700: #15803d;
+        --color-green-800: #166534;
+        --color-green-900: #14532d;
+        
+        width: 816px; 
+        margin: 0; 
+        padding: 48px; 
+        background: white;
+      `;
+
+      // Forcefully replace any inline oklch styles if present (rare, but possible)
+      // and ensure the clone is visible for rendering
+
+      const container = document.createElement("div");
+      container.style.position = "absolute";
+      container.style.left = "-9999px";
+      container.style.top = "0";
+      container.appendChild(clone);
+      document.body.appendChild(container);
+
+      const opt = {
+        margin: [0.5, 0, 0.5, 0],
+        filename: `core-${data.numDoc}.pdf`,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          scrollY: 0,
+          letterRendering: true,
+          // We do NOT ignore styles now, we want Tailwind.
+          // But we need to handle the oklch error.
+          // html2canvas failure on oklch is blocking.
+          // If we can't update html2canvas, we must ensure NO oklch reaches it.
+          // This means avoiding default Tailwind colors like bg-gray-50 if they are oklch.
+          // We used bg-gray-50 in Action.astro. We should change it to a custom hex color or variable.
+        },
+        jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+        pagebreak: { mode: ["avoid-all", "css", "legacy"] },
+      };
+
+      const originalText = btnPdf.innerText;
+      btnPdf.innerText = "Generando PDF...";
+      btnPdf.disabled = true;
+
+      // Hide actions in clone
+      clone
+        .querySelectorAll(".no-print")
+        .forEach((el) => (el.style.display = "none"));
+
+      html2pdf()
+        .set(opt)
+        .from(clone)
+        .save()
+        .then(() => {
+          btnPdf.innerText = originalText;
+          btnPdf.disabled = false;
+          document.body.removeChild(container);
+        })
+        .catch((err) => {
+          console.error("Error generating PDF:", err);
+          btnPdf.innerText = "Error";
+          setTimeout(() => {
+            btnPdf.innerText = originalText;
+            btnPdf.disabled = false;
+            if (document.body.contains(container)) {
+              document.body.removeChild(container);
+            }
+          }, 3000);
+        });
+    });
+  }
+</script>
+
+<style is:global>
+  /* Global styles for the report content */
+  @import url("https://fonts.googleapis.com/css2?family=Mrs+Saint+Delafield&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+
+  :root {
+    --color-bg: #dcebe6;
+    --color-primary: #bcca25;
+    --color-dark: #44403c;
+    --color-muted: #6b7c75;
+    --color-white: #ffffff;
+    --font-title:
+      "Space Mono", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-body: Arial, sans-serif;
+    --font-signature: "Mrs Saint Delafield", "Lucida Handwriting", cursive;
+    --size-title-xl: 64px;
+    --size-title-lg: 36px;
+    --size-title-md: 24px;
+    --size-body: 14px;
+    --radius: 0;
+    --page-width: 816px;
+  }
+
+  .font-mono {
+    font-family: var(--font-title);
+  }
+
+  .pagos-container ul,
+  .pagos-container ol {
+    margin-top: 20px;
+  }
+  .pagos-container li {
+    font-size: var(--size-body);
+    list-style: disc;
+    margin-left: 48px;
+    margin-bottom: 12px;
+  }
+
+  /* Scope report styles to #report-content to avoid breaking Layout */
+  #report-content {
+    width: var(--page-width);
+    margin: 0 auto;
+    background: linear-gradient(
+      to bottom,
+      var(--color-bg) 600px,
+      var(--color-white) 600px
+    );
+    padding: 72px;
+    font-family: var(--font-body);
+    color: var(--color-dark);
+    box-sizing: border-box;
+  }
+
+  #report-content h2.mod-title {
+    font-family: var(--font-title);
+    font-size: var(--size-title-lg);
+    margin-top: 48px;
+    margin-bottom: 24px;
+    border-bottom: 2px solid var(--color-primary);
+    padding-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  /* Print styles */
+  @media print {
+    body * {
+      visibility: hidden;
+    }
+    #report-content,
+    #report-content * {
+      visibility: visible;
+    }
+    #report-content {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      background: white !important; /* Save ink */
+    }
+    .no-print {
+      display: none !important;
+    }
+  }
+
+  /* Force page breaks for each major section */
+  .section-content {
+    page-break-before: always;
+    padding-top: 48px; /* Spacing for better readability */
+    margin-top: 0;
+    margin-bottom: 0;
+    position: relative;
+    font-size: var(--size-body);
+  }
+
+  .section-content a {
+    background-color: var(--color-primary);
+    padding: 5px 6px;
+    border-radius: var(--radius);
+    color: var(--color-white);
+    font-size: var(--size-body);
+    display: inline-block;
+  }
+  a:hover {
+    background-color: var(--color-dark);
+    transform: scale(1.05);
+    transition:
+      background-color 0.3s ease,
+      transform 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .mod-container img {
+    max-width: 100%;
+    height: auto;
+    padding: 32px;
+  }
+
+  /* Specific adjustment for Footer group to ensure it fits well */
+  .footer-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* Ensure titles are at the top */
+  .mod-title {
+    margin-top: 0 !important;
+    padding-top: 48px; /* Optional padding for visual space */
+  }
+  /* Prevent break inside modules if possible */
+  .mod-container {
+    page-break-inside: avoid;
+  }
+
+  /* Keep signature and footer together */
+  .footer-group {
+    page-break-inside: avoid;
+  }
+</style>
+
+<!-- Styles for Report Content (Inlined to avoid Tailwind dependency in PDF) -->
+<style is:inline id="report-styles">
+  /* Utility Classes (Replacement for Tailwind) */
+  .bg-gray-50 {
+    background-color: #f9fafb !important;
+  }
+  .bg-gray-100 {
+    background-color: #f3f4f6 !important;
+  }
+  .border-gray-200 {
+    border-color: #e5e7eb !important;
+  }
+  .border-gray-300 {
+    border-color: #d1d5db !important;
+  }
+  .text-gray-300 {
+    color: #d1d5db !important;
+  }
+  .text-gray-500 {
+    color: #6b7280 !important;
+  }
+  .text-gray-600 {
+    color: #4b5563 !important;
+  }
+  .text-gray-700 {
+    color: #374151 !important;
+  }
+  .text-gray-800 {
+    color: #1f2937 !important;
+  }
+
+  /* Green palette for signed state */
+  .bg-green-50 {
+    background-color: #f0fdf4 !important;
+  }
+  .border-green-200 {
+    border-color: #bbf7d0 !important;
+  }
+  .text-green-600 {
+    color: #16a34a !important;
+  }
+  .text-green-800 {
+    color: #166534 !important;
+  }
+
+  .text-lg {
+    font-size: 1.125rem;
+  }
+  .font-bold {
+    font-weight: 700;
+  }
+  .mb-4 {
+    margin-bottom: 1rem;
+  }
+  .text-sm {
+    font-size: 0.875rem;
+  }
+  .text-muted {
+    color: var(--color-muted);
+  }
+  .my-8 {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+  .p-6 {
+    padding: 1.5rem;
+  }
+  .rounded {
+    border-radius: 0.25rem;
+  }
+  .border {
+    border: 1px solid #e5e7eb;
+  }
+  .px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  .py-2 {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  .w-full {
+    width: 100%;
+  }
+  .text-left {
+    text-align: left;
+  }
+  .text-center {
+    text-align: center;
+  }
+  .text-right {
+    text-align: right;
+  }
+  .block {
+    display: block;
+  }
+  .mt-4 {
+    margin-top: 1rem;
+  }
+  .max-w-full {
+    max-width: 100%;
+  }
+  .h-auto {
+    height: auto;
+  }
+
+  /* Action Component */
+  .action-container {
+    background-color: #f9fafb !important; /* gray-50 */
+    border-color: #e5e7eb !important; /* gray-200 */
+  }
+  .sign-button {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.3s;
+  }
+  .sign-button:hover {
+    opacity: 0.9;
+  }
+  .sign-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  /* Module Component */
+  .mod-text {
+    margin-bottom: 24px;
+    line-height: 1.6;
+    text-align: justify;
+  }
+  .mod-highlight {
+    background: rgba(99, 224, 179, 0.2);
+    border-left: 4px solid var(--color-primary);
+    padding: 24px;
+    margin: 32px 0;
+    font-style: italic;
+  }
+  .columns-2 {
+    column-count: 2;
+    column-gap: 40px;
+    margin-bottom: 32px;
+  }
+  .mod-col {
+    break-inside: avoid;
+    margin-bottom: 16px;
+  }
+  .no-break {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Table Component */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 32px 0;
+    font-size: 14px;
+  }
+  th {
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: var(--color-muted);
+    border-bottom: 2px solid var(--color-dark);
+    padding: 12px 8px;
+  }
+  td {
+    padding: 12px 8px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  .price {
+    font-family: "Space Mono", monospace;
+  }
+</style>

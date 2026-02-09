@@ -1,0 +1,43 @@
+---
+const { mod } = Astro.props;
+---
+
+<div class="mod-container mb-8 break-inside-avoid">
+  {
+    mod.tipo === "texto" && (
+      <p
+        class="mod-text mb-6 leading-relaxed text-justify font-mono text-core-dark"
+        set:html={mod.valor}
+      />
+    )
+  }
+
+  {
+    mod.tipo === "destacado" && (
+      <div
+        class="mod-highlight bg-core-primary/20 border-l-4 border-core-primary p-6 my-8 italic font-mono text-core-dark"
+        set:html={mod.valor}
+      />
+    )
+  }
+
+  {
+    mod.tipo === "columnas" && (
+      <div class={`columns-${mod.columnas} gap-10 mb-8`}>
+        {mod.valor.map((v) => (
+          <div class="mod-col break-inside-avoid mb-4 font-mono" set:html={v} />
+        ))}
+      </div>
+    )
+  }
+
+  {
+    mod.tipo === "imagen" && (
+      <img
+        src={mod.valor.replace("../assets/", "/assets/")}
+        alt="Imagen del módulo"
+        class="block w-full h-auto  my-6 break-inside-avoid"
+      />
+    )
+  }
+</div>

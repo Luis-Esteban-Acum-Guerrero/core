@@ -1,0 +1,38 @@
+---
+import TicketCard from "./TicketCard.astro";
+import tickets from "../data/tickets.json";
+
+// Puedes agregar lógica de filtros si usas frontend React o Alpine.js
+---
+
+<section
+  class="w-full max-w-sm border-r border-core-gray dark:border-neutral-700 bg-core-light dark:bg-neutral-900"
+>
+  <header
+    class="p-4 border-b border-core-gray dark:border-neutral-700 flex justify-between items-center"
+  >
+    <h2 class="text-lg font-semibold text-core-dark dark:text-white">Tickets</h2>
+    <!-- Filtro simple -->
+    <select
+      class="text-sm rounded border-core-gray dark:border-neutral-600 dark:bg-neutral-800 text-core-dark dark:text-white focus:ring-blue-500 focus:border-blue-500"
+    >
+      <option>Todos</option>
+      <option>Abiertos</option>
+      <option>En progreso</option>
+      <option>Resueltos</option>
+    </select>
+  </header>
+
+  <div class="overflow-y-auto h-[calc(100vh-100px)]">
+    {
+      tickets.map((ticket) => (
+        <a
+          href={`/ticket/${ticket.id}`}
+          class="block hover:bg-core-light dark:hover:bg-neutral-800 transition"
+        >
+          <TicketCard {...ticket} />
+        </a>
+      ))
+    }
+  </div>
+</section>

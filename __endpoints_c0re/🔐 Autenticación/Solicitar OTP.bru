@@ -1,0 +1,25 @@
+meta {
+  name: Solicitar OTP
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/auth/request-otp
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "telefono": "56950995487"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

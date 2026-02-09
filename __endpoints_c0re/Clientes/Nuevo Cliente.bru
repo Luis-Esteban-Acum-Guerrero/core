@@ -1,0 +1,30 @@
+meta {
+  name: Nuevo Cliente
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/cliente/
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:json {
+  {
+    "idEmpresa": "7d0b2101-f07a-4e8b-8129-ef92f695493d",
+    "nombre": "Nombre del Cliente",
+    "rut": "12345678-9",
+    "razonSocial": "Razón Social del Cliente",
+    "telefono": "123456789",
+    "email": "cliente@ejemplo.com"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

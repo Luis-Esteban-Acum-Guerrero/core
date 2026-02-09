@@ -1,0 +1,259 @@
+---
+const { key, from, to, message, isMe, avatarFrom, timestamp, estado, nombre, type } = Astro.props;
+
+let ClassPosition = "";   // LEFT / RIGHT
+const ClassRight = "ms-auto text-end justify-end";
+const ClassLeft = ""; 
+
+let ClassBubble = "";     // COLORES
+let OrderBubble = "";
+let OrderOptions = "";
+
+const soyYo = "bg-core-primary/20 dark:bg-core-primary/20";
+const esBOT = "bg-core-gray/30 dark:bg-neutral-950";
+const esTEC = "bg-core-primary/20 dark:bg-core-primary/20";
+const perfil = "bg-core-light shadow-2xs dark:bg-neutral-800";
+
+if (isMe){
+  ClassBubble = soyYo;
+  ClassPosition = ClassRight;
+  OrderBubble = "order-2";
+  OrderOptions = "order-1";
+}else{
+  ClassBubble = perfil;
+  if (type === "TECNICO"){ClassBubble = esTEC;}
+  if (type === "BOT"){ClassBubble = esBOT;}
+  ClassPosition = ClassLeft;
+  OrderBubble = "order-1";
+  OrderOptions = "order-2";
+}
+
+const rtf = new Intl.RelativeTimeFormat("es", { numeric: "auto" });
+const TIME_UNITS = {
+  year: 24 * 60 * 60 * 1000 * 365,
+  month: (24 * 60 * 60 * 1000 * 365) / 12,
+  day: 24 * 60 * 60 * 1000,
+  hour: 60 * 60 * 1000,
+  minute: 60 * 1000,
+  second: 1000
+};
+
+const getRelativeTime = (d1, d2 = new Date()) => {
+  const date1 = d1 instanceof Date ? d1 : new Date(d1);
+  
+  if (isNaN(date1.getTime())) {
+    return "fecha inválida";
+  }
+  
+  const elapsed = date1.getTime() - d2.getTime();
+ 
+  for (var u in TIME_UNITS) {
+    if (Math.abs(elapsed) > TIME_UNITS[u] || u == "second") {
+      return rtf.format(Math.round(elapsed / TIME_UNITS[u]), u);
+    }
+  }
+};
+---
+
+<div class=`max-w-md flex gap-x-2 ${ClassPosition}` id={key}>
+
+  {!isMe && <div class="shrink-0 mt-auto">
+    <img
+      class="shrink-0 size-8 rounded-full"
+      src={avatarFrom}
+      alt={from}
+    />
+  </div>}
+
+
+  <div>
+    {/* FROM -> TO chat */}
+    <div class=`mb-1.5 px-2 pe-2.5 flex ${ClassPosition} items-center gap-x-1`>
+      <p class="text-xs text-core-gray dark:text-neutral-500">{!isMe && nombre} +{from}</p>
+      <div class="hs-tooltip inline-block">
+        <svg
+          class="hs-tooltip-toggle shrink-0 size-3.5 text-core-gray dark:text-neutral-500"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+        <span
+          class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 inline-block absolute invisible z-20 py-1.5 px-2.5 w-auto max-w-56 text-start bg-core-dark text-xs text-white rounded-lg dark:bg-neutral-700"
+          role="tooltip"
+        >
+         +{from} envió a {to} a las {timestamp}
+        </span>
+      </div>
+    </div>
+
+    <div class="space-y-1">
+      <div
+        class="group flex justify-end gap-x-2"
+        style="word-break: break-word"
+      >
+
+      
+
+        {/* BUBBLE CHAT */}
+        <div
+          class=`text-start ${OrderBubble} ${ClassBubble} inline-block rounded-xl pt-2 pb-1.5 px-2.5`
+        >
+          <div class="text-sm text-core-dark dark:text-neutral-200">
+            
+            {
+            message.split(' ').map((word) => {
+                if (word.startsWith('@')) {
+                return (
+                    <span class="text-core-primary dark:text-core-primary">{word}</span>
+                );
+                }
+                return word + ' ';
+            })
+            }
+
+            <span>
+              <span class="block text-[11px] text-end text-core-gray dark:text-neutral-600 italic">
+              {(timestamp ? getRelativeTime(timestamp) : '')} 
+              { estado === 'enviado' ? '✓' : '' }
+              { estado === 'leido' ? '✓✓' : '' }
+              </span>
+            </span>
+          </div>
+        </div>
+
+        {/* BUBBLE CHAT OPTIONS */}
+        <div class=`${OrderOptions} lg:opacity-0 lg:group-hover:opacity-100`>
+          <div
+            class="hs-dropdown --exclude-from-auto-opening [--strategy:absolute] [--auto-close:inside] [--placement:bottom-right] relative inline-flex"
+          >
+            <button
+              id="hs-pro-cht1cmd_5"
+              type="button"
+              class="flex justify-center items-center gap-x-3 size-8 text-sm text-core-dark/60 hover:bg-core-gray/30 rounded-full disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-gray/30 dark:text-core-gray dark:hover:bg-neutral-800 dark:focus:bg-neutral-800 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
+              aria-haspopup="menu"
+              aria-expanded="false"
+              aria-label="Dropdown"
+            >
+              <svg
+                class="shrink-0 size-4 rounded-full"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="12" cy="12" r="1"></circle>
+                <circle cx="12" cy="5" r="1"></circle>
+                <circle cx="12" cy="19" r="1"></circle>
+              </svg>
+            </button>
+
+            <div
+              class="hs-dropdown-menu hs-dropdown-open:opacity-100 w-32 transition-[opacity,margin] duration opacity-0 hidden z-8 bg-core-light rounded-xl shadow-lg dark:bg-neutral-800 before:h-4 before:absolute before:-top-4 before:start-0 before:w-full after:h-4 after:absolute after:-bottom-4 after:start-0 after:w-full"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="hs-pro-cht1cmd_5"
+            >
+              <div class="p-1">
+                <a
+                  class="flex items-center gap-x-3 py-1.5 px-2 rounded-lg text-xs text-core-dark hover:bg-core-light disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                  href="#"
+                >
+                  <svg
+                    class="shrink-0 size-3.5"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"
+                    ></path>
+                    <path d="m15 5 4 4"></path>
+                  </svg>
+                  Edit
+                </a>
+                <a
+                  class="flex items-center gap-x-3 py-1.5 px-2 rounded-lg text-xs text-core-dark hover:bg-core-light disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                  href="#"
+                >
+                  <svg
+                    class="shrink-0 size-3.5"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path
+                      d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                    ></path>
+                    <path d="m10 7-3 3 3 3"></path>
+                    <path d="M17 13v-1a2 2 0 0 0-2-2H7"></path>
+                  </svg>
+                  Reply
+                </a>
+                <a
+                  class="flex items-center gap-x-3 py-1.5 px-2 rounded-lg text-xs text-core-dark hover:bg-core-light disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                  href="#"
+                >
+                  <svg
+                    class="shrink-0 size-3.5"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M3 6h18"></path>
+                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                    <line x1="10" x2="10" y1="11" y2="17"></line>
+                    <line x1="14" x2="14" y1="11" y2="17"></line>
+                  </svg>
+                  Delete
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  {isMe && <div class="shrink-0 mt-auto">
+    <img
+      class="shrink-0 size-8 rounded-full"
+      src={avatarFrom}
+      alt={from}
+    />
+  </div>}
+</div>

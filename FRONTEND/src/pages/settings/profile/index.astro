@@ -1,0 +1,10 @@
+---
+import Layout from "../../../layouts/LayoutMenu.astro";
+import Profile from "./profile.astro";
+
+import { menuData } from "../menu.js";
+---
+
+<Layout menuData={menuData}>
+  <Profile />
+</Layout>

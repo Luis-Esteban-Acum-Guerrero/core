@@ -1,0 +1,23 @@
+meta {
+  name: Eliminar Ticket
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{base_url}}/ticket/:id
+  body: none
+  auth: bearer
+}
+
+params:path {
+  id: 
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+settings {
+  encodeUrl: true
+}

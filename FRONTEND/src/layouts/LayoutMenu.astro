@@ -1,0 +1,144 @@
+---
+import MainMenu from "../components/MainMenu.astro";
+import Menu from "../components/Menu.astro";
+
+const { menuData } = Astro.props;
+const mainMenuData = {
+  mainMenu: [
+    { key: "c0re", label: "c0re", icon: "c0re", pending: 0, ruta: "/#" },
+    {
+      key: "Empresa",
+      label: "Empresa",
+      icon: "Building2",
+      pending: 0,
+      ruta: "/empresa",
+    },
+    { key: "divider", label: "divider", visible: true },
+    {
+      key: "ticket",
+      label: "Ticket",
+      icon: "Ticket",
+      pending: 12,
+      ruta: "/ticket",
+    },
+    {
+      key: "calendar",
+      label: "Calendario",
+      icon: "Calendar1",
+      pending: 0,
+      ruta: "#",
+    },
+    { key: "divider", label: "divider", visible: true },
+    {
+      key: "report",
+      label: "Reportes",
+      icon: "Activity",
+      pending: 2,
+      ruta: "#",
+    },
+    {
+      key: "config",
+      label: "Configuración",
+      icon: "Cog",
+      pending: 0,
+      ruta: "/settings",
+    },
+  ],
+  userPop: {
+    avatarUrl: "https://example.com/avatar.jpg",
+    name: "Usuario Ejemplo",
+    status: "online",
+  },
+};
+---
+
+<!doctype html>
+<html lang="es" class="relative min-h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="description" content="el centro de todo" />
+    <title>core by creceideas</title>
+    <link rel="stylesheet" href="/src/styles/global.css" />
+    <link rel="stylesheet" href="/src/assets/css/main.min.css?v=3.1.0" />
+  </head>
+
+  <body
+    class="hs-overlay-body-open hs-overlay-body-open:overflow-hidden bg-core-light dark:bg-neutral-900"
+  >
+    <aside class="relative">
+      <div
+        id="hs-pro-chat-sidebar"
+        class="hs-overlay [--auto-close:xl] sm:w-auto xl:w-80 xl:block xl:translate-x-0 xl:end-auto xl:bottom-0 [--auto-close-equality-type:less-than] hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform size-full hidden fixed inset-y-0 start-0 z-59 bg-stone-700 border-r border-core-gray dark:border-neutral-800"
+        tabindex="-1"
+        aria-labelledby="hs-pro-chat-sidebar-label"
+      >
+        <div class="h-full flex">
+          <MainMenu
+            items={mainMenuData.mainMenu}
+            userPop={mainMenuData.userPop}
+          />
+          <Menu menuData={menuData} />
+        </div>
+      </div>
+    </aside>
+
+    <slot />
+  </body>
+
+  <script
+    src="https://unpkg.com/@floating-ui/core@1.5.0/dist/floating-ui.core.umd.min.js"
+  ></script>
+  <script
+    src="https://unpkg.com/@floating-ui/dom@1.5.0/dist/floating-ui.dom.umd.min.js"
+  ></script>
+
+  <script src="../../node_modules/preline/preline.js"></script>
+
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"></script>
+
+  <!--
+    <script src="/src/assets/vendor/@floating-ui/core/dist/floating-ui.core.umd.min.js"></script>
+    <script src="/src/assets/vendor/@floating-ui/dom/dist/floating-ui.dom.umd.min.js"></script>
+    <script src="/src/assets/vendor/preline/dist/index.js?v=3.1.0"></script>
+    <script src="/src/assets/vendor/clipboard/dist/clipboard.min.js"></script>
+  -->
+
+  <script src="/src/assets/js/hs-copy-clipboard-helper.js"></script>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", function () {
+      if (window.HSStaticMethods) {
+        window.HSStaticMethods.autoInit();
+      }
+      if (window.ClipboardJS) {
+        new ClipboardJS("[data-clipboard]");
+      }
+    });
+
+    const html = document.querySelector("html");
+
+    const isLightOrAuto =
+      localStorage.getItem("hs_theme") === "light" ||
+      (localStorage.getItem("hs_theme") === "auto" &&
+        !window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+    const isDarkOrAuto =
+      localStorage.getItem("hs_theme") === "dark" ||
+      (localStorage.getItem("hs_theme") === "auto" &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+    if (isLightOrAuto && html.classList.contains("dark"))
+      html.classList.remove("dark");
+    else if (isDarkOrAuto && html.classList.contains("light"))
+      html.classList.remove("light");
+    else if (isDarkOrAuto && !html.classList.contains("dark"))
+      html.classList.add("dark");
+    else if (isLightOrAuto && !html.classList.contains("light"))
+      html.classList.add("light");
+  </script>
+</html>

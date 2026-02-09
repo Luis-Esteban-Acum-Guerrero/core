@@ -1,0 +1,24 @@
+flowchart TB
+    Client[Cliente Web/API] -->|1. Solicita cartolas| API[API REST Express]
+    API -->|2. Valida solicitud| Auth[Autenticación JWT]
+    API -->|3. Encola solicitud| Queue[Cola de Trabajos]
+    
+    subgraph "Procesamiento Asíncrono"
+        Queue -->|4. Distribuye trabajos| Workers[Workers de Scraping]
+        Workers -->|5. Ejecuta| Playwright[Instancias Playwright]
+        Playwright -->|6. Accede| Banks[Portales Bancarios]
+        Workers -->|7. Transforma datos| Transform[Transformador]
+        Workers -->|8. Valida formato| Validator[Validador]
+        Workers -->|9. Almacena resultados| DB[(MySQL)]
+    end
+    
+    Workers -->|10. Notifica| Notification[Servicio de Notificación]
+    Notification -->|11. Envía estado| Client
+    
+    Client -->|12. Consulta resultados| API
+    API -->|13. Obtiene datos| DB
+    
+    subgraph "Monitoreo"
+        CronJob[Tarea Programada] -->|Verifica diariamente| HealthCheck[Verificador de Salud]
+        HealthCheck -->|Actualiza estados| DB
+    end

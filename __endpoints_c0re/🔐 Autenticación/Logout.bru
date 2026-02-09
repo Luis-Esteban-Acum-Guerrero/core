@@ -1,0 +1,30 @@
+meta {
+  name: Logout
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{base_url}}/auth/logout
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "refreshToken": "{{refresh_token}}"
+  }
+}
+
+script:post-response {
+  bru.setVar('access_token', '');
+  bru.setVar('refresh_token', '');
+}
+
+settings {
+  encodeUrl: true
+}

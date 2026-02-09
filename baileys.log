@@ -1,0 +1,47 @@
+[2025-12-15T16:08:17.334Z] Unhandled Rejection at: Promise {
+  <rejected> TypeError: adapterProvider.initHttpServer is not a function
+      at main (file:///Users/owis/dev/core/server.js:33:19)
+      at file:///Users/owis/dev/core/server.js:42:1
+      at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+      at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+      at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5)
+} reason: TypeError: adapterProvider.initHttpServer is not a function
+    at main (file:///Users/owis/dev/core/server.js:33:19)
+    at file:///Users/owis/dev/core/server.js:42:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5)
+[2025-12-15T16:11:09.813Z] Iniciando limpieza de recursos...
+[2025-12-23T19:14:33.571Z] Connection update: connecting
+[2025-12-23T19:15:50.828Z] Connection update: connecting
+[2025-12-23T19:15:51.577Z] Connection update: undefined
+[2025-12-23T19:15:51.577Z] QR Code received
+[2025-12-23T19:16:31.603Z] Connection update: undefined
+[2025-12-23T19:16:31.606Z] QR Code received
+[2025-12-23T19:16:46.533Z] Connection update: undefined
+[2025-12-23T19:16:46.875Z] Connection update: close
+[2025-12-23T19:16:46.875Z] Connection closed. Status: 515, Reason: Stream Errored (restart required)
+[2025-12-23T19:16:46.875Z] Reconnection attempt 1/10 in 1000ms
+[2025-12-23T19:16:47.903Z] Connection update: connecting
+[2025-12-23T19:16:49.868Z] Connection update: undefined
+[2025-12-23T19:16:50.094Z] Connection update: undefined
+[2025-12-23T19:16:50.094Z] Connection update: open
+[2025-12-23T19:16:50.094Z] Connection opened successfully
+[2025-12-23T19:27:07.059Z] Connection update: connecting
+[2025-12-23T19:27:08.332Z] Connection update: undefined
+[2025-12-23T19:27:08.498Z] Connection update: undefined
+[2025-12-23T19:27:08.498Z] Connection update: open
+[2025-12-23T19:27:08.498Z] Connection opened successfully
+[2025-12-23T19:29:52.830Z] Connection update: connecting
+[2025-12-23T19:29:54.069Z] Connection update: undefined
+[2025-12-23T19:29:54.251Z] Connection update: undefined
+[2025-12-23T19:29:54.251Z] Connection update: open
+[2025-12-23T19:29:54.251Z] Connection opened successfully
+[2025-12-23T19:31:57.495Z] Connection update: connecting
+[2025-12-23T19:31:58.740Z] Connection update: undefined
+[2025-12-23T19:31:58.846Z] Connection update: undefined
+[2025-12-23T19:31:58.847Z] Connection update: open
+[2025-12-23T19:31:58.847Z] Connection opened successfully
+[2025-12-23T19:36:15.669Z] Iniciando limpieza de recursos...
+[2025-12-23T19:43:09.304Z] Connection update: connecting
+[2025-12-23T19:43:28.238Z] Connection update: connecting

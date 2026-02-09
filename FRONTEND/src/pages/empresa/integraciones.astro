@@ -1,0 +1,321 @@
+---
+import Layout from "../../layouts/LayoutMenu.astro";
+import { menuData } from "./menu.js";
+import DataTable from "./components/DataTable.astro";
+import SkeletonCard from "./components/SkeletonCard.astro";
+import IntegrationCard from "./components/IntegrationCard.astro";
+import IntegrationWizard from "./components/IntegrationWizard.astro";
+
+// Datos de ejemplo para integraciones
+const integracionesData = {
+  servicios: [
+    {
+      id: 1,
+      tipo_servicio: "sii_empresas",
+      nombre_cuenta: "SII Empresa Principal",
+      estado: "activa",
+      ultima_sincronizacion: "2024-01-20T15:30:00Z",
+      detalle: "Conectado como 76.123.456-9",
+    },
+    {
+      id: 2,
+      tipo_servicio: "bci",
+      nombre_cuenta: "Cuenta Corriente BCI",
+      estado: "activa",
+      ultima_sincronizacion: "2024-01-20T08:00:00Z",
+      detalle: "Sincronización bancaria activa",
+    },
+    {
+      id: 3,
+      tipo_servicio: "boletas_sii",
+      nombre_cuenta: "Emisor Boletas Honorarios",
+      estado: "pendiente",
+      ultima_sincronizacion: null,
+      detalle: "Requiere actualización de credenciales",
+    },
+    {
+      id: 4,
+      tipo_servicio: "santander",
+      nombre_cuenta: "Línea de Crédito Santander",
+      estado: "error",
+      ultima_sincronizacion: "2024-01-15T12:00:00Z",
+      detalle: "Error de autenticación (Credenciales expiradas)",
+    },
+  ],
+  logs: Array.from({ length: 50 }, (_, i) => ({
+    id: i + 1,
+    servicio: i % 3 === 0 ? "SII" : i % 3 === 1 ? "BCI" : "Santander",
+    evento:
+      i % 4 === 0
+        ? "Sincronización exitosa"
+        : i % 4 === 1
+          ? "Inicio de sesión"
+          : i % 4 === 2
+            ? "Actualización de datos"
+            : "Error de conexión",
+    fecha: new Date(Date.now() - i * 3600000).toLocaleString("es-CL"),
+    estado: i % 4 === 3 ? "error" : "exitoso",
+  })),
+};
+
+const serviceColumns = [
+  {
+    key: "nombre_cuenta",
+    label: "Servicio",
+    sortable: true,
+    visible: true,
+    width: "250px",
+  },
+  {
+    key: "tipo_servicio",
+    label: "Tipo",
+    sortable: true,
+    visible: true,
+    width: "150px",
+    format: (val: string) => val.toUpperCase().replace("_", " "),
+  },
+  {
+    key: "ultima_sincronizacion",
+    label: "Última Sinc.",
+    sortable: true,
+    visible: true,
+    width: "180px",
+    format: (val: string) =>
+      val ? new Date(val).toLocaleString("es-CL") : "Pendiente",
+  },
+  {
+    key: "estado",
+    label: "Estado",
+    sortable: true,
+    visible: true,
+    width: "120px",
+    type: "badge",
+    badgeColors: (value: string) => {
+      switch (value) {
+        case "activa":
+          return "bg-core-primary/20 text-core-dark dark:bg-green-900 dark:text-green-200";
+        case "error":
+          return "bg-core-dark/10 text-core-dark dark:bg-red-900 dark:text-red-200";
+        case "pendiente":
+          return "bg-core-gray/20 text-core-dark dark:bg-yellow-900 dark:text-yellow-200";
+        default:
+          return "bg-core-light text-core-dark dark:bg-core-dark dark:text-gray-200";
+      }
+    },
+  },
+];
+
+const logColumns = [
+  { key: "servicio", label: "Servicio", width: "120px" },
+  { key: "evento", label: "Evento", width: "300px" },
+  { key: "fecha", label: "Fecha", width: "150px" },
+  {
+    key: "estado",
+    label: "Resultado",
+    width: "120px",
+    type: "badge",
+    badgeColors: (v: string) =>
+      v === "exitoso"
+        ? "bg-core-primary/20 text-core-dark"
+        : "bg-core-dark/10 text-core-dark",
+  },
+];
+
+const serviceActions = [
+  {
+    label: "Configurar",
+    icon: `<svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>`,
+    action: (item: any) => `window.handleServiceAction('config', '${item.id}')`,
+  },
+  {
+    label: "Sincronizar",
+    icon: `<svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>`,
+    action: (item: any) => `window.handleServiceAction('sync', '${item.id}')`,
+  },
+  {
+    label: "Verificar Estado",
+    icon: `<svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>`,
+    action: (item: any) => `window.handleServiceAction('check', '${item.id}')`,
+  },
+  {
+    label: "Activar/Desactivar",
+    icon: `<svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></svg>`,
+    action: (item: any) => `window.handleServiceAction('toggle', '${item.id}')`,
+  },
+  {
+    label: "Eliminar",
+    icon: `<svg class="size-4 text-red-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>`,
+    action: (item: any) => `window.handleServiceAction('delete', '${item.id}')`,
+  },
+];
+---
+
+<Layout menuData={menuData}>
+  <div
+    id="content"
+    class="md:ps-0 lg:ps-40 mainmenu-open:pt-10 2xl:hs-overlay-layout-open:pe-2 xl:ps-80 transition-all duration-300"
+  >
+    <div class="max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto">
+      <div class="py-2 sm:pb-0 sm:pt-5 space-y-8">
+        <!-- Header -->
+        <div class="flex flex-wrap justify-between items-center gap-2">
+          <div>
+            <h1
+              class="text-lg md:text-xl font-semibold text-core-dark dark:text-neutral-200"
+            >
+              Integraciones y Servicios
+            </h1>
+            <p class="text-sm text-core-gray dark:text-core-gray">
+              Conecta tu empresa con el SII y entidades bancarias para
+              automatizar procesos
+            </p>
+          </div>
+          <div class="flex gap-2">
+            <button
+              type="button"
+              onclick="window.openWizard()"
+              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-core-primary text-white hover:opacity-80 focus:outline-hidden focus:opacity-80 disabled:opacity-50 disabled:pointer-events-none"
+            >
+              <svg
+                class="size-4"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M12 5v14M5 12l7 7 7-7"></path>
+              </svg>
+              Nueva Integración
+            </button>
+          </div>
+        </div>
+
+        <!-- Dashboard de Integraciones -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {
+            integracionesData.servicios.map((servicio) => (
+              <IntegrationCard service={servicio} />
+            ))
+          }
+
+          <!-- Add New Card -->
+          <button
+            onclick="window.openWizard()"
+            class="p-5 border-2 border-dashed border-core-gray rounded-xl flex flex-col items-center justify-center gap-2 hover:bg-core-light hover:border-blue-300 transition-all dark:border-neutral-700 dark:hover:bg-neutral-800 min-h-[200px]"
+          >
+            <div
+              class="w-10 h-10 bg-core-gray/10 rounded-full flex items-center justify-center dark:bg-neutral-700"
+            >
+              <svg
+                class="size-6 text-core-gray"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                ><path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 4v16m8-8H4"></path></svg
+              >
+            </div>
+            <span
+              class="text-sm font-medium text-core-dark/80 dark:text-core-gray"
+              >Agregar nuevo servicio</span
+            >
+          </button>
+        </div>
+
+        <!-- Tabla de Integraciones -->
+        <DataTable
+          id="table-services"
+          data={integracionesData.servicios}
+          columns={serviceColumns}
+          title="Configuraciones Activas (Vista Detallada)"
+          actionButtons={serviceActions}
+        />
+
+        <!-- Logs de Sincronización -->
+        <DataTable
+          id="table-logs"
+          data={integracionesData.logs}
+          columns={logColumns}
+          title="Historial de Sincronización"
+          enableSearch={false}
+          enableExport={true}
+        />
+      </div>
+    </div>
+  </div>
+
+  <IntegrationWizard />
+
+  <script is:inline>
+    // Global Toast Function (Simplified)
+    window.showToast = function (message, type = "success") {
+      const toast = document.createElement("div");
+      const bgColor =
+        type === "success"
+          ? "bg-core-primary"
+          : type === "error"
+            ? "bg-red-500"
+            : "bg-blue-500";
+      toast.className = `fixed top-4 right-4 z-[100] ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.classList.remove("translate-x-full"), 100);
+      setTimeout(() => {
+        toast.classList.add("translate-x-full");
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    };
+
+    // Global Action Handler
+    window.handleServiceAction = function (action, id) {
+      console.log("Action:", action, "ID:", id);
+      if (action === "check") {
+        window.showToast("Verificando estado del servicio...", "info");
+        setTimeout(
+          () => window.showToast("Servicio operativo", "success"),
+          1500,
+        );
+      } else if (action === "toggle") {
+        window.showToast("Actualizando estado...", "info");
+        setTimeout(
+          () => window.showToast("Estado actualizado correctamente", "success"),
+          1000,
+        );
+      } else if (action === "delete") {
+        if (confirm("¿Está seguro de eliminar esta integración?")) {
+          window.showToast("Servicio eliminado", "error");
+        }
+      } else if (action === "sync") {
+        window.showToast("Sincronizando datos...", "info");
+        setTimeout(
+          () => window.showToast("Sincronización finalizada", "success"),
+          2000,
+        );
+      } else if (action === "config") {
+        // Mock existing data fetch
+        const mockData = {
+          rut: "76.123.456-9",
+          password: "password123",
+          sii_type: "empresa",
+        };
+
+        // Determine type based on mock ID
+        const serviceType = id == 1 ? "sii" : "bci";
+
+        if (window.configureIntegration) {
+          window.configureIntegration(serviceType, mockData);
+        } else {
+          console.error("Wizard function not available");
+        }
+      }
+    };
+  </script>
+</Layout>

@@ -1,0 +1,1099 @@
+---
+import clients from "../../../../public/data/clientes_proveedores.json";
+---
+
+<main id="content">
+  <!-- Content -->
+  <div class="max-w-4xl mx-auto">
+    <!-- Heading -->
+    <div class="mb-5">
+      <h1
+        class="text-2xl md:text-3xl font-semibold text-core-dark dark:text-white"
+      >
+        Destinatario
+      </h1>
+    </div>
+    <!-- End Heading -->
+
+    <!-- Search Input -->
+    <div class="relative">
+      <div
+        class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-3"
+      >
+        <svg
+          class="shrink-0 size-5 text-core-gray dark:text-core-gray"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.3-4.3"></path>
+        </svg>
+      </div>
+      <input
+        type="text"
+        id="search-input"
+        class="py-3 ps-10 pe-4 block w-full bg-core-light border-gray-400 rounded-xl hover:border-gray-500 focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-600 dark:text-core-gray dark:placeholder:text-core-gray dark:hover:border-neutral-500 dark:focus:bg-neutral-900 dark:focus:ring-neutral-600"
+        placeholder="Buscar por razón social, RUT o email"
+      />
+    </div>
+    <!-- End Search Input -->
+
+    <div class="mt-8 mb-4">
+      <!-- Nav Tab -->
+      <nav
+        class="p-0.5 inline-flex bg-core-light border border-core-gray rounded-full dark:bg-neutral-900 dark:border-neutral-700"
+        aria-label="Tabs"
+        role="tablist"
+        aria-orientation="horizontal"
+      >
+        <button
+          type="button"
+          class="filter-btn hs-tab-active:bg-core-light hs-tab-active:focus:bg-core-light hs-tab-active:focus:text-core-dark inline-flex justify-center items-center gap-x-2 text-core-dark py-2 px-3 text-sm rounded-full disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:text-core-gray dark:hs-tab-active:bg-neutral-800 dark:focus:hs-tab-active:bg-neutral-800 dark:focus:hs-tab-active:text-neutral-200 dark:text-neutral-200 dark:focus:text-core-gray disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden active"
+          id="hs-pro-tabs-pyrp-item-all"
+          aria-selected="true"
+          data-hs-tab="#hs-pro-tabs-pyrp-all"
+          aria-controls="hs-pro-tabs-pyrp-all"
+          data-filter="all"
+        >
+          Todos
+        </button>
+        <button
+          type="button"
+          class="filter-btn hs-tab-active:bg-core-light hs-tab-active:focus:bg-core-light hs-tab-active:focus:text-core-dark inline-flex justify-center items-center gap-x-2 text-core-dark py-2 px-3 text-sm rounded-full disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:text-core-gray dark:hs-tab-active:bg-neutral-800 dark:focus:hs-tab-active:bg-neutral-800 dark:focus:hs-tab-active:text-neutral-200 dark:text-neutral-200 dark:focus:text-core-gray disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden"
+          id="hs-pro-tabs-pyrp-item-my-accounts"
+          aria-selected="false"
+          data-hs-tab="#hs-pro-tabs-pyrp-my-accounts"
+          aria-controls="hs-pro-tabs-pyrp-my-accounts"
+          data-filter="cliente"
+        >
+          Clientes
+        </button>
+        <button
+          type="button"
+          class="filter-btn hs-tab-active:bg-core-light hs-tab-active:focus:bg-core-light hs-tab-active:focus:text-core-dark inline-flex justify-center items-center gap-x-2 text-core-dark py-2 px-3 text-sm rounded-full disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:text-core-gray dark:hs-tab-active:bg-neutral-800 dark:focus:hs-tab-active:bg-neutral-800 dark:focus:hs-tab-active:text-neutral-200 dark:text-neutral-200 dark:focus:text-core-gray disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden"
+          id="hs-pro-tabs-pyrp-item-my-accounts"
+          aria-selected="false"
+          data-hs-tab="#hs-pro-tabs-pyrp-my-accounts"
+          aria-controls="hs-pro-tabs-pyrp-my-accounts"
+          data-filter="proveedor"
+        >
+          Proveedores
+        </button>
+      </nav>
+      <!-- End Nav Tab -->
+    </div>
+
+    <!-- Tab Content -->
+    <div id="clients-container">
+      <!-- List -->
+      <div
+        id="clients-grid"
+        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-3"
+      >
+        <!-- Item -->
+        <button
+          type="button"
+          class="py-4 px-3 flex flex-col items-center gap-x-3 bg-core-light border border-core-gray rounded-2xl hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:bg-neutral-900 dark:border-neutral-700 dark:hover:bg-neutral-800/50 dark:focus:bg-neutral-800/50 transition-colors"
+          data-hs-overlay="#hs-pro-deum"
+        >
+          <span class="mb-3 shrink-0 relative">
+            <div
+              class="shrink-0 size-11 rounded-full bg-core-light dark:bg-purple-900/30 flex items-center justify-center"
+            >
+              <svg
+                class="size-6 text-green-500"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <line x1="19" x2="19" y1="8" y2="14"></line>
+                <line x1="22" x2="16" y1="11" y2="11"></line>
+              </svg>
+            </div>
+          </span>
+
+          <div class="text-center">
+            <h4 class="font-medium text-core-dark dark:text-neutral-200">
+              Agregar
+            </h4>
+            <p class="text-[13px] text-core-gray dark:text-neutral-500">
+              Nuevo Destinatario
+            </p>
+          </div>
+        </button>
+      </div>
+      <!-- End List -->
+
+      <!-- No Results Message -->
+      <div id="no-results" class="hidden text-center py-8">
+        <div class="max-w-sm mx-auto">
+          <svg
+            class="w-16 h-16 mx-auto mb-4 text-core-gray dark:text-neutral-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.291-1.007-5.691-2.709M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+            ></path>
+          </svg>
+          <h3 class="text-lg font-medium text-core-dark dark:text-white mb-2">
+            No se encontraron resultados
+          </h3>
+          <p class="text-core-gray dark:text-core-gray">
+            No hay clientes que coincidan con los criterios de búsqueda.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Tab Content -->
+</main>
+<!-- End Content -->
+
+<!-- Modal -->
+<div
+  id="hs-pro-deum"
+  class="hs-overlay hidden size-full fixed top-0 start-0 z-80 overflow-x-hidden overflow-y-auto [--close-when-click-inside:true] pointer-events-none"
+  role="dialog"
+  tabindex="-1"
+  aria-labelledby="hs-pro-deum-label"
+>
+  <div
+    class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-56px)] min-h-[calc(100%-56px)] flex items-center"
+  >
+    <div
+      class="w-full max-h-full flex flex-col bg-core-light rounded-xl pointer-events-auto shadow-xl dark:bg-neutral-800"
+    >
+      <!-- Header -->
+      <div
+        class="py-2.5 px-4 flex justify-between items-center border-b border-core-gray dark:border-neutral-700"
+      >
+        <h3
+          id="product-modal-label"
+          class="font-medium text-core-dark dark:text-neutral-200 pt-1"
+        >
+          <span class="inline-flex gap-x-3">
+            <img src="/logos/core/core.svg" class="h-6" />
+            Nuevo destinatario
+          </span>
+        </h3>
+
+        <button
+          type="button"
+          class="size-8 shrink-0 flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-core-light text-core-dark hover:bg-core-gray disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-gray dark:bg-neutral-700 dark:hover:bg-neutral-600 dark:text-core-gray dark:focus:bg-neutral-600"
+          aria-label="Close"
+          data-hs-overlay="#hs-pro-deum"
+        >
+          <span class="sr-only">Close</span>
+          <svg
+            class="shrink-0 size-4"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg
+          >
+        </button>
+      </div>
+      <!-- End Header -->
+
+      <!-- Body -->
+      <div
+        class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-core-light [&::-webkit-scrollbar-thumb]:bg-core-gray/50 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500"
+      >
+        <div class="p-4 space-y-3">
+          <!-- Grid -->
+          <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+            <div class="sm:col-span-3">
+              <label
+                for="hs-pro-daufnm"
+                class="sm:mt-2.5 inline-block text-sm text-core-gray dark:text-neutral-500"
+              >
+                RUT
+              </label>
+            </div>
+            <!-- End Col -->
+
+            <div class="sm:col-span-9">
+              <!-- Input -->
+              <div class="relative">
+                <div
+                  class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-3.5"
+                >
+                  <svg
+                    class="shrink-0 size-4 text-core-dark dark:text-neutral-200"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    ><circle cx="11" cy="11" r="8"></circle><path
+                      d="m21 21-4.3-4.3"></path></svg
+                  >
+                </div>
+                <div class="flex items-center gap-x-2">
+                  <div class="grow relative">
+                    <input
+                      type="text"
+                      id="rut-search-input"
+                      class="py-1.5 sm:py-2 ps-10 pe-8 text-xl font-extrabold block w-full border-core-gray rounded-lg placeholder:text-core-gray focus:border-core-gray focus:ring-0 disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:border-neutral-600"
+                      placeholder="12.345.678-9"
+                      maxlength="12"
+                      required
+                    />
+
+                    <div
+                      class="absolute inset-y-0 end-0 flex items-center z-20 pe-2"
+                    >
+                      <div class="flex items-center">
+                        <button
+                          type="button"
+                          id="clear-rut-btn"
+                          class="hidden flex shrink-0 justify-center items-center size-6 rounded-full text-core-gray hover:text-cyan-600 focus:outline-hidden focus:text-cyan-600 dark:text-neutral-500 dark:hover:text-cyan-500 dark:focus:text-cyan-500"
+                          aria-label="Close"
+                        >
+                          <span class="sr-only">Close</span>
+                          <svg
+                            class="shrink-0 size-4"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            ><circle cx="12" cy="12" r="10"></circle><path
+                              d="m15 9-6 6"></path><path d="m9 9 6 6"
+                            ></path></svg
+                          >
+                        </button>
+
+                        <button
+                          type="button"
+                          id="search-rut-btn"
+                          class="inline-flex shrink-0 justify-center items-center size-6 text-sm font-medium rounded-full text-white bg-green-700 hover:bg-green-600 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-cyan-600"
+                        >
+                          <svg
+                            class="shrink-0 size-3.5"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            ><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"
+                            ></path></svg
+                          >
+                          <span class="sr-only">Buscar</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- End Input -->
+            </div>
+            <!-- End Col -->
+          </div>
+          <!-- End Grid -->
+
+          <hr />
+
+          <!-- Grid -->
+          <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+            <div class="sm:col-span-3">
+              <label
+                class="sm:mt-2.5 inline-block text-sm text-core-gray dark:text-neutral-500"
+              >
+                Logo
+              </label>
+            </div>
+            <!-- End Col -->
+
+            <div class="sm:col-span-9">
+              <!-- Logo Upload Group -->
+              <div class="flex flex-wrap items-center gap-3 sm:gap-5">
+                <img
+                  class="shrink-0 w-16 h-16 size-20 rounded-full"
+                  src="/logos/core/core_dot.svg"
+                  alt="profile.avatar"
+                  id="empresa-logo"
+                />
+
+                <div class="grow">
+                  <div class="flex items-center gap-x-2">
+                    <button
+                      type="button"
+                      class="py-2 px-3 inline-flex items-center gap-x-2 text-xs font-medium rounded-lg border border-transparent bg-core-primary text-white hover:opacity-80 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+                    >
+                      <svg
+                        class="shrink-0 size-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+                        ></path><polyline points="17 8 12 3 7 8"
+                        ></polyline><line x1="12" x2="12" y1="3" y2="15"
+                        ></line></svg
+                      >
+                      Upload photo
+                    </button>
+
+                    <button
+                      type="button"
+                      class="py-2 px-3 inline-flex items-center gap-x-2 text-xs font-medium rounded-lg border border-core-gray bg-core-light text-core-dark shadow-2xs hover:bg-core-light disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-dark dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!-- End Logo Upload Group -->
+            </div>
+            <!-- End Col -->
+          </div>
+          <!-- End Grid -->
+
+          <!-- Grid -->
+          <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+            <div class="sm:col-span-3">
+              <label
+                for="empresa-razonSocial"
+                class="sm:mt-2.5 inline-block text-sm text-core-gray dark:text-neutral-500"
+              >
+                Razon Social
+              </label>
+            </div>
+            <!-- End Col -->
+
+            <div class="sm:col-span-9">
+              <input
+                id="empresa-razonSocial"
+                type="text"
+                class="py-1.5 sm:py-2 px-3 block w-full border-core-gray rounded-lg sm:text-sm placeholder:text-core-gray focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:ring-neutral-600"
+                placeholder="Razon Social"
+                value=""
+              />
+            </div>
+            <!-- End Col -->
+          </div>
+          <!-- End Grid -->
+
+          <!-- Grid -->
+          <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+            <div class="sm:col-span-3">
+              <label
+                for="empresa-giro"
+                class="sm:mt-2.5 inline-block text-sm text-core-gray dark:text-neutral-500"
+              >
+                Giro
+              </label>
+            </div>
+            <!-- End Col -->
+
+            <div class="sm:col-span-9">
+              <input
+                id="empresa-giro"
+                type="text"
+                class="py-1.5 sm:py-2 px-3 block w-full border-core-gray rounded-lg sm:text-sm placeholder:text-core-gray focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:ring-neutral-600"
+                placeholder="Giro del negocio"
+                value=""
+              />
+            </div>
+            <!-- End Col -->
+          </div>
+          <!-- End Grid -->
+
+          <!-- Grid -->
+          <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+            <div class="sm:col-span-3">
+              <label
+                for="empresa-email"
+                class="sm:mt-2.5 inline-block text-sm text-core-gray dark:text-neutral-500"
+              >
+                Email
+              </label>
+            </div>
+            <!-- End Col -->
+
+            <div class="sm:col-span-9">
+              <input
+                id="empresa-email"
+                type="email"
+                class="py-1.5 sm:py-2 px-3 block w-full border-core-gray rounded-lg sm:text-sm placeholder:text-core-gray focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:ring-neutral-600"
+                placeholder="email@empresa.com"
+                value=""
+              />
+            </div>
+            <!-- End Col -->
+          </div>
+          <!-- End Grid -->
+
+          <!-- Grid -->
+          <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+            <div class="sm:col-span-3">
+              <label
+                for="empresa-telefono"
+                class="sm:mt-2.5 inline-block text-sm text-core-gray dark:text-neutral-500"
+              >
+                Teléfono
+              </label>
+            </div>
+            <!-- End Col -->
+
+            <div class="sm:col-span-9">
+              <div id="hs-pro-daufph-wrfc" class="space-y-3">
+                <div id="hs-pro-daufph-cnfc" class="grid grid-cols-12 gap-2">
+                  <div class="col-span-12">
+                    <input
+                      id="empresa-telefono"
+                      type="text"
+                      class="py-1.5 sm:py-2 px-3 block w-full border-core-gray rounded-lg sm:text-sm placeholder:text-core-gray focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:ring-neutral-600"
+                      placeholder="+56 9 1234 5678"
+                      value=""
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- End Col -->
+          </div>
+          <!-- End Grid -->
+
+          <!-- Grid -->
+          <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+            <div class="sm:col-span-3">
+              <label
+                for="empresa-direccion"
+                class="sm:mt-2.5 inline-block text-sm text-core-gray dark:text-neutral-500"
+              >
+                Dirección
+              </label>
+            </div>
+            <!-- End Col -->
+
+            <div class="sm:col-span-9 space-y-3">
+              <div class="space-y-3">
+                <input
+                  id="empresa-direccion"
+                  type="text"
+                  class="py-1.5 sm:py-2 px-3 block w-full border-core-gray rounded-lg sm:text-sm placeholder:text-core-gray focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:ring-neutral-600"
+                  placeholder="Dirección de la empresa"
+                  value=""
+                />
+              </div>
+
+              <div class="grid grid-cols-2 gap-x-3">
+                <div>
+                  <input
+                    id="empresa-ciudad"
+                    type="text"
+                    class="py-1.5 sm:py-2 px-3 block w-full border-core-gray rounded-lg sm:text-sm placeholder:text-core-gray focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:ring-neutral-600"
+                    placeholder="Ciudad"
+                    value=""
+                  />
+                </div>
+                <div>
+                  <input
+                    id="empresa-comuna"
+                    type="text"
+                    class="py-1.5 sm:py-2 px-3 block w-full border-core-gray rounded-lg sm:text-sm placeholder:text-core-gray focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:ring-neutral-600"
+                    placeholder="Comuna"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+            <!-- End Col -->
+          </div>
+          <!-- End Grid -->
+        </div>
+      </div>
+      <!-- End Body -->
+
+      <!-- Footer -->
+      <div class="p-4 flex justify-end gap-x-2">
+        <div class="flex-1 flex justify-end items-center gap-2">
+          <button
+            type="button"
+            class="py-2 px-3 text-nowrap inline-flex justify-center items-center text-start whitespace-nowrap bg-core-light border border-core-gray text-core-dark text-sm font-medium rounded-lg shadow-2xs align-middle hover:bg-core-light focus:outline-hidden focus:bg-core-light disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+            data-hs-overlay="#hs-pro-deum"
+          >
+            Volver
+          </button>
+
+          <button
+            type="button"
+            class="py-2 px-3 text-nowrap inline-flex justify-center items-center gap-x-2 text-start whitespace-nowrap bg-core-primary border border-blue-600 text-white text-sm font-medium rounded-lg shadow-2xs align-middle hover:opacity-80 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:ring-1 focus:ring-blue-300 dark:focus:ring-blue-500"
+            data-hs-overlay="#hs-pro-deum"
+          >
+            Guardar
+          </button>
+        </div>
+      </div>
+      <!-- End Footer -->
+    </div>
+  </div>
+</div>
+<!-- End Edit User Modal -->
+{clients && (
+  <script type="application/json" id="clients-data" set:html={JSON.stringify(clients)}>
+  </script>
+)}
+
+<script>
+  // Obtener datos de la empresa desde el HTML
+    const clientsDataElement = document.getElementById('clients-data');
+    let clientsData = null;
+    
+    if (clientsDataElement) {
+      try {
+        clientsData = JSON.parse(clientsDataElement.textContent);
+      } catch (e) {
+        console.error('Error parsing clients data:', e);
+      }
+    }
+
+  // Variables globales para filtros
+  let currentFilter = "all";
+  let currentSearch = "";
+
+  // Función para renderizar clientes
+  function renderClients(clients) {
+    const grid = document.getElementById("clients-grid");
+    const noResults = document.getElementById("no-results");
+
+    if (!grid) return;
+
+    // Limpiar grid manteniendo el botón "Nuevo Destinatario"
+    const newClientBtn = grid.querySelector("button[data-hs-overlay]");
+    grid.innerHTML = "";
+    if (newClientBtn) {
+      grid.appendChild(newClientBtn);
+    }
+
+    if (clients.length === 0) {
+      noResults.classList.remove("hidden");
+      return;
+    }
+
+    noResults.classList.add("hidden");
+
+    // Renderizar clientes filtrados
+    clients.forEach((client) => {
+      const clientElement = document.createElement("a");
+      clientElement.className =
+        "client-item py-4 px-3 flex flex-col items-center gap-x-3 bg-core-light border border-core-gray rounded-2xl hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:bg-neutral-900 dark:border-neutral-700 dark:hover:bg-neutral-800/50 dark:focus:bg-neutral-800/50 transition-colors";
+      clientElement.href = "#";
+      clientElement.setAttribute("data-is-cliente", client.isCliente);
+      clientElement.setAttribute("data-is-proveedor", client.isProveedor);
+      clientElement.setAttribute("data-nombre", client.datosBasicos.razonSocial.toLowerCase());
+      clientElement.setAttribute("data-rut", client.datosBasicos.rut.toLowerCase());
+      clientElement.setAttribute("data-email", client.datosBasicos.email.toLowerCase());
+      clientElement.innerHTML = `
+        <span class="mb-3 shrink-0 relative">
+          <img
+            class="shrink-0 p-1 size-11 rounded-full"
+            src="${client.datosBasicos.logo}"
+            alt="${client.datosBasicos.razonSocial}"
+          />
+          ${
+            client.isCliente
+              ? `
+            <span class="absolute -top-1 -right-1 size-4 bg-core-primary rounded-full flex items-center justify-center">
+              <img src="/logos/core/core_dot.svg" alt="Cliente" class="w-full h-auto bg-cover bg-core-light p-0.5 rounded-full">
+            </span>
+          `
+              : ""
+          }
+        </span>
+        <div class="text-center">
+          <h3 class="text-md font-medium text-core-dark dark:text-neutral-200 leading-none mb-1">
+            ${client.datosBasicos.razonSocial}
+          </h3>
+          <p class="text-[12px] text-core-gray dark:text-neutral-500">
+            ${client.datosBasicos.rut}
+          </p>
+          <p class="text-[11px] text-core-gray dark:text-neutral-600 mt-1">
+            ${client.isProveedor ? "Proveedor" : "Cliente"}
+          </p>
+        </div>
+      `;
+
+      grid.appendChild(clientElement);
+    });
+  }
+
+  // Función para filtrar clientes
+  function filterClients() {
+    let filteredClients = clientsData;
+
+    // Filtrar por tipo
+    if (currentFilter !== "all") {
+      filteredClients = filteredClients.filter(
+        (client) => {
+          if (currentFilter === "cliente") {
+            return client.isCliente;
+          } else if (currentFilter === "proveedor") {
+            return client.isProveedor;
+          }
+          return true;
+        }
+      );
+    }
+
+    // Filtrar por búsqueda
+    if (currentSearch.trim() !== "") {
+      const searchTerm = currentSearch.toLowerCase().trim();
+      filteredClients = filteredClients.filter(
+        (client) =>
+          client.datosBasicos.razonSocial.toLowerCase().includes(searchTerm) ||
+          client.datosBasicos.rut.toLowerCase().includes(searchTerm) ||
+          client.datosBasicos.email.toLowerCase().includes(searchTerm)
+      );
+    }
+
+    renderClients(filteredClients);
+
+    // Actualizar contador en los botones de filtro
+    updateFilterCounts();
+  }
+
+  // Función para actualizar contadores en los filtros
+  function updateFilterCounts() {
+    const allBtn = document.querySelector('[data-filter="all"]');
+    const clienteBtn = document.querySelector('[data-filter="cliente"]');
+    const proveedorBtn = document.querySelector('[data-filter="proveedor"]');
+
+    let filteredBySearch = clientsData;
+    if (currentSearch.trim() !== "") {
+      const searchTerm = currentSearch.toLowerCase().trim();
+      filteredBySearch = filteredBySearch.filter(
+        (client) =>
+          client.datosBasicos.razonSocial.toLowerCase().includes(searchTerm) ||
+          client.datosBasicos.rut.toLowerCase().includes(searchTerm) ||
+          client.datosBasicos.email.toLowerCase().includes(searchTerm)
+      );
+    }
+
+    const allCount = filteredBySearch.length;
+    const clienteCount = filteredBySearch.filter(
+      (c) => c.isCliente
+    ).length;
+    const proveedorCount = filteredBySearch.filter(
+      (c) => c.isProveedor
+    ).length;
+
+    if (allBtn) allBtn.textContent = `Todos (${allCount})`;
+    if (clienteBtn) clienteBtn.textContent = `Clientes (${clienteCount})`;
+    if (proveedorBtn)
+      proveedorBtn.textContent = `Proveedores (${proveedorCount})`;
+  }
+
+  // Event listeners
+  document.addEventListener("DOMContentLoaded", function () {
+    // Renderizar clientes inicialmente
+    filterClients();
+
+    // Event listeners para filtros de tipo
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", function () {
+        // Remover clase active de todos los botones
+        filterButtons.forEach((btn) => {
+          btn.classList.remove("active", "bg-core-light", "dark:bg-neutral-800");
+          btn.classList.add(
+            "hover:bg-core-light",
+            "focus:text-core-gray",
+            "dark:focus:text-core-gray"
+          );
+        });
+
+        // Agregar clase active al botón clickeado
+        this.classList.add("active", "bg-core-light", "dark:bg-neutral-800");
+        this.classList.remove(
+          "hover:bg-core-light",
+          "focus:text-core-gray",
+          "dark:focus:text-core-gray"
+        );
+
+        // Actualizar filtro actual
+        currentFilter = this.getAttribute("data-filter");
+
+        // Aplicar filtros
+        filterClients();
+      });
+    });
+
+    // Event listener para búsqueda
+    const searchInput = document.getElementById("search-input");
+    if (searchInput) {
+      searchInput.addEventListener("input", function () {
+        currentSearch = this.value;
+        filterClients();
+      });
+
+      // Búsqueda en tiempo real con debounce
+      let searchTimeout;
+      searchInput.addEventListener("keyup", function () {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+          currentSearch = this.value;
+          filterClients();
+        }, 300);
+      });
+    }
+  });
+
+  // Funciones para validación y formateo de RUT chileno
+  function formatRut(rut) {
+    // Remover caracteres no numéricos excepto 'k' o 'K'
+    const cleanRut = rut.replace(/[^0-9kK]/g, "");
+
+    if (cleanRut.length === 0) return "";
+
+    // Separar número y dígito verificador
+    const rutNumber = cleanRut.slice(0, -1);
+    const dv = cleanRut.slice(-1).toLowerCase();
+
+    if (rutNumber.length === 0) return cleanRut;
+
+    // Formatear número con puntos
+    const formattedNumber = rutNumber.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+    return `${formattedNumber}-${dv}`;
+  }
+
+  function validateRut(rut) {
+    // Remover formato
+    const cleanRut = rut.replace(/[^0-9kK]/g, "");
+
+    if (cleanRut.length < 2) return false;
+
+    const rutNumber = cleanRut.slice(0, -1);
+    const dv = cleanRut.slice(-1).toLowerCase();
+
+    // Validar que el número tenga entre 7 y 8 dígitos
+    if (rutNumber.length < 7 || rutNumber.length > 8) return false;
+
+    // Calcular dígito verificador
+    let sum = 0;
+    let multiplier = 2;
+
+    for (let i = rutNumber.length - 1; i >= 0; i--) {
+      sum += parseInt(rutNumber[i]) * multiplier;
+      multiplier = multiplier === 7 ? 2 : multiplier + 1;
+    }
+
+    const remainder = sum % 11;
+    const calculatedDv =
+      remainder < 2
+        ? remainder.toString()
+        : 11 - remainder === 10
+          ? "k"
+          : (11 - remainder).toString();
+
+    return dv === calculatedDv;
+  }
+
+  // Función para verificar RUT en base de proveedores existentes
+  function checkRutInDatabase(rut) {
+    const cleanRut = rut.replace(/[^0-9kK]/g, "");
+
+    // Buscar en clientesData existentes
+    const existingClient = clientsData.find((client) => {
+      const clientRut = client.datosBasicos.rut.replace(/[^0-9kK]/g, "");
+      return clientRut === cleanRut;
+    });
+
+    return existingClient;
+  }
+
+  // Función para simular consulta a endpoint externo
+  async function fetchClientFromEndpoint(rut) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        // Probabilidad 3:1 de éxito
+        const success = Math.random() > 0.25;
+
+        if (success) {
+          // Generar datos aleatorios del cliente
+          const nombres = [
+            "Juan Carlos",
+            "María Elena",
+            "Pedro Antonio",
+            "Ana Sofía",
+            "Carlos Eduardo",
+            "Lucía Fernanda",
+          ];
+          const apellidos = [
+            "González",
+            "Rodríguez",
+            "Martínez",
+            "López",
+            "García",
+            "Hernández",
+          ];
+          const empresas = [
+            "Comercial del Sur",
+            "Distribuidora Norte",
+            "Servicios Integrales",
+            "Tecnología Avanzada",
+            "Consultores Asociados",
+          ];
+          const dominios = [
+            "gmail.com",
+            "hotmail.com",
+            "empresa.cl",
+            "negocio.com",
+          ];
+
+          const nombre = nombres[Math.floor(Math.random() * nombres.length)];
+          const apellido =
+            apellidos[Math.floor(Math.random() * apellidos.length)];
+          const empresa = empresas[Math.floor(Math.random() * empresas.length)];
+          const dominio = dominios[Math.floor(Math.random() * dominios.length)];
+
+          const clientData = {
+            rut: rut,
+            nombre: `${nombre} ${apellido}`,
+            empresa: empresa,
+            giro: "Giro 1",
+            razonSocial: "Razón Social 1",
+            email: `${nombre.toLowerCase().replace(" ", ".")}@${dominio}`,
+            telefono: `+569${Math.floor(Math.random() * 90000000 + 10000000)}`,
+            direccion: `Av. Principal ${Math.floor(Math.random() * 9000 + 1000)}`,
+            ciudad: "Santiago",
+            comuna: "Santiago",
+            region: "Metropolitana",
+            logo: "/logos/creceideas/ci.svg",
+          };
+
+          resolve({ success: true, data: clientData });
+        } else {
+          resolve({
+            success: false,
+            message: "Cliente no encontrado en el endpoint externo",
+          });
+        }
+      }, 1000);
+    });
+  }
+
+  // Función para poblar el modal con datos del cliente
+  function populateModal(clientData) {
+    // Poblar campos del modal
+    const $empresaRut = document.getElementById("empresa-rut");
+    const $empresaNombre = document.getElementById("empresa-razonSocial");
+    const $empresaGiro = document.getElementById("empresa-giro");
+    const $empresaLogo = document.getElementById("empresa-logo");
+
+    const $empresaEmail = document.getElementById("empresa-email");
+    const $empresaTelefono = document.getElementById("empresa-telefono");
+
+    const $empresaRegion = document.getElementById("empresa-region");
+    const $empresaCiudad = document.getElementById("empresa-ciudad");
+    const $empresaComuna = document.getElementById("empresa-comuna");
+    const $empresaDireccion = document.getElementById("empresa-direccion");
+
+    if ($empresaRut) $empresaRut.value = clientData.rut || "";
+    if ($empresaNombre) $empresaNombre.value = clientData.empresa || "";
+    if ($empresaGiro) $empresaGiro.value = clientData.giro || "";
+
+    if ($empresaEmail) $empresaEmail.value = clientData.email || "";
+    if ($empresaTelefono) $empresaTelefono.value = clientData.telefono || "";
+
+    if ($empresaRegion) $empresaRegion.value = clientData.region || "";
+    if ($empresaCiudad) $empresaCiudad.value = clientData.ciudad || "";
+    if ($empresaComuna) $empresaComuna.value = clientData.comuna || "";
+    if ($empresaDireccion) $empresaDireccion.value = clientData.direccion || "";
+    if ($empresaLogo) $empresaLogo.src = clientData.logo || "";
+  }
+
+  // Función para limpiar el modal
+  function clearModal() {
+    const fields = [
+      "empresa-nombre",
+      "empresa-rut",
+      "contacto-nombre",
+      "contacto-email",
+      "contacto-telefono",
+      "empresa-direccion",
+      "empresa-ciudad",
+      "empresa-region",
+    ];
+
+    fields.forEach((fieldId) => {
+      const field = document.getElementById(fieldId);
+      if (field) field.value = "";
+    });
+  }
+
+  // Función principal de búsqueda de RUT
+  async function searchRut(rut) {
+    if (!validateRut(rut)) {
+      console.log("RUT inválido:", rut);
+      return;
+    }
+
+    console.log("Buscando RUT:", rut);
+
+    // Paso 1: Verificar en base de datos de proveedores
+    const existingClient = checkRutInDatabase(rut);
+
+    if (existingClient) {
+      console.log("RUT encontrado en base de datos:", existingClient);
+      alert(
+        `El RUT ${rut} ya existe en la base de datos como: ${existingClient.nombre}`
+      );
+      return;
+    }
+
+    console.log(
+      "RUT no encontrado en base de datos, consultando endpoint externo..."
+    );
+
+    // Paso 2: Consultar endpoint externo
+    try {
+      const result = await fetchClientFromEndpoint(rut);
+
+      if (result.success) {
+        console.log("Cliente encontrado en endpoint externo:", result.data);
+        populateModal(result.data);
+
+        // Abrir el modal automáticamente
+        /*
+        const modal = document.querySelector(
+          '[data-hs-overlay="#hs-pro-deum"]'
+        );
+        if (modal) {
+          modal.click();
+        }
+        */
+      } else {
+        console.log(result.message);
+        clearModal();
+      }
+    } catch (error) {
+      console.error("Error al consultar endpoint:", error);
+      clearModal();
+    }
+  }
+
+  // Event listeners para el input de RUT
+  document.addEventListener("DOMContentLoaded", function () {
+    const rutInput = document.getElementById("rut-search-input");
+    const searchBtn = document.getElementById("search-rut-btn");
+    const clearBtn = document.getElementById("clear-rut-btn");
+
+    if (rutInput) {
+      // Formateo en tiempo real
+      rutInput.addEventListener("input", function (e) {
+        const cursorPosition = e.target.selectionStart;
+        const oldValue = e.target.value;
+        const newValue = formatRut(oldValue);
+
+        e.target.value = newValue;
+
+        // Ajustar posición del cursor
+        const diff = newValue.length - oldValue.length;
+        e.target.setSelectionRange(
+          cursorPosition + diff,
+          cursorPosition + diff
+        );
+
+        // Mostrar/ocultar botón de limpiar
+        if (clearBtn) {
+          if (newValue.length > 0) {
+            clearBtn.classList.remove("hidden");
+          } else {
+            clearBtn.classList.add("hidden");
+          }
+        }
+      });
+
+      // Búsqueda al salir del input (blur)
+      /*
+      rutInput.addEventListener("blur", function (e) {
+        const rut = e.target.value.trim();
+        if (rut && validateRut(rut)) {
+          searchRut(rut);
+        }
+      });
+      */
+
+      // Búsqueda con Enter
+      rutInput.addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          const rut = e.target.value.trim();
+          if (rut && validateRut(rut)) {
+            searchRut(rut);
+          }
+        }
+      });
+    }
+
+    // Botón de búsqueda
+    if (searchBtn) {
+      searchBtn.addEventListener("click", function () {
+        const rut = rutInput ? rutInput.value.trim() : "";
+        if (rut && validateRut(rut)) {
+          searchRut(rut);
+        } else {
+          console.log("Ingrese un RUT válido");
+        }
+      });
+    }
+
+    // Botón de limpiar
+    if (clearBtn) {
+      clearBtn.addEventListener("click", function () {
+        if (rutInput) {
+          rutInput.value = "";
+          rutInput.focus();
+        }
+        clearBtn.classList.add("hidden");
+      });
+    }
+  });
+</script>

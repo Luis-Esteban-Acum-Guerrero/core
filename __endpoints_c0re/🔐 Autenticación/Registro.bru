@@ -1,0 +1,37 @@
+meta {
+  name: Registro
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/auth/register
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "nombre": "Miguel",
+    "nick": "miguel",
+    "email": "miguel@creceideas.cl",
+    "telefono": "56984207393",
+    "pass": "123456pass"
+  }
+}
+
+script:post-response {
+  if (res.getStatus() === 201) {
+      const response = res.getBody();
+      bru.setVar('access_token', response.accessToken);
+      bru.setVar('refresh_token', response.refreshToken);
+  }
+}
+
+settings {
+  encodeUrl: true
+}

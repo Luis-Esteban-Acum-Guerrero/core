@@ -1,0 +1,67 @@
+---
+const { detalle } = Astro.props;
+---
+
+<div class="table-container mt-8 mb-0">
+  <h2
+    class="mod-title font-mono text-3xl mt-12 mb-6 border-b-2 border-core-primary pb-2 text-core-dark"
+  >
+    {detalle.titulo}
+  </h2>
+  <table
+    class="w-full border-collapse my-8 font-mono text-core-dark break-inside-avoid"
+  >
+    <thead>
+      <tr>
+        <th
+          class="text-left uppercase text-xs tracking-wider text-core-gray border-b-2 border-core-dark p-3"
+          >Descripción</th
+        >
+        <th
+          class="text-center uppercase text-xs tracking-wider text-core-gray border-b-2 border-core-dark p-3"
+          >Cantidad</th
+        >
+        <th
+          class="text-right uppercase text-xs tracking-wider text-core-gray border-b-2 border-core-dark p-3 font-mono"
+          >Precio</th
+        >
+        <th
+          class="text-right uppercase text-xs tracking-wider text-core-gray border-b-2 border-core-dark p-3 font-mono"
+          >Subtotal</th
+        >
+      </tr>
+    </thead>
+    <tbody>
+      {
+        detalle.items.map((i) => (
+          <tr>
+            <td class="p-3 border-b border-gray-200">{i.descripcion}</td>
+            <td class="text-center p-3 border-b border-gray-200 font-mono">
+              {i.cantidad}
+            </td>
+            <td class="text-right p-3 border-b border-gray-200 font-mono">
+              ${i.precioUnitario.toLocaleString()}
+            </td>
+            <td class="text-right p-3 border-b border-gray-200 font-mono">
+              ${i.subtotal.toLocaleString()}
+            </td>
+          </tr>
+        ))
+      }
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3" class="text-right font-bold p-3 font-mono">Total</td>
+        <td class="text-right p-3 font-mono">
+          <b class="text-lg">${detalle.total.toLocaleString()}</b>
+          <small class="text-core-gray">+ IVA</small>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+  <small
+    class="observaciones block mt-4 font-light text-core-gray font-mono italic"
+  >
+    {detalle.observaciones}
+  </small>
+</div>

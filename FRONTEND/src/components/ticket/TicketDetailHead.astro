@@ -1,0 +1,525 @@
+---
+const { ticket } = Astro.props;
+---
+
+<header
+  class="sticky top-0 inset-x-0 z-10 p-2 sm:px-4 flex justify-between items-center gap-x-2 bg-core-light border-b border-core-gray dark:bg-neutral-800 dark:border-neutral-700"
+>
+  <div class="w-32 sm:w-auto xl:hidden flex items-center">
+    <div class="sm:-ms-3 flex items-center gap-x-1">
+      {/*  */}
+      <button
+        type="button"
+        class="flex justify-center items-center gap-x-1 py-1.5 px-2 min-h-8 text-xs text-core-dark/60 bg-core-light hover:bg-core-light rounded-full disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:bg-neutral-800 dark:text-core-gray dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
+        data-hs-overlay=`#hs-pro-chat-sidebar-${ticket.UID}`
+        aria-controls=`hs-pro-chat-sidebar-${ticket.UID}`
+        aria-label="Toggle navigation"
+      >
+        <svg
+          class="shrink-0 size-4 -ms-1"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="m15 18-6-6 6-6"></path>
+        </svg>
+        Menu
+      </button>
+
+      <div
+        class="lg:hidden relative ps-1.5 ms-0.5 before:block before:absolute before:top-1/2 before:start-0 before:w-px before:h-4 before:bg-core-gray/30 before:-translate-y-1/2 dark:before:bg-neutral-700"
+      >
+        <button
+          type="button"
+          class="flex justify-center items-center gap-x-1 py-1.5 px-2 min-h-8 text-xs text-core-dark/60 bg-core-light hover:bg-core-light rounded-full disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:bg-neutral-800 dark:text-core-gray dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
+          data-hs-overlay="#hs-pro-chtshid1"
+          aria-controls="hs-pro-chtshid1"
+          aria-label="Toggle navigation"
+        >
+          <svg
+            class="shrink-0 size-4"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M14 9a2 2 0 0 1-2 2H6l-4 4V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2z"
+            ></path>
+            <path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="hs-dropdown relative inline-flex">
+    <button
+      id=`hs-estadoTicket-${ticket.UID}`
+      type="button"
+      class="py-1.5 px-2.5 flex justify-center items-center bg-core-dark text-white hover:bg-core-dark focus:bg-core-dark dark:bg-neutral-100 dark:text-neutral-800 dark:hover:bg-core-light dark:focus:bg-core-light.class text-nowrap text-xs sm:text-[13px] rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden dark:text-core-gray"
+    >
+      {ticket.estadoTicket}
+    </button>
+    <p class="text-xs text-core-gray mx-4 my-2">{ticket.UID}</p>
+
+    <div
+      class="hs-dropdown-menu hs-dropdown-open:opacity-100 w-44 transition-[opacity,margin] duration opacity-0 hidden z-11 bg-core-light rounded-xl shadow-lg dark:bg-neutral-950"
+      role="menu"
+      aria-orientation="vertical"
+      aria-labelledby=`hs-estadoTicket-${ticket.UID}`
+    >
+      <div class="py-2 px-4">
+        <span
+          class="block font-medium text-[13px] text-core-dark dark:text-neutral-200"
+        >
+          <span class="truncate">Update ticket status</span>
+        </span>
+      </div>
+
+      <div class="p-1 border-t border-core-gray dark:border-neutral-800">
+        <div
+          class="space-y-0.5 max-h-48 overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-core-light [&::-webkit-scrollbar-thumb]:bg-core-gray/50 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500"
+        >
+          <label
+            for="hs-pro-chthuts1op"
+            class="py-1.5 px-3 group flex items-center gap-x-3 rounded-lg cursor-pointer text-[13px] text-core-dark hover:bg-core-light dark:text-neutral-200 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+          >
+            <input
+              type="radio"
+              class="hidden"
+              id="hs-pro-chthuts1op"
+              name="hs-pro-chthuts1"
+            />
+            <span class="shrink-0 size-3.5 flex justify-center items-center">
+              <span
+                class="shrink-0 size-2 block mx-auto bg-emerald-500 rounded-full"
+              ></span>
+            </span>
+            Open
+            <svg
+              class="shrink-0 size-3.5 ms-auto opacity-0 group-has-checked:opacity-100"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M20 6 9 17l-5-5"></path>
+            </svg>
+          </label>
+
+          <label
+            for="hs-pro-chthuts1ip"
+            class="py-1.5 px-3 group flex items-center gap-x-3 rounded-lg cursor-pointer text-[13px] text-core-dark hover:bg-core-light dark:text-neutral-200 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+          >
+            <input
+              type="radio"
+              class="hidden"
+              id="hs-pro-chthuts1ip"
+              name="hs-pro-chthuts1"
+            />
+            <span class="shrink-0 size-3.5 flex justify-center items-center">
+              <span
+                class="shrink-0 size-2 block mx-auto bg-orange-500 rounded-full"
+              ></span>
+            </span>
+            In progress
+            <svg
+              class="shrink-0 size-3.5 ms-auto opacity-0 group-has-checked:opacity-100"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M20 6 9 17l-5-5"></path>
+            </svg>
+          </label>
+
+          <label
+            for="hs-pro-chthuts1oh"
+            class="py-1.5 px-3 group flex items-center gap-x-3 rounded-lg cursor-pointer text-[13px] text-core-dark hover:bg-core-light dark:text-neutral-200 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+          >
+            <input
+              type="radio"
+              class="hidden"
+              id="hs-pro-chthuts1oh"
+              name="hs-pro-chthuts1"
+            />
+            <span class="shrink-0 size-3.5 flex justify-center items-center">
+              <span
+                class="shrink-0 size-2 block mx-auto bg-red-500 rounded-full"
+              ></span>
+            </span>
+            Snoozed
+            <svg
+              class="shrink-0 size-3.5 ms-auto opacity-0 group-has-checked:opacity-100"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M20 6 9 17l-5-5"></path>
+            </svg>
+          </label>
+
+          <label
+            for="hs-pro-chthuts1cd"
+            class="py-1.5 px-3 group flex items-center gap-x-3 rounded-lg cursor-pointer text-[13px] text-core-dark hover:bg-core-light dark:text-neutral-200 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+          >
+            <input
+              type="radio"
+              class="hidden"
+              id="hs-pro-chthuts1cd"
+              name="hs-pro-chthuts1"
+              checked
+            />
+            <span class="shrink-0 size-3.5 flex justify-center items-center">
+              <span
+                class="shrink-0 size-2 block mx-auto bg-core-dark dark:bg-neutral-200 rounded-full"
+              ></span>
+            </span>
+            Closed
+            <svg
+              class="shrink-0 size-3.5 ms-auto opacity-0 group-has-checked:opacity-100"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M20 6 9 17l-5-5"></path>
+            </svg>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-32 sm:w-auto flex justify-end items-center gap-x-0.5">
+    <div class="hs-tooltip [--placement:bottom] hidden sm:inline-block">
+      <button
+        type="button"
+        class="hs-tooltip-toggle flex justify-center items-center gap-x-3 size-8 text-sm text-core-dark/60 hover:bg-core-light rounded-full disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:text-core-gray dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
+        data-hs-overlay=`#hs-pro-chhsn-${ticket.UID}`
+      >
+        <svg
+          class="shrink-0 size-4"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+          <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+          <path d="M4 2C2.8 3.7 2 5.7 2 8"></path>
+          <path d="M22 8c0-2.3-.8-4.3-2-6"></path>
+        </svg>
+        <span class="sr-only">Notificame</span>
+      </button>
+      <span
+        class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 inline-block absolute invisible z-20 py-1.5 px-2.5 bg-core-dark text-xs text-white rounded-lg whitespace-nowrap dark:bg-neutral-700"
+        role="tooltip"
+      >
+        Notificame
+      </span>
+    </div>
+
+    <div class="hs-tooltip [--placement:bottom] hidden sm:inline-block">
+      <button
+        type="button"
+        class="hs-tooltip-toggle flex justify-center items-center gap-x-3 size-8 text-sm text-core-dark/60 hover:bg-core-light rounded-full disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:text-core-gray dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
+        data-hs-overlay="#hs-pro-chhtgm"
+      >
+        <svg
+          class="shrink-0 size-4"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"
+          ></path>
+          <circle cx="7.5" cy="7.5" r=".5" fill="currentColor"></circle>
+        </svg>
+        <span class="sr-only">Tags</span>
+      </button>
+      <span
+        class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 inline-block absolute invisible z-20 py-1.5 px-2.5 bg-core-dark text-xs text-white rounded-lg whitespace-nowrap dark:bg-neutral-700"
+        role="tooltip"
+      >
+        Tags
+      </span>
+    </div>
+
+    <div
+      class="hs-dropdown [--strategy:absolute] [--placement:top-right] relative inline-flex"
+    >
+      <button
+        id=`hs-pro-chthmdid1-${ticket.UID}`
+        type="button"
+        class="flex justify-center items-center gap-x-3 size-8 text-sm text-core-dark/60 hover:bg-core-light rounded-full disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:text-core-gray dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
+      >
+        <svg
+          class="shrink-0 size-4"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="1"></circle>
+          <circle cx="12" cy="5" r="1"></circle>
+          <circle cx="12" cy="19" r="1"></circle>
+        </svg>
+      </button>
+
+      <div
+        class="hs-dropdown-menu hs-dropdown-open:opacity-100 w-40 transition-[opacity,margin] duration opacity-0 hidden z-11 bg-core-light rounded-xl shadow-lg dark:bg-neutral-950"
+        role="menu"
+        aria-orientation="vertical"
+        aria-labelledby=`hs-pro-chthmdid1-${ticket.UID}`
+      >
+        <div class="p-1 space-y-0.5">
+          <button
+            type="button"
+            class="sm:hidden w-full flex items-center gap-x-3 py-1.5 px-2 rounded-lg text-xs text-core-dark hover:bg-core-light disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+            data-hs-overlay=`#hs-pro-chhsn-${ticket.UID}`
+          >
+            <svg
+              class="shrink-0 size-3.5"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+              <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+              <path d="M4 2C2.8 3.7 2 5.7 2 8"></path>
+              <path d="M22 8c0-2.3-.8-4.3-2-6"></path>
+            </svg>
+            Snooze
+          </button>
+
+          <button
+            type="button"
+            class="sm:hidden w-full flex items-center gap-x-3 py-1.5 px-2 rounded-lg text-xs text-core-dark hover:bg-core-light disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+            data-hs-overlay=`#hs-pro-chhtgm-${ticket.UID}`
+          >
+            <svg
+              class="shrink-0 size-3.5"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"
+              ></path>
+              <circle cx="7.5" cy="7.5" r=".5" fill="currentColor"></circle>
+            </svg>
+            Tags
+          </button>
+
+          <button
+            type="button"
+            class="w-full flex items-center gap-x-3 py-1.5 px-2 rounded-lg text-xs text-core-dark hover:bg-core-light disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+            data-hs-overlay=`#hs-pro-chhsh-${ticket.UID}`
+          >
+            <svg
+              class="shrink-0 size-3.5"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+              <polyline points="16 6 12 2 8 6"></polyline>
+              <line x1="12" x2="12" y1="2" y2="15"></line>
+            </svg>
+            Share
+          </button>
+
+          <button
+            type="button"
+            class="w-full flex items-center gap-x-3 py-1.5 px-2 rounded-lg text-xs text-core-dark hover:bg-core-light disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+            data-hs-overlay=`#hs-pro-chhsp-${ticket.UID}`
+          >
+            <svg
+              class="shrink-0 size-3.5"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polygon
+                points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"
+              ></polygon>
+              <line x1="12" x2="12" y1="8" y2="12"></line>
+              <line x1="12" x2="12.01" y1="16" y2="16"></line>
+            </svg>
+            Spam
+          </button>
+          
+          <button
+            type="button"
+            class="w-full flex items-center gap-x-3 py-1.5 px-2 rounded-lg text-xs text-core-dark hover:bg-core-light disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+            data-hs-overlay=`#hs-pro-chhbu-${ticket.UID}`
+          >
+            <svg
+              class="shrink-0 size-3.5"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="m4.9 4.9 14.2 14.2"></path>
+            </svg>
+            Block user
+          </button>
+          <button
+            type="button"
+            class="w-full flex items-center gap-x-3 py-1.5 px-2 rounded-lg text-xs text-core-dark hover:bg-core-light disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+            data-hs-overlay=`#hs-pro-chhdl-${ticket.UID}`
+          >
+            <svg
+              class="shrink-0 size-3.5"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M3 6h18"></path>
+              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+              <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+              <line x1="10" x2="10" y1="11" y2="17"></line>
+              <line x1="14" x2="14" y1="11" y2="17"></line>
+            </svg>
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="relative ps-1.5 ms-0.5 before:block before:absolute before:top-1/2 before:start-0 before:w-px before:h-4 before:bg-core-gray/30 before:-translate-y-1/2 dark:before:bg-neutral-700"
+    >
+      <button
+        type="button"
+        class="flex justify-center items-center gap-x-3 size-8 text-sm text-core-dark/60 hover:bg-core-light rounded-full disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:text-core-gray dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
+        data-hs-overlay=`#hs-aside-${ticket.UID}`
+        aria-controls=`hs-aside-${ticket.UID}`
+        aria-label="Toggle navigation"
+      >
+        <svg
+          class="xl:hidden shrink-0 size-4"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+          <path d="M15 3v18"></path>
+          <path d="m10 15-3-3 3-3"></path>
+        </svg>
+        <svg
+          class="hidden xl:block shrink-0 size-4"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+          <path d="M15 3v18"></path>
+          <path d="m8 9 3 3-3 3"></path>
+        </svg>
+        <span class="sr-only">Navigation Toggle</span>
+      </button>
+    </div>
+  </div>
+</header>

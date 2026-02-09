@@ -1,0 +1,47 @@
+---
+import TicketMenuDetail from "./TicketMenuDetail.astro";
+import TicketHeader from "./TicketHeader.astro";
+
+const { tickets } = Astro.props;
+---
+
+<div
+  id="hs-pro-chtshid1"
+  class="hs-overlay [--auto-close:xl] hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform sm:w-80 w-full hidden fixed inset-y-0 start-0 z-20 lg:start-0 xl:start-80 lg:block lg:translate-x-0 bg-core-light border-e border-core-gray dark:bg-neutral-800 dark:border-neutral-700"
+  tabindex="-1"
+  aria-labelledby="hs-pro-chtshid1-label"
+>
+  <div class="h-full flex flex-col">
+    <TicketHeader />
+
+    <div
+      class="h-full overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-core-light [&::-webkit-scrollbar-thumb]:bg-core-gray/50 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500"
+    >
+      <div aria-label="Tabs" role="tablist">
+        {
+          tickets.map((ticket, index) => (
+            <TicketMenuDetail
+              key={ticket.UID}
+              ticket={ticket}
+              isFirst={index === 0}
+            />
+          ))
+        }
+      </div>
+      <!-- 3 dots -->
+      <div class="h-16 flex flex-col justify-center items-center text-center">
+        <span class="inline-flex gap-x-1">
+          <span
+            class="size-1.5 bg-gray-400 rounded-full animate-[typing_1s_ease-in-out_infinite] dark:bg-neutral-600"
+          ></span>
+          <span
+            class="size-1.5 bg-gray-400 rounded-full animate-[typing_1s_ease-in-out_infinite_0.2s] dark:bg-neutral-600"
+          ></span>
+          <span
+            class="size-1.5 bg-gray-400 rounded-full animate-[typing_1s_ease-in-out_infinite_0.4s] dark:bg-neutral-600"
+          ></span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

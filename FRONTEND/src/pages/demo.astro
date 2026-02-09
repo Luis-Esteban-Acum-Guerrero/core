@@ -1,0 +1,93 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+import FinancialChart from "../components/old-dashboard/FinancialChart.tsx";
+import ContributionGraph from "../components/old-dashboard/ContributionGraph.tsx";
+import VentasModulo from "../components/old-dashboard/VentasModulo.jsx";
+import Resumenes from "../components/old-dashboard/Resumenes.jsx";
+import Daily from "../components/old-dashboard/Daily.jsx";
+import CreditCard from "../components/old-dashboard/CreditCards.jsx";
+import Services from "../components/old-dashboard/Services.jsx";
+
+import Client from "../components/maestros/Client.jsx";
+
+const sampleData = {
+  logo: "/ci.svg", // Replace with your logo path
+  company: "Acme Inc",
+  title: "Website Redesign Project",
+  menuItems: [
+    {
+      label: "Edit",
+      icon: "/ci.svg",
+      action: () => console.log("Edit clicked"),
+    },
+    {
+      label: "Delete",
+      icon: "/ci.svg",
+      action: () => console.log("Delete clicked"),
+    },
+  ],
+  stats: [
+    { value: "24", label: "Tasks" },
+    { value: "12", label: "Pending" },
+    { value: "4.2", label: "Priority" },
+  ],
+  details: [
+    {
+      label: "Due Date",
+      content: "December 24, 2024",
+    },
+    {
+      label: "Budget",
+      content: "$24,000",
+    },
+    {
+      label: "Team",
+      content: "Design & Development",
+    },
+  ],
+  comments: 24,
+  attachments: 8,
+  progress: 65,
+};
+---
+
+<Layout>
+  <div
+    class="flex min-h-screen flex-col items-center justify-between p-6 md:p-12 bg-core-light"
+  >
+    <div class="w-full max-w-6xl">
+      <div class="w-full">
+        <FinancialChart client:load />
+      </div>
+
+      <div class="w-full">
+        <ContributionGraph client:load />
+      </div>
+
+      <div class="w-full">
+        <VentasModulo client:load />
+      </div>
+
+      <div class="w-full">
+        <Resumenes client:load />
+      </div>
+
+      <div class="w-full">
+        <Daily data={sampleData} />
+      </div>
+
+      <div class="w-full m-20">
+        <Client data={sampleData} />
+      </div>
+
+      <div class="w-full">
+        <CreditCard data={sampleData} client:load />
+      </div>
+
+      <div class="w-full">
+        <Services data={sampleData} client:load />
+      </div>
+    </div>
+  </div>
+</Layout>

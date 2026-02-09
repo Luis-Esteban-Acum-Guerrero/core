@@ -1,0 +1,24 @@
+---
+const { emisor, header } = Astro.props;
+---
+
+<div class="footer mt-12 flex justify-between items-end font-mono">
+  <div>
+    <img src={`/assets/${emisor.firma}`} alt="Firma" class="w-64 h-auto" /><br
+    />
+    <div style="margin-top: -10px;">
+      <strong class="text-xl leading-none">{emisor.nombre}</strong><br />
+      {emisor.cargo}<br />
+      <small>{emisor.email} · {emisor.telefono}</small>
+    </div>
+  </div>
+  <div class="flex flex-col items-end text-right">
+    <div
+      id="qrcode"
+      class="qr"
+      style="padding:0; background: transparent; margin-bottom: 10px;"
+    >
+    </div>
+    <small class="leading-none">{header.uid}<br />{header.createdAt}</small>
+  </div>
+</div>

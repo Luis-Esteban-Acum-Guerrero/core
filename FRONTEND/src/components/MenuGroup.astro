@@ -1,0 +1,76 @@
+---
+import MenuItem from "./MenuItem.astro";
+import Icon from "./Icon.jsx";
+
+const { groupLabel, groupAdd, items, currentPath, activeRoute } = Astro.props;
+---
+
+<div
+  id={`${groupLabel}-accordion`}
+  class="hs-accordion p-2 group active"
+  data-hs-accordion="true"
+>
+  <div class="flex items-center gap-x-2 ps-1.5">
+    <button
+      type="button"
+      class="hs-accordion-toggle flex shrink-0 justify-center items-center text-core-dark/60 rounded-lg hover:bg-core-gray/10 focus:outline-hidden focus:bg-core-gray/10 dark:hover:bg-neutral-700 dark:text-neutral-500 dark:focus:bg-neutral-700"
+      aria-expanded="true"
+      aria-controls={`${groupLabel}-accordion-sub`}
+    >
+      <Icon
+        icon="ChevronRight"
+        className="hs-accordion-force-active hs-accordion-active:rotate-90 shrink-0 size-3.5 transition"
+        client:visible
+      />
+      <span class="sr-only">Toggle</span>
+    </button>
+    <span class="truncate text-xs text-core-dark/60 dark:text-neutral-500">
+      {groupLabel}
+    </span>
+    
+    {groupAdd && (
+      <div class="hs-tooltip [--placement:left] inline-block ms-auto group-hover:opacity-100 opacity-0">
+        <button
+          type="button"
+          class="flex shrink-0 justify-center items-center size-6 text-core-dark/60 rounded-lg hover:bg-core-gray/10 focus:outline-hidden focus:bg-core-gray/10 dark:hover:bg-neutral-700 dark:text-neutral-500 dark:focus:bg-neutral-700"
+        >
+          <Icon icon="Plus" className="shrink-0 size-3.5 mx-auto" client:visible />
+          <span class="sr-only">Create</span>
+        </button>
+        <span
+          class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 inline-block absolute invisible z-20 py-1.5 px-2.5 bg-core-dark text-xs text-white rounded-lg dark:bg-neutral-700"
+          role="tooltip"
+        >
+          Nuevo
+        </span>
+      </div>
+    )}
+  </div>
+
+  <div
+    id={`${groupLabel}-accordion-sub`}
+    class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300"
+    role="region"
+    aria-labelledby={`${groupLabel}-accordion`}
+  >
+    <div class="hs-accordion-group mt-0.5 space-y-0.5">
+      {items.map((item) => {
+        return <MenuItem key={item.key} item={item} isActive={item.ruta === activeRoute} />;
+      })}
+    </div>
+    
+    {groupAdd && (
+       <button
+        type="button"
+        class="flex items-center gap-x-2.5 w-full py-1.5 px-2 text-xs text-core-dark/60 rounded-lg hover:bg-core-gray/10 focus:outline-hidden focus:bg-core-gray/10 dark:hover:bg-neutral-700/50 dark:text-neutral-500 dark:focus:bg-neutral-700/50"
+      >
+        <span class="flex justify-center items-center size-3.5 bg-core-gray/20 text-core-dark rounded-full dark:bg-neutral-500/10 dark:text-neutral-500">
+          <Icon icon="Plus" className="shrink-0 size-2.5 mx-auto" client:visible />
+        </span>
+        <span class="truncate">
+          <small>{groupLabel.toUpperCase()}</small>
+        </span>
+      </button>
+    )}
+  </div>
+</div>

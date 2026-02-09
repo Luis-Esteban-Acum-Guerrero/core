@@ -1,0 +1,20 @@
+meta {
+  name: Obtener Clima por Coordenadas
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/mcp/clima?lat=-33.4489&lon=-70.6693
+  body: none
+  auth: inherit
+}
+
+params:query {
+  lat: -33.4489
+  lon: -70.6693
+}
+
+settings {
+  encodeUrl: true
+}

@@ -1,0 +1,10 @@
+---
+import Layout from "../../../layouts/LayoutMenu.astro";
+import CompanyFormComponent from "./CompanyFormComponent.astro";
+
+import { menuData } from "../menu.js";
+---
+
+<Layout menuData={menuData}>
+  <CompanyFormComponent />
+</Layout>

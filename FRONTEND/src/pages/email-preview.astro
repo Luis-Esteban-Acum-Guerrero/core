@@ -1,0 +1,179 @@
+---
+import { createReceiptEmail } from "../../../email/templates/ReceiptEmail.js";
+import { createOtpEmail } from "../../../email/templates/OtpEmail.js";
+import { createNotificationEmail } from "../../../email/templates/NotificationEmail.js";
+import { createReceiptAlreadyPaidEmail } from "../../../email/templates/ReceiptAlreadyPaidEmail.js";
+import { createAlertEmail } from "../../../email/templates/AlertEmail.js";
+
+const template = Astro.url.searchParams.get("template") || "receipt";
+
+const commonHeader = {
+  logo: "https://jelp.cl/logos/ci-logo.png", // Mock logo
+  backgroundColor: "#f8f9fa",
+};
+const mockData = {
+  receipt: {
+    header: {
+      from: "creceideas ltda",
+      logo: "https://jelp.cl/logos/ci-logo.png",
+      backgroundColor: "null",
+      email: "boris@creceideas.cl",
+
+      razonSocial: "Construcciones Servicios e Inversiones El Maiten SPA",
+      contacto: "Beatriz",
+      fechaFacturacion: "2026-01-31",
+      tipoDocumento: "Factura",
+      numeroFactura: "574",
+      moneda: "CLP",
+      pago: {
+        metodo: "Transferencia",
+        cuenta: "61085511",
+        tipoCuenta: "Cuenta Corriente",
+        banco: "Banco BCI",
+        email: "hola@creceideas.cl",
+      },
+    },
+    recipient: {
+      name: "MACA Servicios",
+      email: "bcabezasr@gmail.com",
+      asunto: "Documento Tributario - MACA",
+    },
+    observation: "***posee facturas pendientes",
+    items: [
+      {
+        name: "SERVICIOS INFORMATICOS",
+        description:
+          "Servicio mensual de asesoría informática y soporte técnico",
+        price: "317.649",
+        img: "https://jelp.cl/logos/jelp-logo.png",
+      },
+      {
+        name: "REPUESTOS Y PIEZAS PARA PC",
+        description: "Ventilador de procesador intel + pasta dicipadora",
+        price: "24.990",
+      },
+      {
+        name: "RENOVACION DOMINIO ANUAL",
+        description: "Renovación de dominio anual macaservicios.cl",
+        price: "9.990",
+        img: "https://jelp.cl/logos/ci-logo.png",
+      },
+    ],
+    totals: {
+      subtotal: "352.629",
+      tax: "67.000",
+      total: "419.629",
+    },
+    attachment: {
+      url: "./uploads/2026-01/2026-01_maca.pdf",
+    },
+  },
+  otp: {
+    header: commonHeader,
+    otpCode: "123456",
+  },
+  notification: {
+    header: commonHeader,
+    notificationType: "info",
+    title: "Nueva actualización disponible",
+    message:
+      "Hemos lanzado una nueva versión de la plataforma con mejoras de rendimiento.",
+  },
+  receiptAlreadyPaid: {
+    header: commonHeader,
+    userName: "Juan Pérez",
+    receiptNumber: "REC-00123",
+    paymentDate: "02/02/2026",
+    amount: "$41.650",
+    paymentMethod: "Tarjeta de Crédito",
+  },
+  alert: {
+    header: commonHeader,
+    title: "Alerta de Seguridad",
+    message: "Se ha detectado un inicio de sesión inusual en tu cuenta.",
+  },
+};
+
+let htmlContent = "";
+try {
+  switch (template) {
+    case "receipt":
+      htmlContent = createReceiptEmail(mockData.receipt);
+      break;
+    case "otp":
+      htmlContent = createOtpEmail(mockData.otp);
+      break;
+    case "notification":
+      htmlContent = createNotificationEmail(mockData.notification);
+      break;
+    case "receiptAlreadyPaid":
+      htmlContent = createReceiptAlreadyPaidEmail(mockData.receiptAlreadyPaid);
+      break;
+    case "alert":
+      htmlContent = createAlertEmail(mockData.alert);
+      break;
+    default:
+      htmlContent = "<p>Selecciona una plantilla válida.</p>";
+  }
+} catch (e) {
+  htmlContent = `<p>Error rendering template: ${e.message}</p>`;
+}
+---
+
+<div style="display: flex; height: 100vh; font-family: system-ui, sans-serif;">
+  <meta charset="UTF-8" />
+  <div
+    style="width: 250px; background: #f0f0f0; padding: 20px; border-right: 1px solid #ccc; display: flex; flex-direction: column;"
+  >
+    <h3 style="margin-top: 0;">Email Templates</h3>
+    <ul style="list-style: none; padding: 0; flex: 1;">
+      <li style="margin-bottom: 10px;">
+        <a
+          href="?template=receipt"
+          style={`text-decoration: none; color: ${template === "receipt" ? "#007bff" : "#333"}; font-weight: ${template === "receipt" ? "bold" : "normal"}`}
+          >Receipt</a
+        >
+      </li>
+      <li style="margin-bottom: 10px;">
+        <a
+          href="?template=otp"
+          style={`text-decoration: none; color: ${template === "otp" ? "#007bff" : "#333"}; font-weight: ${template === "otp" ? "bold" : "normal"}`}
+          >OTP</a
+        >
+      </li>
+      <li style="margin-bottom: 10px;">
+        <a
+          href="?template=notification"
+          style={`text-decoration: none; color: ${template === "notification" ? "#007bff" : "#333"}; font-weight: ${template === "notification" ? "bold" : "normal"}`}
+          >Notification</a
+        >
+      </li>
+      <li style="margin-bottom: 10px;">
+        <a
+          href="?template=receiptAlreadyPaid"
+          style={`text-decoration: none; color: ${template === "receiptAlreadyPaid" ? "#007bff" : "#333"}; font-weight: ${template === "receiptAlreadyPaid" ? "bold" : "normal"}`}
+          >Receipt Paid</a
+        >
+      </li>
+      <li style="margin-bottom: 10px;">
+        <a
+          href="?template=alert"
+          style={`text-decoration: none; color: ${template === "alert" ? "#007bff" : "#333"}; font-weight: ${template === "alert" ? "bold" : "normal"}`}
+          >Alert</a
+        >
+      </li>
+    </ul>
+    <div style="font-size: 0.8em; color: #666;">
+      <p>Select a template to preview.</p>
+    </div>
+  </div>
+  <div style="flex: 1; padding: 24px; background: #f4f4f4; overflow: auto;">
+    <div
+      style="max-width: 640px; margin: 0 auto; background: #ffffff; border: 1px solid #e5e5e5; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);"
+    >
+      <iframe
+        srcdoc={htmlContent}
+        style="width: 100%; min-height: 100vh; border: none;"></iframe>
+    </div>
+  </div>
+</div>

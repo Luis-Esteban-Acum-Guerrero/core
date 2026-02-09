@@ -1,0 +1,611 @@
+[
+  {
+    "header": {
+      "from": "creceideas ltda",
+      "logo": "https://jelp.cl/logos/ci-logo.png",
+      "backgroundColor": "null",
+
+      "email": "jcardenas@ecasanova.cl",
+      "razonSocial": "CLAUDIO CASANOVA GARCES PRESTACIONES DE SERVICIOS EIRL",
+      "contacto": "Transportes Casanova",
+      "fechaFacturacion": "2026-01-31",
+      "tipoDocumento": "Factura Electrónica",
+      "numeroFactura": "571",
+      "moneda": "CLP",
+      "pago": {
+        "metodo": "Transferencia",
+        "cuenta": "61085511",
+        "tipoCuenta": "Cuenta Corriente",
+        "banco": "Banco BCI",
+        "email": "hola@creceideas.cl"
+      }
+    },
+    "recipient": {
+      "name": "Transportes Casanova",
+      "email": ["jcardenas@ecasanova.cl", "ncorvalan@ecasanova.cl"],
+      "asunto": "❇️ Documento Tributario - creceideas"
+    },
+    "observation": "",
+    "items": [
+      {
+        "name": "SERVICIO SOPORTE TECNICO",
+        "description": "Soporte y Asesoría en TI",
+        "price": "476.473",
+        "img": "https://jelp.cl/logos/jelp-logo.png"
+      }
+    ],
+    "totals": {
+      "subtotal": "476.473",
+      "tax": "90.530",
+      "total": "567.003"
+    },
+    "attachment": {
+      "url": "./uploads/2026-01/2026-01_casanova.pdf"
+    }
+  },
+  {
+    "header": {
+      "from": "creceideas ltda",
+      "logo": "https://jelp.cl/logos/ci-logo.png",
+      "backgroundColor": "null",
+
+      "email": "contacto@transporteprambs.cl",
+      "razonSocial": "Transportes Prambs SPA",
+      "contacto": "Transportes Prambs",
+      "fechaFacturacion": "2026-01-31",
+      "tipoDocumento": "Factura Electrónica",
+      "numeroFactura": "572",
+      "moneda": "CLP",
+      "pago": {
+        "metodo": "Transferencia",
+        "cuenta": "61085511",
+        "tipoCuenta": "Cuenta Corriente",
+        "banco": "Banco BCI",
+        "email": "hola@creceideas.cl"
+      }
+    },
+    "recipient": {
+      "name": "Transportes Prambs",
+      "email": ["contabilidad@transporteprambs.cl"],
+      "asunto": "❇️ Documento Tributario - creceideas"
+    },
+    "observation": "",
+    "items": [
+      {
+        "name": "SERVICIO SERVIDOR CLOUD",
+        "description": "Configuración de servidor en gigas.com para app de audisoft",
+        "price": "397.061",
+        "img": "https://jelp.cl/logos/ci-logo.png"
+      },
+      {
+        "name": "REFACT GIGAS",
+        "description": "1 año de hosting en gigas para VPS",
+        "price": "430.684",
+        "img": "https://jelp.cl/logos/ci-logo.png"
+      },
+      {
+        "name": "SOPORTE EN TERRENO",
+        "description": "3 visita en terreno 1,5UF cu",
+        "price": "39.706",
+        "img": "https://jelp.cl/logos/jelp-logo.png"
+      }
+    ],
+    "totals": {
+      "subtotal": "1.006.422",
+      "tax": "191.220",
+      "total": "1.197.642"
+    },
+    "attachment": {
+      "url": "./uploads/2026-01/2026-01_prambs.pdf"
+    }
+  },
+  {
+    "header": {
+      "from": "creceideas ltda",
+      "logo": "https://jelp.cl/logos/ci-logo.png",
+      "backgroundColor": "null",
+
+      "email": "lcarabante@re-uso.cl",
+      "razonSocial": "Comercial Frohlich SPA",
+      "contacto": "RE-USO",
+      "fechaFacturacion": "2026-01-31",
+      "tipoDocumento": "Factura Electrónica",
+      "numeroFactura": "573",
+      "moneda": "CLP",
+      "pago": {
+        "metodo": "Transferencia",
+        "cuenta": "61085511",
+        "tipoCuenta": "Cuenta Corriente",
+        "banco": "Banco BCI",
+        "email": "hola@creceideas.cl"
+      }
+    },
+    "recipient": {
+      "name": "RE-USO",
+      "email": ["lcarabante@re-uso.cl", "cojeda@re-uso.cl"],
+      "asunto": "❇️ Documento Tributario - creceideas"
+    },
+    "observation": "",
+    "items": [
+      {
+        "name": "SERVICIOS INFORMATICOS",
+        "description": "Servicio mensual de asesoría informática y soporte técnico",
+        "price": "39.706",
+        "img": "https://jelp.cl/logos/jelp-logo.png"
+      },
+      {
+        "name": "ACTUALIZACION DE DOMINIOS",
+        "description": "Actualización anual de dominios emmfro.cl - fromo.cl - alspa.cl",
+        "price": "9.990",
+        "img": "https://jelp.cl/logos/ci-logo.png"
+      }
+    ],
+    "totals": {
+      "subtotal": "506.443",
+      "tax": "96.224",
+      "total": "602.667"
+    },
+    "attachment": {
+      "url": "./uploads/2026-01/2026-01_re-uso.pdf"
+    }
+  },
+  {
+    "header": {
+      "from": "creceideas ltda",
+      "logo": "https://jelp.cl/logos/ci-logo.png",
+      "backgroundColor": "null",
+      "email": "boris@creceideas.cl",
+
+      "razonSocial": "Construcciones Servicios e Inversiones El Maiten SPA",
+      "contacto": "boris cabezas",
+      "fechaFacturacion": "2026-01-31",
+      "tipoDocumento": "Factura Electrónica",
+      "numeroFactura": "574",
+      "moneda": "CLP",
+      "pago": {
+        "metodo": "Transferencia",
+        "cuenta": "61085511",
+        "tipoCuenta": "Cuenta Corriente",
+        "banco": "Banco BCI",
+        "email": "hola@creceideas.cl"
+      }
+    },
+    "recipient": {
+      "name": "MACA Servicios",
+      "email": ["beatrizdiaz74@gmail.com", "contabilidad@macaservicios.cl"],
+      "asunto": "❇️ Documento Tributario - creceideas"
+    },
+    "observation": "***posee facturas pendientes",
+    "items": [
+      {
+        "name": "SERVICIOS INFORMATICOS",
+        "description": "Servicio mensual de asesoría informática y soporte técnico",
+        "price": "317.649",
+        "img": "https://jelp.cl/logos/jelp-logo.png"
+      },
+      {
+        "name": "REPUESTOS Y PIEZAS PARA PC",
+        "description": "Ventilador de procesador intel + pasta dicipadora",
+        "price": "24.990"
+      },
+      {
+        "name": "RENOVACION DOMINIO ANUAL",
+        "description": "Renovación de dominio anual macaservicios.cl",
+        "price": "9.990",
+        "img": "https://jelp.cl/logos/ci-logo.png"
+      }
+    ],
+    "totals": {
+      "subtotal": "352.629",
+      "tax": "67.000",
+      "total": "419.629"
+    },
+    "attachment": {
+      "url": "./uploads/2026-01/2026-01_maca.pdf"
+    }
+  },
+  {
+    "header": {
+      "from": "creceideas ltda",
+      "logo": "https://jelp.cl/logos/ci-logo.png",
+      "backgroundColor": "null",
+
+      "email": "erika@alternova.cl",
+      "razonSocial": "Sociedad Constructora Alternova SPA",
+      "contacto": "Erika",
+      "fechaFacturacion": "2026-01-31",
+      "tipoDocumento": "Factura Electrónica",
+      "numeroFactura": "575",
+      "moneda": "CLP",
+      "pago": {
+        "metodo": "Transferencia",
+        "cuenta": "61085511",
+        "tipoCuenta": "Cuenta Corriente",
+        "banco": "Banco BCI",
+        "email": "hola@creceideas.cl"
+      }
+    },
+    "recipient": {
+      "name": "Constructira Alternova",
+      "email": ["erika@alternova.cl"],
+      "asunto": "❇️ Documento Tributario - creceideas"
+    },
+    "observation": "",
+    "items": [
+      {
+        "name": "SERVICIOS INFORMATICOS",
+        "description": "Servicio mensual de asesoría informática y soporte técnico",
+        "price": "158.824",
+        "img": "https://jelp.cl/logos/jelp-logo.png"
+      }
+    ],
+    "totals": {
+      "subtotal": "158.824",
+      "tax": "30.177",
+      "total": "189.001"
+    },
+    "attachment": {
+      "url": "./uploads/2026-01/2026-01_alternova.pdf"
+    }
+  },
+  {
+    "header": {
+      "from": "creceideas ltda",
+      "logo": "https://jelp.cl/logos/ci-logo.png",
+      "backgroundColor": "null",
+      "email": "boris@creceideas.cl",
+      "razonSocial": "Gallagher Chile SPA",
+      "contacto": "Gallagher",
+      "fechaFacturacion": "2026-01-31",
+      "tipoDocumento": "Factura Electrónica",
+      "numeroFactura": "576",
+      "moneda": "CLP",
+      "pago": {
+        "metodo": "Transferencia",
+        "cuenta": "61085511",
+        "tipoCuenta": "Cuenta Corriente",
+        "banco": "Banco BCI",
+        "email": "hola@creceideas.cl"
+      }
+    },
+    "recipient": {
+      "name": "Gallager",
+      "email": ["cesar.bustos@gallagher.com"],
+      "asunto": "❇️ Documento Tributario - creceideas"
+    },
+    "observation": "",
+    "items": [
+      {
+        "name": "SERVICIO SOPORTE TECNICO",
+        "description": "SERVICIO SOPORTE TECNICO",
+        "price": "158.824",
+        "img": "https://jelp.cl/logos/jelp-logo.png"
+      }
+    ],
+    "totals": {
+      "subtotal": "158.824",
+      "tax": "30.177",
+      "total": "189.001"
+    },
+    "attachment": {
+      "url": "./uploads/2026-01/2026-01_gallagher.pdf"
+    }
+  },
+  {
+    "header": {
+      "from": "creceideas ltda",
+      "logo": "https://creceideas.cl/logo.png",
+      "backgroundColor": "null",
+
+      "email": "boris@creceideas.cl",
+      "razonSocial": "COOPERATIVA AGRICOLA TORRENCIAL LECHERO",
+      "contacto": "Torrencial Lechero",
+      "fechaFacturacion": "2026-01-31",
+      "tipoDocumento": "Boleta Electrónica",
+      "numeroFactura": "643",
+      "moneda": "CLP",
+      "pago": {
+        "metodo": "Transferencia",
+        "cuenta": "61085511",
+        "tipoCuenta": "Cuenta Corriente",
+        "banco": "Banco BCI",
+        "email": "hola@creceideas.cl"
+      }
+    },
+    "recipient": {
+      "name": "COOPERATIVA AGRICOLA TORRENCIAL LECHERO",
+      "email": [
+        "administracion@torrencialechero.cl",
+        "ricardo.ossandon@torrencialechero.cl"
+      ],
+      "asunto": "❇️ Documento Tributario - creceideas"
+    },
+    "observation": "",
+    "items": [
+      {
+        "name": "SERVICIOS INFORMATICOS",
+        "description": "SERVICIOS INFORMATICOS",
+        "price": "262.509",
+        "img": "https://jelp.cl/logos/jelp-logo.png"
+      }
+    ],
+    "totals": {
+      "subtotal": "$262.509",
+      "tax": "40.033",
+      "total": "222.476"
+    },
+    "attachment": {
+      "url": "./uploads/2026-01/2026-01_torrencial.pdf"
+    }
+  },
+  {
+    "header": {
+      "from": "creceideas ltda",
+      "logo": "https://creceideas.cl/logo.png",
+      "backgroundColor": "null",
+
+      "email": "boris@creceideas.cl",
+      "razonSocial": "LABORATORIO CLINICO COCHRANE LTDA",
+      "contacto": "Laboratorio Clinico Cochrane",
+      "fechaFacturacion": "2026-01-31",
+      "tipoDocumento": "Boleta Electrónica",
+      "numeroFactura": "644",
+      "moneda": "CLP",
+      "pago": {
+        "metodo": "Transferencia",
+        "cuenta": "61085511",
+        "tipoCuenta": "Cuenta Corriente",
+        "banco": "Banco BCI",
+        "email": "hola@creceideas.cl"
+      }
+    },
+    "recipient": {
+      "name": "LABORATORIO CLINICO COCHRANE LTDA",
+      "email": ["jbarriga@cmcochrane.cl", "cvillanueva@cmcochrane.cl"],
+      "asunto": "❇️ Documento Tributario - creceideas"
+    },
+    "observation": "",
+    "items": [
+      {
+        "name": "SERVICIOS SOPORTE TECNICO EXTERNO",
+        "description": "SERVICIOS SOPORTE TECNICO EXTERNO",
+        "price": "294.985",
+        "img": "https://jelp.cl/logos/jelp-logo.png"
+      }
+    ],
+    "totals": {
+      "subtotal": "294.985",
+      "tax": "44.985",
+      "total": "250.000"
+    },
+    "attachment": {
+      "url": "./uploads/2026-01/2026-01_lab_cochrane.pdf"
+    }
+  },
+  {
+    "header": {
+      "from": "creceideas ltda",
+      "logo": "https://creceideas.cl/logo.png",
+      "backgroundColor": "null",
+
+      "email": "boris@creceideas.cl",
+      "razonSocial": "CENTRO MEDICO COCHRANE S A",
+      "contacto": "Centro Médico Cochrane",
+      "fechaFacturacion": "2026-01-31",
+      "tipoDocumento": "Boleta Electrónica",
+      "numeroFactura": "645",
+      "moneda": "CLP",
+      "pago": {
+        "metodo": "Transferencia",
+        "cuenta": "61085511",
+        "tipoCuenta": "Cuenta Corriente",
+        "banco": "Banco BCI",
+        "email": "hola@creceideas.cl"
+      }
+    },
+    "recipient": {
+      "name": "CENTRO MEDICO COCHRANE S A",
+      "email": ["cvillanueva@cmcochrane.cl", "jbarriga@cmcochrane.cl"],
+      "asunto": "❇️ Documento Tributario - creceideas"
+    },
+    "observation": "",
+    "items": [
+      {
+        "name": "SERVICIOS SOPORTE TECNICO EXTERNO",
+        "description": "SERVICIOS SOPORTE TECNICO EXTERNO",
+        "price": "294.985",
+        "img": "https://jelp.cl/logos/jelp-logo.png"
+      }
+    ],
+    "totals": {
+      "subtotal": "294.985",
+      "tax": "44.985",
+      "total": "250.000"
+    },
+    "attachment": {
+      "url": "./uploads/2026-01/2026-01_cm_cochrane.pdf"
+    }
+  },
+  {
+    "header": {
+      "from": "creceideas ltda",
+      "logo": "https://creceideas.cl/logo.png",
+      "backgroundColor": "null",
+
+      "email": "boris@creceideas.cl",
+      "razonSocial": "TRANSPORTES KORTMANN SPA",
+      "contacto": "Transportes Kortmann",
+      "fechaFacturacion": "2026-01-31",
+      "tipoDocumento": "Boleta Electrónica",
+      "numeroFactura": "646",
+      "moneda": "CLP",
+      "pago": {
+        "metodo": "Transferencia",
+        "cuenta": "61085511",
+        "tipoCuenta": "Cuenta Corriente",
+        "banco": "Banco BCI",
+        "email": "hola@creceideas.cl"
+      }
+    },
+    "recipient": {
+      "name": "TRANSPORTES KORTMANN SPA",
+      "email": ["p.kortmann@transporteskortmann.cl"],
+      "asunto": "❇️ Documento Tributario - creceideas"
+    },
+    "observation": "",
+    "items": [
+      {
+        "name": "SERVICIOS INFORMATICOS",
+        "description": "SERVICIOS INFORMATICOS",
+        "price": "177.515",
+        "img": "https://jelp.cl/logos/jelp-logo.png"
+      }
+    ],
+    "totals": {
+      "subtotal": "177.515",
+      "tax": "27.071",
+      "total": "150.444"
+    },
+    "attachment": {
+      "url": "./uploads/2026-01/2026-01_kortmann.pdf"
+    }
+  },
+  {
+    "header": {
+      "from": "creceideas ltda",
+      "logo": "https://creceideas.cl/logo.png",
+      "backgroundColor": "null",
+
+      "email": "boris@creceideas.cl",
+      "razonSocial": "OTTEN S A",
+      "contacto": "OTTEN",
+      "fechaFacturacion": "2026-01-31",
+      "tipoDocumento": "Boleta Electrónica",
+      "numeroFactura": "647",
+      "moneda": "CLP",
+      "pago": {
+        "metodo": "Transferencia",
+        "cuenta": "61085511",
+        "tipoCuenta": "Cuenta Corriente",
+        "banco": "Banco BCI",
+        "email": "hola@creceideas.cl"
+      }
+    },
+    "recipient": {
+      "name": "OTTEN S.A.",
+      "email": ["hedyr@rhenania.cl", "marisol.ferreira@rhenania.cl"],
+      "asunto": "❇️ Documento Tributario - creceideas"
+    },
+    "observation": "",
+    "items": [
+      {
+        "name": "SERVICIOS INFORMATICOS",
+        "description": "SERVICIOS INFORMATICOS",
+        "price": "557.278",
+        "img": "https://jelp.cl/logos/jelp-logo.png"
+      }
+    ],
+    "totals": {
+      "subtotal": "557.278",
+      "tax": "84.985",
+      "total": "472.293"
+    },
+    "attachment": {
+      "url": "./uploads/2026-01/2026-01_otten.pdf"
+    }
+  },
+  {
+    "header": {
+      "from": "creceideas ltda",
+      "logo": "https://creceideas.cl/logo.png",
+      "backgroundColor": "null",
+
+      "email": "boris@creceideas.cl",
+      "razonSocial": "CCL AUDITORES CONSULTORES LIMITADA",
+      "contacto": "CCL AC",
+      "fechaFacturacion": "2026-01-31",
+      "tipoDocumento": "Boleta Electrónica",
+      "numeroFactura": "",
+      "moneda": "CLP",
+      "pago": {
+        "metodo": "Transferencia",
+        "cuenta": "61085511",
+        "tipoCuenta": "Cuenta Corriente",
+        "banco": "Banco BCI",
+        "email": "hola@creceideas.cl"
+      }
+    },
+    "recipient": {
+      "name": "CCL AUDITORES CONSULTORES LIMITADA",
+      "email": ["restay@cclac.cl", "loporto@cclac.cl"],
+      "asunto": "Boleta Electrónica"
+    },
+    "observation": "",
+    "items": [
+      {
+        "name": "SERVICIOS DE ASESORIA INFORMATICA",
+        "description": "SERVICIOS DE ASESORIA INFORMATICA",
+        "price": "476.473",
+        "img": "https://jelp.cl/logos/jelp-logo.png"
+      }
+    ],
+    "totals": {
+      "subtotal": "476.473",
+      "tax": "72.662",
+      "total": "403.811"
+    },
+    "attachment": {
+      "url": "./uploads/2026-01/2026-01_cclac.pdf"
+    }
+  },
+  {
+    "header": {
+      "from": "creceideas ltda",
+      "logo": "https://jelp.cl/logos/ci-logo.png",
+      "backgroundColor": "null",
+
+      "email": "contacto@transportesprambs.cl",
+      "razonSocial": "INMOBILIARIA ALERCE SPA",
+      "contacto": "INMOBILIARIA ALERCE",
+      "fechaFacturacion": "2026-01-31",
+      "tipoDocumento": "Factura Electrónica",
+      "numeroFactura": "572",
+      "moneda": "CLP",
+      "pago": {
+        "metodo": "Transferencia",
+        "cuenta": "61085511",
+        "tipoCuenta": "Cuenta Corriente",
+        "banco": "Banco BCI",
+        "email": "hola@creceideas.cl"
+      }
+    },
+    "recipient": {
+      "name": "Inmobiliaria Alerce SPA",
+      "email": ["contabilidad@transportesprambs.cl"],
+      "asunto": "❇️ Documento Tributario - creceideas"
+    },
+    "observation": "",
+    "items": [
+      {
+        "name": "SERVICIO SERVIDOR CLOUD",
+        "description": "Configuración de servidor en gigas.com para app de audisoft",
+        "price": "397.061",
+        "img": "https://jelp.cl/logos/ci-logo.png"
+      },
+      {
+        "name": "REFACT GIGAS",
+        "description": "1 año de hosting en gigas para VPS",
+        "price": "430.684",
+        "img": "https://jelp.cl/logos/ci-logo.png"
+      }
+    ],
+    "totals": {
+      "subtotal": "827.745",
+      "tax": "157.272",
+      "total": "985.017"
+    },
+    "attachment": {
+      "url": "./uploads/2026-01_alerce.pdf"
+    }
+  }
+]

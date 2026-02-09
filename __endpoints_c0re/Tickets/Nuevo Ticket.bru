@@ -1,0 +1,33 @@
+meta {
+  name: Nuevo Ticket
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/ticket
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:json {
+  {
+    "idCliente": "f0a48efc-e0ad-4a38-88a9-fbe072472258",
+    "idTerminal": "45908f00-d2c2-4049-b117-8d107c385103",
+    "origenTicket": 1, // origen, app, webapp, bot ... etc
+    "prioridad": 2,
+    "asunto": "Problema con el sistema",
+    "descripcion": "Descripción detallada del problema",
+    "estado": 1,
+    "tipoPrestacion": 1, // 0 : en suscripción - 1 : regalo - 2 : xfacturar
+    "estadoPago": 0
+  }
+}
+
+settings {
+  encodeUrl: true
+}

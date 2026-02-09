@@ -1,0 +1,1327 @@
+---
+const ticket = Astro.props.ticket;
+
+
+const rtf = new Intl.RelativeTimeFormat("es", {
+  localeMatcher: "best fit",
+  numeric: "always",
+  style: "long",
+});
+
+function relativeTime(timestamp) {
+  const date = new Date(timestamp);
+  const now = new Date();
+  const diff = now - date;
+  const diffHours = Math.round(diff / (1000 * 60 * 60));
+  return rtf.format(-diffHours, "hour");
+}
+
+---
+
+<aside
+  id=`hs-aside-${ticket.UID}`
+  class="hs-overlay [--body-scroll:true] 2xl:[--overlay-backdrop:false] [--is-layout-affect:true] [--opened:2xl] [--auto-close:2xl] hs-overlay-open:translate-x-0 2xl:hs-overlay-layout-open:translate-x-0 translate-x-full transition-all duration-300 transform sm:w-96 w-full hidden fixed bottom-0 end-0 z-10 top-0 h-full bg-core-light border-s border-core-gray 2xl:block 2xl:translate-x-full 2xl:bottom-0 dark:bg-neutral-800 dark:border-neutral-700"
+  tabindex="-1"
+  aria-labelledby=`hs-aside-label-${ticket.UID}`
+>
+  <div class="h-full flex flex-col">
+    <div
+      class="py-3 px-5 flex justify-between items-center border-b border-core-gray dark:border-neutral-800"
+    >
+      <span
+        id=`hs-aside-label-${ticket.UID}`
+        class="block font-semibold text-core-dark dark:text-neutral-200"
+      >
+        Detalles
+      </span>
+
+      <div class="absolute top-2 end-4 z-10">
+        <button
+          type="button"
+          class="size-8 inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-core-light text-core-dark hover:bg-core-gray/30 focus:outline-hidden focus:bg-core-gray/30 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:text-core-gray dark:focus:bg-neutral-700"
+          aria-label="Close"
+          data-hs-overlay=`#hs-aside-${ticket.UID}`
+        >
+          <span class="sr-only">Close</span>
+          <svg
+            class="shrink-0 size-4"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div
+      class="h-full overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-core-light [&::-webkit-scrollbar-thumb]:bg-core-gray/50 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500"
+    >
+      <div class="p-5">
+        <div class="">
+          <textarea
+            class="py-3 px-0 block w-full bg-core-light border-transparent border-b-gray-200 font-semibold text-base rounded-0 resize-none hover:border-b-gray-400 focus:outline-hidden focus:border-transparent focus:border-b-gray-400 focus:ring-transparent disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:text-core-gray dark:border-b-neutral-700 dark:hover:border-b-neutral-500 dark:focus:bg-neutral-800 dark:placeholder-neutral-500 overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-core-light [&::-webkit-scrollbar-thumb]:bg-core-gray/50 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 focus:bg-core-light"
+            placeholder="Comentario..."
+            rows="1"
+            data-hs-textarea-auto-height='{"defaultHeight": 51}'
+            >{ticket.titulo}</textarea
+          >
+          {/**/}
+        </div>
+        {/**/}
+
+        <div class="mt-3">
+          <button
+            type="button"
+            class="hs-collapse-toggle hs-collapse-open:hidden py-1 px-2 inline-flex items-center gap-x-1 text-[13px] rounded-lg border border-core-gray bg-core-light text-core-dark shadow-2xs hover:bg-core-light disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+            id=`hs-pro-chtddclid1-${ticket.UID}`
+            aria-expanded="false"
+            aria-controls=`hs-pro-chtddclid1-heading-${ticket.UID}`
+            data-hs-collapse=`#hs-pro-chtddclid1-heading-${ticket.UID}`
+          >
+            <svg
+              class="shrink-0 size-3.5"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14"></path>
+              <path d="M12 5v14"></path>
+            </svg>
+            Agrega una descripción
+          </button>
+
+          <div
+            id=`hs-pro-chtddclid1-heading-${ticket.UID}`
+            class="hs-collapse hidden w-full overflow-hidden"
+            aria-labelledby=`hs-pro-chtddclid1-${ticket.UID}`
+          >
+            <div class="p-0.5">
+              <label
+                for=`hs-pro-chtddtxid1-${ticket.UID}`
+                class="block mb-2 font-medium text-sm text-core-dark dark:text-neutral-200"
+              >
+                Descripción
+              </label>
+              <textarea
+                id=`hs-pro-chtddtxid1-${ticket.UID}`
+                class="p-2 block w-full bg-core-light border-core-gray rounded-lg sm:text-sm text-base focus:border-blue-500 focus:ring-blue-500 resize-none disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                placeholder="Agrega notas que te ayudarán mas tarde"
+                data-hs-textarea-auto-height></textarea>
+            </div>
+            {/* */}
+          </div>
+        </div>
+      </div>
+
+      <div class="hs-accordion-group" data-hs-accordion-always-open>
+        <div
+          class="hs-accordion border-b border-gray-100 dark:border-neutral-800 active"
+          id=`hs-pro-chtdbdid1-${ticket.UID}`
+        >
+          <button
+            type="button"
+            class="hs-accordion-toggle p-5 pb-2 w-full flex justify-between items-center gap-x-3 text-core-dark hover:text-core-dark/60 focus:outline-hidden focus:text-core-dark/60 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-200 dark:hover:text-core-gray dark:focus:text-core-gray"
+            aria-expanded="true"
+            aria-controls=`hs-pro-chtdbdid1-collapse-${ticket.UID}`
+          >
+            <span class="text-sm font-medium">Detalle</span>
+            <svg
+              class="hs-accordion-active:hidden block size-4"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14"></path>
+              <path d="M12 5v14"></path>
+            </svg>
+            <svg
+              class="hs-accordion-active:block hidden size-4"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14"></path>
+            </svg>
+          </button>
+
+          <div
+            id=`hs-pro-chtdbdid1-collapse-${ticket.UID}`
+            class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300"
+            role="region"
+            aria-labelledby=`hs-pro-chtdbdid1-${ticket.UID}`
+          >
+            <div class="px-5 pb-5">
+              <dl class="py-1 flex items-center gap-x-4">
+                <dt class="w-full max-w-28">
+                  <p
+                    class="inline-flex items-center gap-x-2 text-[13px] text-core-gray dark:text-neutral-500"
+                  >
+                    <svg
+                      class="shrink-0 size-3.5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path
+                        d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"
+                      ></path>
+                      <path d="M13 5v2"></path>
+                      <path d="M13 17v2"></path>
+                      <path d="M13 11v2"></path>
+                    </svg>
+                    Ticket ID:
+                  </p>
+                </dt>
+                <dd class="grow w-full">
+                  <p
+                    class="inline-flex items-center gap-x-1 font-medium text-[13px] text-core-dark dark:text-neutral-200"
+                  >
+                    # {ticket.UID.split("-").pop()}
+                  </p>
+                </dd>
+              </dl>
+
+              <dl class="py-1 flex items-center gap-x-4">
+                <dt class="w-full max-w-28">
+                  <p
+                    class="inline-flex items-center gap-x-2 text-[13px] text-core-gray dark:text-neutral-500"
+                  >
+                    <svg
+                      class="shrink-0 size-3.5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path
+                        d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"
+                      ></path>
+                      <path d="m21.854 2.147-10.94 10.939"></path>
+                    </svg>
+                    From:
+                  </p>
+                </dt>
+                <dd class="grow w-full">
+                  <p
+                    class="inline-flex items-center gap-x-1 font-medium text-[13px] text-core-dark dark:text-neutral-200"
+                  >
+                    <svg
+              class="shrink-0 size-3.5"
+              width="32"
+              height="33"
+              viewBox="0 0 32 33"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8.42691 28.1051L8.94979 28.3665C11.0818 29.6347 13.5192 30.2975 15.9998 30.2837C23.6364 30.2663 29.9109 23.977 29.9109 16.3404C29.9109 12.6498 28.4451 9.10563 25.8386 6.493C23.2355 3.85337 19.6792 2.3658 15.9728 2.3658C8.37114 2.3658 2.1167 8.62111 2.1167 16.2219C2.1167 16.2821 2.1167 16.3413 2.11757 16.4015C2.14047 18.9857 2.86325 21.5154 4.20907 23.7217L4.55764 24.2445L3.16332 29.3861L8.42691 28.1051Z"
+                fill="#00E676"></path>
+              <path
+                d="M27.3898 4.92441C24.4225 1.89695 20.3519 0.198514 16.1132 0.218497H16.0862C7.35684 0.218524 0.173436 7.40196 0.173436 16.1313C0.173436 16.1722 0.17431 16.2124 0.17431 16.2533C0.20719 19.0287 0.925671 21.7529 2.26581 24.1836L0 32.4624L8.44441 30.2837C10.7772 31.5644 13.3998 32.2246 16.0609 32.2009C24.8225 32.153 32.005 24.9286 31.9998 16.1662C32.0207 11.9562 30.3606 7.90739 27.3898 4.92441ZM16.1132 29.4994C13.7543 29.5117 11.4369 28.8789 9.4117 27.6694L8.88883 27.4079L3.86054 28.7151L5.16771 23.7478L4.81915 23.2249C3.52433 21.1342 2.83835 18.7238 2.83832 16.2646C2.83832 9.01241 8.80606 3.04464 16.0583 3.04464C23.3105 3.04464 29.2782 9.01241 29.2782 16.2646C29.2782 20.8311 26.9123 25.0855 23.0325 27.4951C20.9806 28.8095 18.5936 29.5053 16.1568 29.4994M23.8169 19.8263L22.8583 19.3906C22.8583 19.3906 21.4639 18.7805 20.5925 18.3448C20.5053 18.3448 20.4182 18.2577 20.331 18.2577C20.1162 18.263 19.9062 18.3229 19.721 18.4319C19.5354 18.5409 19.6339 18.5191 18.4138 19.9134C18.3311 20.0764 18.1611 20.1784 17.9781 20.1749H17.891C17.76 20.1529 17.6385 20.0922 17.5424 20.0006L17.1067 19.8263C16.1717 19.4305 15.3157 18.8696 14.5794 18.1705C14.4051 17.9962 14.1437 17.8219 13.9694 17.6476C13.3243 17.0296 12.7671 16.3259 12.3137 15.5561L12.2265 15.3819C12.1508 15.2753 12.092 15.1577 12.0522 15.0333C12.0294 14.8823 12.0603 14.7281 12.1394 14.5976C12.2187 14.4668 12.4879 14.1618 12.7494 13.9004C13.0108 13.639 13.0108 13.4647 13.1851 13.2904C13.2747 13.166 13.3366 13.0238 13.3666 12.8735C13.3967 12.7232 13.3942 12.5682 13.3594 12.4189C12.9533 11.2913 12.4878 10.1859 11.9651 9.10738C11.8249 8.88946 11.6066 8.73352 11.3551 8.67165H10.3964C10.2222 8.67165 10.0479 8.75879 9.87357 8.75879L9.78642 8.84593C9.61214 8.93307 9.43786 9.10738 9.26355 9.19452C9.08927 9.28166 9.00212 9.54312 8.82784 9.7174C8.21862 10.4873 7.88153 11.4372 7.86923 12.4189C7.87888 13.1094 8.02705 13.791 8.30494 14.4233L8.39211 14.6847C9.1746 16.3577 10.2689 17.8661 11.6165 19.1291L11.9651 19.4777C12.2187 19.6878 12.4521 19.9212 12.6622 20.1749C14.4679 21.7461 16.6125 22.879 18.928 23.4864C19.1894 23.5735 19.538 23.5735 19.7994 23.6607H20.6709C21.1264 23.6382 21.5719 23.5194 21.9781 23.3121C22.1916 23.2154 22.3955 23.0986 22.5881 22.9635L22.7624 22.7892C22.9367 22.6149 23.111 22.5278 23.2853 22.3535C23.4556 22.2017 23.6024 22.0255 23.721 21.8306C23.8883 21.4402 24.0059 21.0306 24.0696 20.6106V20.0006C23.9913 19.9302 23.9032 19.8715 23.8081 19.8263"
+                fill="white"></path>
+            </svg>
+                    BOT
+                  </p>
+                </dd>
+              </dl>
+
+              <dl class="py-1 flex items-center gap-x-4">
+                <dt class="w-full max-w-28">
+                  <p
+                    class="inline-flex items-center gap-x-2 text-[13px] text-core-gray dark:text-neutral-500"
+                  >
+                    <svg
+                      class="shrink-0 size-3.5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path
+                        d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"
+                      ></path>
+                      <circle cx="7.5" cy="7.5" r=".5" fill="currentColor"
+                      ></circle>
+                    </svg>
+                    Tags:
+                  </p>
+                </dt>
+                <dd class="grow w-full">
+                  <div class="-ms-2 flex flex-wrap items-center gap-1">
+                    <div class="hs-dropdown relative inline-flex">
+                      <button
+                        id="hs-pro-intbtwtaddid1_1"
+                        type="button"
+                        class="py-0.5 px-2 group inline-flex items-center gap-1.5 bg-core-light border border-core-gray text-core-dark text-[13px] rounded-lg hover:bg-core-light dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:border-neutral-700 dark:text-neutral-200"
+                      >
+                        <svg
+                          class="shrink-0 size-3.5 text-orange-500"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path
+                            d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"
+                          ></path>
+                          <circle cx="7.5" cy="7.5" r=".5" fill="currentColor"
+                          ></circle>
+                        </svg>
+                        Generic
+                      </button>
+
+                      <div
+                        class="hs-dropdown-menu hs-dropdown-open:opacity-100 w-60 transition-[opacity,margin] duration opacity-0 hidden z-11 bg-core-light rounded-xl shadow-lg dark:bg-neutral-950 before:h-4 before:absolute before:-top-4 before:start-0 before:w-full"
+                        role="menu"
+                        aria-orientation="vertical"
+                        aria-labelledby="hs-pro-intbtwtaddid1_1"
+                      >
+                        <div
+                          class="p-1 space-y-0.5 border-b border-core-gray dark:border-neutral-800"
+                        >
+                          <button
+                            type="button"
+                            class="w-full flex items-center gap-x-3 py-1.5 px-3 rounded-lg text-[13px] text-core-dark hover:bg-core-light disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+                          >
+                            <svg
+                              class="shrink-0 size-3.5"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <path
+                                d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"
+                              ></path>
+                              <path d="m15 5 4 4"></path>
+                            </svg>
+                            Edit tag
+                          </button>
+                          <button
+                            type="button"
+                            class="w-full flex items-center gap-x-3 py-1.5 px-3 rounded-lg text-[13px] text-core-dark hover:bg-core-light disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+                          >
+                            <svg
+                              class="shrink-0 size-3.5"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <path d="M3 6h18"></path>
+                              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"
+                              ></path>
+                              <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"
+                              ></path>
+                              <line x1="10" x2="10" y1="11" y2="17"></line>
+                              <line x1="14" x2="14" y1="11" y2="17"></line>
+                            </svg>
+                            Remove from conversation
+                          </button>
+                          <button
+                            type="button"
+                            class="w-full flex items-center gap-x-3 py-1.5 px-3 rounded-lg text-[13px] text-core-dark hover:bg-core-light disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+                            data-hs-overlay="#hs-pro-chhsn"
+                          >
+                            <svg
+                              class="shrink-0 size-3.5"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
+                              <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
+                              <path d="M21 17v2a2 2 0 0 1-2 2h-2"></path>
+                              <path d="M7 21H5a2 2 0 0 1-2-2v-2"></path>
+                              <circle cx="12" cy="12" r="3"></circle>
+                              <path d="m16 16-1.9-1.9"></path>
+                            </svg>
+                            View all conversations
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="hs-dropdown relative inline-flex">
+                      <button
+                        id="hs-pro-intbtwtaddid1_2"
+                        type="button"
+                        class="py-0.5 px-2 group inline-flex items-center gap-1.5 bg-core-light border border-core-gray text-core-dark text-[13px] rounded-lg hover:bg-core-light dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:border-neutral-700 dark:text-neutral-200"
+                      >
+                        <svg
+                          class="shrink-0 size-3.5 text-core-primary"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path
+                            d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"
+                          ></path>
+                          <circle cx="7.5" cy="7.5" r=".5" fill="currentColor"
+                          ></circle>
+                        </svg>
+                        Reviews
+                      </button>
+
+                      <div
+                        class="hs-dropdown-menu hs-dropdown-open:opacity-100 w-60 transition-[opacity,margin] duration opacity-0 hidden z-11 bg-core-light rounded-xl shadow-lg dark:bg-neutral-950 before:h-4 before:absolute before:-top-4 before:start-0 before:w-full"
+                        role="menu"
+                        aria-orientation="vertical"
+                        aria-labelledby="hs-pro-intbtwtaddid1_2"
+                      >
+                        <div
+                          class="p-1 space-y-0.5 border-b border-core-gray dark:border-neutral-800"
+                        >
+                          <button
+                            type="button"
+                            class="w-full flex items-center gap-x-3 py-1.5 px-3 rounded-lg text-[13px] text-core-dark hover:bg-core-light disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+                          >
+                            <svg
+                              class="shrink-0 size-3.5"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <path
+                                d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"
+                              ></path>
+                              <path d="m15 5 4 4"></path>
+                            </svg>
+                            Edit tag
+                          </button>
+                          <button
+                            type="button"
+                            class="w-full flex items-center gap-x-3 py-1.5 px-3 rounded-lg text-[13px] text-core-dark hover:bg-core-light disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+                          >
+                            <svg
+                              class="shrink-0 size-3.5"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <path d="M3 6h18"></path>
+                              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"
+                              ></path>
+                              <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"
+                              ></path>
+                              <line x1="10" x2="10" y1="11" y2="17"></line>
+                              <line x1="14" x2="14" y1="11" y2="17"></line>
+                            </svg>
+                            Remove from conversation
+                          </button>
+                          <button
+                            type="button"
+                            class="w-full flex items-center gap-x-3 py-1.5 px-3 rounded-lg text-[13px] text-core-dark hover:bg-core-light disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+                            data-hs-overlay="#hs-pro-chhsn"
+                          >
+                            <svg
+                              class="shrink-0 size-3.5"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
+                              <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
+                              <path d="M21 17v2a2 2 0 0 1-2 2h-2"></path>
+                              <path d="M7 21H5a2 2 0 0 1-2-2v-2"></path>
+                              <circle cx="12" cy="12" r="3"></circle>
+                              <path d="m16 16-1.9-1.9"></path>
+                            </svg>
+                            View all conversations
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="hs-accordion border-b border-gray-100 dark:border-neutral-800 active"
+          id=`hs-pro-chdstcc1-${ticket.UID}`
+        >
+          <button
+            type="button"
+            class="hs-accordion-toggle p-5 pb-2 w-full flex justify-between items-center gap-x-3 text-core-dark hover:text-core-dark/60 focus:outline-hidden focus:text-core-dark/60 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-200 dark:hover:text-core-gray dark:focus:text-core-gray"
+            aria-expanded="true"
+            aria-controls="hs-pro-chdstcc1-collapse"
+          >
+            <span class="text-sm font-medium">Ticket</span>
+            <svg
+              class="hs-accordion-active:hidden block size-4"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14"></path>
+              <path d="M12 5v14"></path>
+            </svg>
+            <svg
+              class="hs-accordion-active:block hidden size-4"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14"></path>
+            </svg>
+          </button>
+
+          <div
+            id="hs-pro-chdstcc1-collapse"
+            class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300"
+            role="region"
+            aria-labelledby="hs-pro-chdstcc1"
+          >
+            <div class="px-5 pb-5">
+              <dl class="py-1 flex gap-x-4">
+                <dt class="w-full max-w-28">
+                  <label
+                    class="inline-flex items-center gap-x-2 text-[13px] text-core-gray dark:text-neutral-500"
+                  >
+                    <svg
+                      class="shrink-0 size-3.5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
+                      ></path>
+                      <circle cx="9" cy="7" r="4"></circle>
+                      <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    Asignado:
+                  </label>
+                </dt>
+                <dd class="grow w-full -mx-1">
+                        <select multiple data-hs-select=`{
+                          "placeholder": "Unassigned",
+                          "dropdownClasses": "mt-2 z-85 w-full max-w-xs max-h-72 p-1 bg-core-light border border-core-gray rounded-lg shadow-lg overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-core-light [&::-webkit-scrollbar-thumb]:bg-core-gray/50 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 dark:bg-neutral-900 dark:border-neutral-700",
+                          "dropdownScope": "window",
+                          "dropdownPlacement": "bottom-left",
+                          "optionClasses": "py-1 px-2 w-full text-sm text-core-dark cursor-pointer hover:bg-core-light rounded-lg focus:outline-hidden focus:bg-core-light hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:text-neutral-200 dark:focus:bg-neutral-800",
+                          "mode": "tags",
+                          "wrapperClasses": "relative flex items-center flex-wrap text-nowrap w-full text-start text-sm",
+                          "tagsItemTemplate": "<div class='flex flex-nowrap items-center relative z-1 bg-core-light border border-core-gray rounded-full p-0.5 pe-[3px] m-0.5 dark:bg-neutral-800 dark:border-neutral-700 '><div class='shrink-0 size-6 me-1.5' data-icon></div><div class='whitespace-nowrap text-core-dark dark:text-neutral-200 ' data-title></div><div class='inline-flex shrink-0 justify-center items-center size-5 ms-1 rounded-full text-core-dark hover:bg-core-gray/30 focus:outline-hidden focus:bg-core-gray/30 text-sm dark:hover:bg-neutral-700 dark:text-core-gray cursor-pointer' data-remove><svg class='shrink-0 size-3' xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M18 6 6 18'/><path d='m6 6 12 12'/></svg></div></div>",
+                          "tagsInputId": "hs-pro-chtdaiid1",
+                          "tagsInputClasses": "py-0 px-1 rounded-md grow order-1 font-medium sm:text-[13px] text-base border-transparent focus:ring-0 placeholder:text-core-dark outline-hidden cursor-pointer hover:bg-core-light dark:bg-neutral-800 dark:placeholder-neutral-200 dark:text-neutral-200 dark:hover:bg-neutral-700",
+                          "optionTemplate": "<div class='flex items-center'><div class='shrink-0 size-6 me-3' data-icon></div><div class='truncate'><div class='text-sm text-core-dark dark:text-neutral-200 ' data-title></div><div class='truncate text-xs text-core-gray dark:text-neutral-500 ' data-description></div></div><div class='ms-auto'><span class='hidden hs-selected:block'><svg class='shrink-0 size-4' xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'><path d='M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z'/></svg></span></div></div>"
+                        }`
+                        class="hidden" 
+                        id={`mselect-${ticket.UID}`}>
+                          <option value="">Choose</option>
+                          <option value="1" data-hs-select-option=`{
+                              "icon": "<span class='inline-flex shrink-0 justify-center items-center size-6 text-xs uppercase bg-gray-400 text-white dark:bg-neutral-600 rounded-full'>S</span>"
+                            }`>Sarah Chen</option>
+                          <option selected value="2" data-hs-select-option=`{
+                              "icon": "<img class='shrink-0 rounded-full' src='https://images.unsplash.com/photo-1659482633369-9fe69af50bfb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=3&w=320&h=320&q=80' alt='Avatar'>"
+                            }`>James Collins</option>
+                          <option value="3" data-hs-select-option=`{
+                              "icon": "<img class='shrink-0 rounded-full' src='https://images.unsplash.com/photo-1679412330254-90cb240038c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2.5&w=320&h=320&q=80' alt='Avatar'>"
+                            }`>Lewis Clarke</option>
+                          <option value="4" data-hs-select-option=`{
+                              "icon": "<span class='inline-flex shrink-0 justify-center items-center size-6 text-xs uppercase bg-purple-500 text-white rounded-full'>I</span>"
+                            }`>Isabella Lauda</option>
+                          <option value="5" data-hs-select-option=`{
+                              "icon": "<span class='inline-flex shrink-0 justify-center items-center size-6 text-xs uppercase bg-orange-500 text-white rounded-full'>C</span>"
+                            }`>Christina Williams</option>
+                          <option value="6" data-hs-select-option=`{
+                              "icon": "<img class='shrink-0 rounded-full' src='https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2.5&w=320&h=320&q=80' alt='Avatar'>"
+                            }`>Amanda Harvey</option>
+
+                        </select>
+                </dd>
+              </dl>
+
+              <dl class="py-1 flex items-center gap-x-4">
+                <dt class="w-full max-w-28">
+                  <p
+                    class="inline-flex items-center gap-x-2 text-[13px] text-core-gray dark:text-neutral-500"
+                  >
+                    <svg
+                      class="shrink-0 size-3.5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    Created time:
+                  </p>
+                </dt>
+                <dd class="grow w-full">
+                  <p
+                    class="font-medium text-[13px] text-core-dark dark:text-neutral-200"
+                  >
+                    {
+                      new Date(ticket.createdAt)
+                        .toLocaleString("es-ES", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "2-digit",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          second: "2-digit",
+                          hour12: false,
+                        })
+                        .replace(/[/]/g, "-")
+                    }
+                  </p>
+                </dd>
+              </dl>
+
+              <dl class="py-1 flex items-center gap-x-4">
+                <dt class="w-full max-w-28">
+                  <p
+                    class="inline-flex items-center gap-x-2 text-[13px] text-core-gray dark:text-neutral-500"
+                  >
+                    <svg
+                      class="shrink-0 size-3.5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <circle cx="12" cy="10" r="3"></circle>
+                      <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"
+                      ></path>
+                    </svg>
+                    Created by:
+                  </p>
+                </dt>
+                <dd class="grow w-full">
+                  <div class="flex items-center gap-x-1">
+                    <div class="relative size-4">
+                      <span
+                        class="flex shrink-0 justify-center items-center size-4 text-xs font-medium uppercase nullInitial.color rounded-full"
+                      >
+                    <svg
+              class="shrink-0 size-3.5"
+              width="32"
+              height="33"
+              viewBox="0 0 32 33"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8.42691 28.1051L8.94979 28.3665C11.0818 29.6347 13.5192 30.2975 15.9998 30.2837C23.6364 30.2663 29.9109 23.977 29.9109 16.3404C29.9109 12.6498 28.4451 9.10563 25.8386 6.493C23.2355 3.85337 19.6792 2.3658 15.9728 2.3658C8.37114 2.3658 2.1167 8.62111 2.1167 16.2219C2.1167 16.2821 2.1167 16.3413 2.11757 16.4015C2.14047 18.9857 2.86325 21.5154 4.20907 23.7217L4.55764 24.2445L3.16332 29.3861L8.42691 28.1051Z"
+                fill="#00E676"></path>
+              <path
+                d="M27.3898 4.92441C24.4225 1.89695 20.3519 0.198514 16.1132 0.218497H16.0862C7.35684 0.218524 0.173436 7.40196 0.173436 16.1313C0.173436 16.1722 0.17431 16.2124 0.17431 16.2533C0.20719 19.0287 0.925671 21.7529 2.26581 24.1836L0 32.4624L8.44441 30.2837C10.7772 31.5644 13.3998 32.2246 16.0609 32.2009C24.8225 32.153 32.005 24.9286 31.9998 16.1662C32.0207 11.9562 30.3606 7.90739 27.3898 4.92441ZM16.1132 29.4994C13.7543 29.5117 11.4369 28.8789 9.4117 27.6694L8.88883 27.4079L3.86054 28.7151L5.16771 23.7478L4.81915 23.2249C3.52433 21.1342 2.83835 18.7238 2.83832 16.2646C2.83832 9.01241 8.80606 3.04464 16.0583 3.04464C23.3105 3.04464 29.2782 9.01241 29.2782 16.2646C29.2782 20.8311 26.9123 25.0855 23.0325 27.4951C20.9806 28.8095 18.5936 29.5053 16.1568 29.4994M23.8169 19.8263L22.8583 19.3906C22.8583 19.3906 21.4639 18.7805 20.5925 18.3448C20.5053 18.3448 20.4182 18.2577 20.331 18.2577C20.1162 18.263 19.9062 18.3229 19.721 18.4319C19.5354 18.5409 19.6339 18.5191 18.4138 19.9134C18.3311 20.0764 18.1611 20.1784 17.9781 20.1749H17.891C17.76 20.1529 17.6385 20.0922 17.5424 20.0006L17.1067 19.8263C16.1717 19.4305 15.3157 18.8696 14.5794 18.1705C14.4051 17.9962 14.1437 17.8219 13.9694 17.6476C13.3243 17.0296 12.7671 16.3259 12.3137 15.5561L12.2265 15.3819C12.1508 15.2753 12.092 15.1577 12.0522 15.0333C12.0294 14.8823 12.0603 14.7281 12.1394 14.5976C12.2187 14.4668 12.4879 14.1618 12.7494 13.9004C13.0108 13.639 13.0108 13.4647 13.1851 13.2904C13.2747 13.166 13.3366 13.0238 13.3666 12.8735C13.3967 12.7232 13.3942 12.5682 13.3594 12.4189C12.9533 11.2913 12.4878 10.1859 11.9651 9.10738C11.8249 8.88946 11.6066 8.73352 11.3551 8.67165H10.3964C10.2222 8.67165 10.0479 8.75879 9.87357 8.75879L9.78642 8.84593C9.61214 8.93307 9.43786 9.10738 9.26355 9.19452C9.08927 9.28166 9.00212 9.54312 8.82784 9.7174C8.21862 10.4873 7.88153 11.4372 7.86923 12.4189C7.87888 13.1094 8.02705 13.791 8.30494 14.4233L8.39211 14.6847C9.1746 16.3577 10.2689 17.8661 11.6165 19.1291L11.9651 19.4777C12.2187 19.6878 12.4521 19.9212 12.6622 20.1749C14.4679 21.7461 16.6125 22.879 18.928 23.4864C19.1894 23.5735 19.538 23.5735 19.7994 23.6607H20.6709C21.1264 23.6382 21.5719 23.5194 21.9781 23.3121C22.1916 23.2154 22.3955 23.0986 22.5881 22.9635L22.7624 22.7892C22.9367 22.6149 23.111 22.5278 23.2853 22.3535C23.4556 22.2017 23.6024 22.0255 23.721 21.8306C23.8883 21.4402 24.0059 21.0306 24.0696 20.6106V20.0006C23.9913 19.9302 23.9032 19.8715 23.8081 19.8263"
+                fill="white"></path>
+            </svg>
+                      </span>
+                    </div>
+                    <div class="grow truncate">
+                      <p
+                        class="truncate font-medium text-[13px] text-core-dark dark:text-neutral-200"
+                      >
+                        BOT [lluvia]
+                      </p>
+                    </div>
+                  </div>
+                </dd>
+              </dl>
+
+              <dl class="py-1 flex items-center gap-x-4">
+                <dt class="w-full max-w-28">
+                  <label
+                    for="hs-pro-shtdsi1ta1"
+                    class="inline-flex items-center gap-x-2 text-[13px] text-core-gray dark:text-neutral-500"
+                  >
+                    <svg
+                      class="shrink-0 size-3.5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <polyline points="4 7 4 4 20 4 20 7"></polyline>
+                      <line x1="9" x2="15" y1="20" y2="20"></line>
+                      <line x1="12" x2="12" y1="4" y2="20"></line>
+                    </svg>
+                    Subject:
+                  </label>
+                </dt>
+                <dd class="grow w-full -mx-1">
+                  <input
+                    id="hs-pro-shtdsi1ta1"
+                    type="text"
+                    class="py-px px-1 block w-full bg-core-light hover:bg-core-light border-transparent rounded-md sm:text-[13px] sm:leading-5 text-base text-core-dark focus:bg-core-light focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none placeholder:text-core-dark dark:bg-neutral-800 dark:border-transparent dark:text-neutral-200 dark:placeholder-neutral-200 dark:focus:ring-neutral-600 dark:hover:bg-neutral-700 dark:focus:bg-neutral-800"
+                    placeholder="+ Add"
+                  />
+                </dd>
+              </dl>
+
+              <dl class="py-1 flex items-center gap-x-4">
+                <dt class="w-full max-w-28">
+                  <p
+                    class="inline-flex items-center gap-x-2 text-[13px] text-core-gray dark:text-neutral-500"
+                  >
+                    <svg
+                      class="shrink-0 size-3.5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path
+                        d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"
+                      ></path>
+                      <path
+                        d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"
+                      ></path>
+                    </svg>
+                    Share:
+                  </p>
+                </dt>
+                <dd class="grow w-full -mx-1">
+                  <div class="flex items-center gap-x-2">
+                    <input
+                      id=`hs-pro-chtdshi1-${ticket.UID}`
+                      type="text"
+                      class="py-px px-1 block w-full truncate bg-core-light hover:bg-core-light border-transparent rounded-md sm:text-[13px] sm:leading-5 text-base focus:bg-core-light focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none placeholder:text-core-dark dark:bg-neutral-800 dark:border-transparent dark:text-neutral-200 dark:placeholder-neutral-200 dark:focus:ring-neutral-600 dark:hover:bg-neutral-700 dark:focus:bg-neutral-800"
+                      readonly
+                      value={ticket.urlPublica}
+                    />
+
+                    <button
+                      type="button"
+                      class="js-clipboard [--is-toggle-tooltip:false] hs-tooltip size-6 shrink-0 inline-flex justify-center items-center gap-x-2 rounded-md text-core-dark hover:bg-core-light disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden dark:text-neutral-200 dark:hover:bg-neutral-700"
+                      data-clipboard-target=`#hs-pro-chtdshi1-${ticket.UID}`
+                      data-clipboard-action="copy"
+                      data-clipboard-success-text="Link copiado"
+                    >
+                      <svg
+                        class="js-clipboard-default shrink-0 size-3.5"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <rect width="14" height="14" x="8" y="8" rx="2" ry="2"
+                        ></rect>
+                        <path
+                          d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                        ></path>
+                      </svg>
+                      <svg
+                        class="js-clipboard-success hidden size-3.5"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                      <span
+                        class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity hidden invisible z-10 py-1 px-2 bg-core-dark text-xs font-medium text-white rounded-md shadow-2xs dark:bg-neutral-700"
+                        role="tooltip"
+                      >
+                        <span class="js-clipboard-success-text">Copiar link</span>
+                      </span>
+                    </button>
+                  </div>
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="hs-accordion border-b border-gray-100 dark:border-neutral-800 active"
+          id=`hs-pro-chtdudid1-${ticket.UID}`
+        >
+          <button
+            type="button"
+            class="hs-accordion-toggle p-5 pb-2 w-full flex justify-between items-center gap-x-3 text-core-dark hover:text-core-dark/60 focus:outline-hidden focus:text-core-dark/60 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-200 dark:hover:text-core-gray dark:focus:text-core-gray"
+            aria-expanded="true"
+            aria-controls=`hs-pro-chtdudid1-collapse-${ticket.UID}`
+          >
+            <span class="text-sm font-medium">Usuario</span>
+            <svg
+              class="hs-accordion-active:hidden block size-4"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14"></path>
+              <path d="M12 5v14"></path>
+            </svg>
+            <svg
+              class="hs-accordion-active:block hidden size-4"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14"></path>
+            </svg>
+          </button>
+
+          <div
+            id=`hs-pro-chtdudid1-collapse-${ticket.UID}`
+            class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300"
+            role="region"
+            aria-labelledby=`hs-pro-chtdudid1-${ticket.UID}`
+          >
+            <div class="px-5 pb-5">
+              <dl class="py-1 flex items-center gap-x-4">
+                <dt class="w-full max-w-28">
+                  <p
+                    class="inline-flex items-center gap-x-2 text-[13px] text-core-gray dark:text-neutral-500"
+                  >
+                    <svg
+                      class="shrink-0 size-3.5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"
+                      ></path>
+                      <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    Nombre:
+                  </p>
+                </dt>
+                <dd class="grow w-full">
+                  <p
+                    class="inline-flex items-center gap-x-1 font-medium text-[13px] text-core-dark dark:text-neutral-200"
+                  >
+                    {ticket.usuario.nombre}
+                  </p>
+                </dd>
+              </dl>
+
+              <dl class="py-1 flex items-center gap-x-4">
+                <dt class="w-full max-w-28">
+                  <p
+                    class="inline-flex items-center gap-x-2 text-[13px] text-core-gray dark:text-neutral-500"
+                  >
+                    <svg
+                      class="shrink-0 size-3.5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"
+                      ></path>
+                      <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"></path>
+                      <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"></path>
+                      <path d="M10 6h4"></path>
+                      <path d="M10 10h4"></path>
+                      <path d="M10 14h4"></path>
+                      <path d="M10 18h4"></path>
+                    </svg>
+                    Empresa:
+                  </p>
+                </dt>
+                <dd class="grow w-full">
+                  <p
+                    class="inline-flex items-center gap-x-1 font-medium text-[13px] text-core-dark dark:text-neutral-200"
+                  >
+                    {ticket.usuario.empresa}
+                  </p>
+                </dd>
+              </dl>
+
+              
+
+              <dl class="py-1 flex items-center gap-x-4">
+                <dt class="w-full max-w-28">
+                  <p
+                    class="inline-flex items-center gap-x-2 text-[13px] text-core-gray dark:text-neutral-500"
+                  >
+                    <svg
+                      class="shrink-0 size-3.5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="4"></circle>
+                      <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8"></path>
+                    </svg>
+                    Email:
+                  </p>
+                </dt>
+                <dd class="grow w-full">
+                  <p
+                    class="inline-flex items-center gap-x-1 font-medium text-[13px] text-core-dark dark:text-neutral-200"
+                  >
+                    {ticket.usuario.email}
+                  </p>
+                </dd>
+              </dl>
+                            
+                <dl class="py-1 flex items-center gap-x-4">
+                  <dt class="w-full max-w-28">
+                    <p
+                      class="inline-flex items-center gap-x-2 text-[13px] text-core-gray dark:text-neutral-500"
+                    >
+                      <svg
+                        class="shrink-0 size-3.5"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path
+                          d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+                        ></path>
+                      </svg>
+                      Teléfono:
+                    </p>
+                  </dt>
+                  <dd class="grow w-full">
+                    <p
+                      class="inline-flex items-center gap-x-1 font-medium text-[13px] text-core-dark dark:text-neutral-200"
+                    >
+                      {ticket.usuario.telefono}
+                    </p>
+                  </dd>
+                </dl>
+
+              <div
+                id=`hs-pro-chtdudsaid1-heading-${ticket.UID}`
+                class="hs-collapse hidden w-full overflow-hidden transition-[height] duration-300"
+                aria-labelledby=`hs-pro-chtdudsaid1-${ticket.UID}`
+              >
+<dl class="py-1 flex items-center gap-x-4">
+                <dt class="w-full max-w-28">
+                  <p
+                    class="inline-flex items-center gap-x-2 text-[13px] text-core-gray dark:text-neutral-500"
+                  >
+                    <svg
+                      class="shrink-0 size-3.5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path
+                        d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"
+                      ></path>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    Ubicación:
+                  </p>
+                </dt>
+                <dd class="grow w-full">
+                  <p
+                    class="inline-flex items-center gap-x-1 font-medium text-[13px] text-core-dark dark:text-neutral-200"
+                  >
+                    Osorno, Chile
+                  </p>
+                </dd>
+              </dl>
+              
+              </div>
+
+              <button
+                type="button"
+                class="hs-collapse-toggle mt-2 inline-flex items-center gap-x-1 font-medium text-[13px] text-core-dark hover:text-core-dark/60 focus:outline-hidden focus:text-core-dark/60 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-200 dark:hover:text-core-gray dark:focus:text-core-gray"
+                id=`hs-pro-chtdudsaid1-${ticket.UID}`
+                aria-expanded="false"
+                aria-controls=`hs-pro-chtdudsaid1-heading-${ticket.UID}`
+                data-hs-collapse=`#hs-pro-chtdudsaid1-heading-${ticket.UID}`
+              >
+                <span class="hs-collapse-open:hidden block">Mostrar Todo</span>
+                <span class="hs-collapse-open:block hidden">Mostrar Menos</span>
+                <svg
+                  class="hs-collapse-open:rotate-180 shrink-0 size-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m6 9 6 6 6-6"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="hs-accordion border-b border-gray-100 dark:border-neutral-800 active"
+          id=`hs-pro-chtdpcid1-${ticket.UID}`
+        >
+          <button
+            type="button"
+            class="hs-accordion-toggle p-5 pb-2 w-full flex justify-between items-center gap-x-3 text-core-dark hover:text-core-dark/60 focus:outline-hidden focus:text-core-dark/60 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-200 dark:hover:text-core-gray dark:focus:text-core-gray"
+            aria-expanded="true"
+            aria-controls=`hs-pro-chtdpcid1-collapse-${ticket.UID}`
+          >
+            <span class="text-sm font-medium">Histórico</span>
+            <svg
+              class="hs-accordion-active:hidden block size-4"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14"></path>
+              <path d="M12 5v14"></path>
+            </svg>
+            <svg
+              class="hs-accordion-active:block hidden size-4"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14"></path>
+            </svg>
+          </button>
+
+          <div
+            id=`hs-pro-chtdpcid1-collapse-${ticket.UID}`
+            class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300"
+            role="region"
+            aria-labelledby=`hs-pro-chtdpcid1-${ticket.UID}`
+          >
+            {
+              ticket.previo.slice(-5).map((previo) => (
+                <div
+                  id=`previo-${previo.UID}`
+                  class="relative overflow-hidden group cursor-pointer bg-core-light hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:border-neutral-700"
+                >
+                  <div class="py-4 px-5 border-b border-b-gray-100 dark:border-neutral-700">
+                    <div class="flex gap-x-2.5">
+                      <div class="mt-1 shrink-0">
+                        <div class="relative size-8">
+                          <img
+                            class="shrink-0 size-7 rounded-full"
+                            src="https://images.unsplash.com/photo-1601935111741-ae98b2b230b0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2.5&w=320&h=320&q=80"
+                            alt="Avatar"
+                          />
+                          <span class="absolute top-3.5 start-3.5 flex shrink-0 justify-center items-center size-5 bg-core-light rounded-full group-hover:bg-core-light dark:bg-neutral-800 dark:group-hover:bg-neutral-700">
+                            <svg
+              class="shrink-0 size-3.5"
+              width="32"
+              height="33"
+              viewBox="0 0 32 33"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8.42691 28.1051L8.94979 28.3665C11.0818 29.6347 13.5192 30.2975 15.9998 30.2837C23.6364 30.2663 29.9109 23.977 29.9109 16.3404C29.9109 12.6498 28.4451 9.10563 25.8386 6.493C23.2355 3.85337 19.6792 2.3658 15.9728 2.3658C8.37114 2.3658 2.1167 8.62111 2.1167 16.2219C2.1167 16.2821 2.1167 16.3413 2.11757 16.4015C2.14047 18.9857 2.86325 21.5154 4.20907 23.7217L4.55764 24.2445L3.16332 29.3861L8.42691 28.1051Z"
+                fill="#00E676"></path>
+              <path
+                d="M27.3898 4.92441C24.4225 1.89695 20.3519 0.198514 16.1132 0.218497H16.0862C7.35684 0.218524 0.173436 7.40196 0.173436 16.1313C0.173436 16.1722 0.17431 16.2124 0.17431 16.2533C0.20719 19.0287 0.925671 21.7529 2.26581 24.1836L0 32.4624L8.44441 30.2837C10.7772 31.5644 13.3998 32.2246 16.0609 32.2009C24.8225 32.153 32.005 24.9286 31.9998 16.1662C32.0207 11.9562 30.3606 7.90739 27.3898 4.92441ZM16.1132 29.4994C13.7543 29.5117 11.4369 28.8789 9.4117 27.6694L8.88883 27.4079L3.86054 28.7151L5.16771 23.7478L4.81915 23.2249C3.52433 21.1342 2.83835 18.7238 2.83832 16.2646C2.83832 9.01241 8.80606 3.04464 16.0583 3.04464C23.3105 3.04464 29.2782 9.01241 29.2782 16.2646C29.2782 20.8311 26.9123 25.0855 23.0325 27.4951C20.9806 28.8095 18.5936 29.5053 16.1568 29.4994M23.8169 19.8263L22.8583 19.3906C22.8583 19.3906 21.4639 18.7805 20.5925 18.3448C20.5053 18.3448 20.4182 18.2577 20.331 18.2577C20.1162 18.263 19.9062 18.3229 19.721 18.4319C19.5354 18.5409 19.6339 18.5191 18.4138 19.9134C18.3311 20.0764 18.1611 20.1784 17.9781 20.1749H17.891C17.76 20.1529 17.6385 20.0922 17.5424 20.0006L17.1067 19.8263C16.1717 19.4305 15.3157 18.8696 14.5794 18.1705C14.4051 17.9962 14.1437 17.8219 13.9694 17.6476C13.3243 17.0296 12.7671 16.3259 12.3137 15.5561L12.2265 15.3819C12.1508 15.2753 12.092 15.1577 12.0522 15.0333C12.0294 14.8823 12.0603 14.7281 12.1394 14.5976C12.2187 14.4668 12.4879 14.1618 12.7494 13.9004C13.0108 13.639 13.0108 13.4647 13.1851 13.2904C13.2747 13.166 13.3366 13.0238 13.3666 12.8735C13.3967 12.7232 13.3942 12.5682 13.3594 12.4189C12.9533 11.2913 12.4878 10.1859 11.9651 9.10738C11.8249 8.88946 11.6066 8.73352 11.3551 8.67165H10.3964C10.2222 8.67165 10.0479 8.75879 9.87357 8.75879L9.78642 8.84593C9.61214 8.93307 9.43786 9.10738 9.26355 9.19452C9.08927 9.28166 9.00212 9.54312 8.82784 9.7174C8.21862 10.4873 7.88153 11.4372 7.86923 12.4189C7.87888 13.1094 8.02705 13.791 8.30494 14.4233L8.39211 14.6847C9.1746 16.3577 10.2689 17.8661 11.6165 19.1291L11.9651 19.4777C12.2187 19.6878 12.4521 19.9212 12.6622 20.1749C14.4679 21.7461 16.6125 22.879 18.928 23.4864C19.1894 23.5735 19.538 23.5735 19.7994 23.6607H20.6709C21.1264 23.6382 21.5719 23.5194 21.9781 23.3121C22.1916 23.2154 22.3955 23.0986 22.5881 22.9635L22.7624 22.7892C22.9367 22.6149 23.111 22.5278 23.2853 22.3535C23.4556 22.2017 23.6024 22.0255 23.721 21.8306C23.8883 21.4402 24.0059 21.0306 24.0696 20.6106V20.0006C23.9913 19.9302 23.9032 19.8715 23.8081 19.8263"
+                fill="white"></path>
+            </svg>
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="grow truncate">
+                        <div class="flex justify-between gap-x-1">
+                          <span class="block truncate font-medium text-[13px] text-core-dark dark:text-neutral-200">
+                            {previo.from}
+                          </span>
+                          <span class="block text-[10px] leading-5 text-core-gray uppercase dark:text-neutral-500">
+                          { relativeTime(previo.timestamp) }
+                          </span>
+                        </div>
+
+                        <div class="mt-1 flex justify-between items-center gap-x-1">
+                          <div class="w-10/12 truncate">
+                            <p class="truncate font-bold text-xs text-core-gray dark:text-neutral-500">
+                              {previo.titulo}
+                            </p>
+                          </div>
+
+                          <div class="hs-tooltip [--placement:left] inline-block">
+                            <span class="hs-tooltip-toggle flex shrink-0 justify-center items-center size-4 bg-emerald-500 text-white rounded-full">
+                              <svg
+                                class="shrink-0 size-2.5"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="3"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              >
+                                <path d="M20 6 9 17l-5-5" />
+                              </svg>
+                            </span>
+                            <span
+                              class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 inline-block absolute invisible z-20 py-1 px-1.5 w-auto max-w-56 bg-core-dark text-xs text-white rounded-lg whitespace-nowrap dark:bg-neutral-700"
+                              role="tooltip"
+                            >
+                              {previo.estado}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div class="flex items-center gap-x-1.5 mt-1">
+                          <div class="w-10/12 truncate">
+                            <p class="truncate text-core-gray dark:text-neutral-500 text-xs">
+                              {previo.descripcion}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+
+        <div class="hs-accordion active" id=`hs-pro-chtdshmid1-${ticket.UID}`>
+          <button
+            type="button"
+            class="hs-accordion-toggle p-5 pb-2 w-full flex justify-between items-center gap-x-3 text-core-dark hover:text-core-dark/60 focus:outline-hidden focus:text-core-dark/60 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-200 dark:hover:text-core-gray dark:focus:text-core-gray"
+            aria-expanded="true"
+            aria-controls=`hs-pro-chtdshmid1-collapse-${ticket.UID}`
+          >
+            <span class="text-sm font-medium">Archivos</span>
+            <svg
+              class="hs-accordion-active:hidden block size-4"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14"></path>
+              <path d="M12 5v14"></path>
+            </svg>
+            <svg
+              class="hs-accordion-active:block hidden size-4"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14"></path>
+            </svg>
+          </button>
+
+          <div
+            id="hs-pro-chtdshmid1-collapse"
+            class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300"
+            role="region"
+            aria-labelledby=`hs-pro-chtdshmid1-${ticket.UID}`
+          >
+            <div class="px-5 pb-5">
+              <p class="text-[13px] text-core-gray dark:text-neutral-500">
+                Los archivos enviados aparecerán en esta sección
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</aside>

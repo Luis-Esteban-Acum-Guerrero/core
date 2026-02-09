@@ -1,7 +1,7 @@
 import { Queue, Worker } from "bullmq";
 import IORedis from "ioredis";
-import setupBrowser from "../bot/browser.js";
-import getRCV from "../bot/sii/getRCV.js";
+import setupBrowser from "../_auto/browser.js";
+import getRCV from "../_auto/sii/getRCV.js";
 import { randomUUID } from "crypto";
 
 const connection = new IORedis({
@@ -34,5 +34,5 @@ new Worker(
       await browser.close();
     }
   },
-  { connection, concurrency: 6 }
+  { connection, concurrency: 6 },
 );

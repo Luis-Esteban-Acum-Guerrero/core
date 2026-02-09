@@ -1,0 +1,38 @@
+---
+
+---
+
+<div class="pdf-btn-container">
+  <button id="btn-pdf" class="pdf-button bg-core-secundary text-core-light">
+    Descargar PDF
+  </button>
+</div>
+
+<style>
+  .pdf-btn-container {
+    width: 100%;
+  }
+
+  .pdf-button {
+    width: 100%;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 13px;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  .pdf-button:hover {
+    background: var(--color-primary);
+    color: var(--color-dark);
+  }
+
+  .pdf-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+</style>

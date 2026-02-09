@@ -1,0 +1,32 @@
+meta {
+  name: Refrescar Token
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{base_url}}/auth/refresh
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "refreshToken": "{{refresh_token}}"
+  }
+}
+
+script:post-response {
+  if (res.getStatus() === 200) {
+      const response = res.getBody();
+      bru.setVar('access_token', response.accessToken);
+  }
+}
+
+settings {
+  encodeUrl: true
+}

@@ -1,0 +1,884 @@
+---
+const hoy = new Date().toLocaleDateString("es-CL");
+const TAX = 0.19;
+
+import QRScanner from "../../../components/qr/scanner.astro";
+import sampleData from "../../../../public/data/productos.json";
+---
+
+<script src="../../../../node_modules/lodash/lodash.min.js"></script>
+<script src="../../../../node_modules/vanilla-calendar-pro/index.js"></script>
+
+<!-- Invoice -->
+<div class="flex flex-col p-4 bg-core-light dark:bg-neutral-900">
+  <!-- Grid -->
+  <div class="flex justify-between">
+    <div>
+      <img src="/logos/creceideas/ci.svg" class="w-24 h-auto" />
+    </div>
+    <!-- Col -->
+
+    <div class="text-end">
+      <h2
+        class="text-2xl md:text-3xl font-semibold text-core-dark dark:text-neutral-200"
+      >
+        Invoice #
+      </h2>
+      <span class="mt-1 block text-core-gray dark:text-neutral-500">3682303</span
+      >
+    </div>
+    <!-- Col -->
+  </div>
+  <!-- End Grid -->
+
+  <!-- Grid -->
+  <div class="mt-8 grid sm:grid-cols-2 gap-3">
+    <div>
+      <h3 class="text-lg font-semibold text-core-dark dark:text-neutral-200">
+        creceideas ltda
+      </h3>
+      <address
+        class="mt-0 not-italic text-sm text-core-gray dark:text-neutral-500"
+      >
+        76.261.139-2<br />
+        hola@creceideas.cl<br />
+        Rapel 870, Osorno, Chile
+      </address>
+    </div>
+    <!-- Col -->
+
+    <div class="sm:text-end space-y-2">
+      <!-- Grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2">
+        <dl class="grid sm:grid-cols-5 gap-x-3">
+          <dt
+            class="col-span-3 font-semibold text-core-dark dark:text-neutral-200"
+          >
+            Fecha Emisión:
+          </dt>
+          <dd class="col-span-2 text-core-gray dark:text-neutral-500">
+            {hoy}
+          </dd>
+        </dl>
+        <dl class="grid sm:grid-cols-5 gap-x-3">
+          <dt
+            class="col-span-3 font-semibold text-core-dark dark:text-neutral-200"
+          >
+            Fecha Documento:
+          </dt>
+          <dd class="col-span-2 text-core-gray dark:text-neutral-500">
+            <input
+              class="hs-datepicker py-2 px-2 block w-full border-core-gray rounded-lg text-sm text-right focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-core-gray dark:placeholder:text-core-gray dark:focus:border-core-primary dark:focus:ring-neutral-500"
+              type="text"
+              placeholder="Selecciona"
+              data-hs-datepicker=`{
+                    "type": "default",
+                    "dateMax": "2025-08-31",
+                    "styles": {
+                        "week": "vc-week flex pb-1.5",
+                        "weekDay": "vc-week__day m-px w-10 block font-normal text-center text-sm text-core-gray focus:outline-hidden dark:text-neutral-500",
+                        "dates": "vc-dates grid grid-cols-7 gap-y-0.5",
+                        "date": "vc-date relative size-10.5 flex justify-center items-center text-sm text-core-dark rounded-full hover:text-core-primary [& />button]:relative [&>button]:size-full [&>button]:rounded-full nth-[7n]:rounded-r-full nth-[7n+1]:rounded-l-full before:absolute before:inset-0 before:size-full before:border before:border-transparent before:rounded-full hover:before:border-core-primary hs-vc-date-selected:text-white hs-vc-date-today:bg-core-primary hs-vc-date-today:text-white hs-vc-date-selected:hs-vc-date-month-prev:text-white hs-vc-date-selected:hs-vc-date-month-next:text-white hs-vc-date-selected:hs-vc-date-month-prev:hover:before:border-core-primary hs-vc-date-selected:hs-vc-date-month-next:hover:before:border-core-primary hs-vc-calendar-selected-middle:text-core-dark hs-vc-calendar-selected-middle:hover:text-core-primary hs-vc-calendar-selected-first:bg-core-light hs-vc-calendar-selected-first:rounded-l-full hs-vc-calendar-selected-first:rounded-r-none hs-vc-date-selected:before:bg-core-primary hs-vc-calendar-selected-middle:bg-core-light hs-vc-calendar-selected-middle:before:bg-core-light hs-vc-calendar-selected-middle:rounded-none hs-vc-calendar-selected-last:bg-core-light hs-vc-calendar-selected-last:rounded-r-full hs-vc-calendar-selected-last:rounded-l-none hs-vc-date-selected:before:bg-core-primary hs-vc-date-month-prev:text-core-gray hs-vc-date-month-next:text-core-gray hs-vc-date-month-prev:before:hover:border-core-gray hs-vc-date-month-next:before:hover:border-core-gray hs-vc-date-month-prev:hs-vc-calendar-selected-middle:text-core-gray hs-vc-date-month-next:hs-vc-calendar-selected-middle:text-core-gray hs-vc-date-month-prev:hs-vc-calendar-selected-middle:before:hover:border-core-gray hs-vc-date-month-next:hs-vc-calendar-selected-middle:before:hover:border-core-gray hs-vc-date-selected-first:hs-vc-date-month-prev:bg-transparent hs-vc-date-selected-first:hs-vc-date-month-next:bg-transparent hs-vc-date-selected-last:hs-vc-date-month-prev:bg-transparent hs-vc-date-selected-last:hs-vc-date-month-next:bg-transparent dark:text-neutral-200 dark:hover:text-core-primary dark:hover:before:border-core-primary dark:hs-vc-date-selected:text-white dark:hs-vc-date-selected:hs-vc-date-month-prev:text-white dark:hs-vc-date-selected:hs-vc-date-month-next:text-white dark:hs-vc-date-today:bg-core-primary dark:hs-vc-date-today:text-white dark:hs-vc-date-selected:hs-vc-date-month-prev:hover:before:border-core-primary dark:hs-vc-date-selected:hs-vc-date-month-next:hover:before:border-core-primary dark:hs-vc-calendar-selected-middle:text-neutral-200 dark:hs-vc-calendar-selected-middle:hover:text-core-primary dark:hs-vc-calendar-selected-first:bg-neutral-800 dark:hs-vc-date-selected:before:bg-core-primary dark:hs-vc-calendar-selected-middle:bg-neutral-800 dark:hs-vc-calendar-selected-middle:before:bg-neutral-800 dark:hs-vc-calendar-selected-last:bg-neutral-800 dark:hs-vc-date-selected:before:bg-core-primary dark:hs-vc-date-month-prev:text-neutral-600 dark:hs-vc-date-month-next:text-neutral-600 dark:hs-vc-date-month-prev:before:hover:border-neutral-700 dark:hs-vc-date-month-next:before:hover:border-neutral-700 dark:hs-vc-date-month-prev:hs-vc-calendar-selected-middle:text-neutral-600 dark:hs-vc-date-month-next:hs-vc-calendar-selected-middle:text-neutral-600 dark:hs-vc-date-month-prev:hs-vc-calendar-selected-middle:before:hover:border-neutral-700 dark:hs-vc-date-month-next:hs-vc-calendar-selected-middle:before:hover:border-neutral-700",
+                        "arrowPrev": "vc-arrow vc-arrow_prev size-8 flex justify-center items-center text-core-dark hover:bg-core-light rounded-full disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:text-core-gray dark:hover:bg-neutral-800 dark:focus:bg-neutral-800",
+                        "arrowNext": "vc-arrow vc-arrow_next size-8 flex justify-center items-center text-core-dark hover:bg-core-light rounded-full disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:text-core-gray dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+                    },
+                    "inputModeOptions": {
+                        "dateSeparator": "-"
+                    },
+                    "mode": "custom-select",
+                    "templates": {
+                        "arrowPrev": "<button data-vc-arrow='prev'><svg className='shrink-0 size-4' xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'><path d='m15 18-6-6 6-6'></path></svg></button>",
+                        "arrowNext": "<button data-vc-arrow='next'><svg className='shrink-0 size-4' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'><path d='m9 18 6-6-6-6'></path></svg></button>"
+                    },
+                    "dateLocale": "es-CL",
+                    "selectedDates": ["${hoy}"],
+                    "replaceTodayWithText": "Hoy",
+                    "dateFormat": "DD-MM-YYYY"
+                }`
+            />
+          </dd>
+        </dl>
+
+        <div class="w-full flex justify-end gap-1">
+          <button
+            id="add-product-btn"
+            class="py-2 px-4 bg-core-primary text-white rounded-lg hover:opacity-80"
+          >
+            + Agregar
+          </button>
+          <QRScanner data={sampleData} />
+        </div>
+      </div>
+      <!-- End Grid -->
+    </div>
+    <!-- Col -->
+  </div>
+  <!-- End Grid -->
+
+  <!-- Table -->
+  <div class="mt-6">
+    <div
+      class="border border-core-gray p-4 rounded-lg space-y-4 dark:border-neutral-700"
+    >
+      <div class="hidden sm:grid sm:grid-cols-6">
+        <div
+          class="sm:col-span-3 text-xs font-medium text-core-gray uppercase dark:text-neutral-500"
+        >
+          Item
+        </div>
+        <div
+          class="text-end text-xs font-medium text-core-gray uppercase dark:text-neutral-500"
+        >
+          Cant
+        </div>
+        <div
+          class="text-end text-xs font-medium text-core-gray uppercase dark:text-neutral-500"
+        >
+          Valor
+        </div>
+        <div
+          class="text-end text-xs font-medium text-core-gray uppercase dark:text-neutral-500"
+        >
+          Total
+        </div>
+      </div>
+
+      <div
+        class="hidden sm:block border-b border-core-gray dark:border-neutral-700"
+      >
+      </div>
+
+      <div id="detalle"></div>
+    </div>
+  </div>
+  <!-- End Table -->
+
+  <!-- Flex -->
+  <div class="mt-8 flex sm:justify-end">
+    <div class="w-full max-w-2xl sm:text-end space-y-2">
+      <!-- Grid -->
+      <div class="grid grid-cols-3 sm:grid-cols-1 gap-3 sm:gap-2">
+        <dl class="grid sm:grid-cols-5 gap-x-3">
+          <dt
+            class="col-span-3 font-semibold text-core-dark dark:text-neutral-200"
+          >
+            Neto:
+          </dt>
+          <dd class="col-span-2 text-core-gray dark:text-neutral-500" id="neto">
+            {}
+          </dd>
+        </dl>
+
+        <dl class="grid sm:grid-cols-5 gap-x-3">
+          <dt
+            class="col-span-3 font-semibold text-core-dark dark:text-neutral-200"
+          >
+            Impuesto:
+          </dt>
+          <dd
+            class="col-span-2 text-core-gray dark:text-neutral-500"
+            id="impuesto"
+          >
+            {}
+          </dd>
+        </dl>
+
+        <dl class="grid sm:grid-cols-5 gap-x-3">
+          <dt
+            class="col-span-3 font-bold text-xl text-core-dark dark:text-neutral-200"
+          >
+            Total:
+          </dt>
+          <dd
+            class="col-span-2 font-bold text-xl text-core-gray dark:text-neutral-500"
+            id="total"
+          >
+            {}
+          </dd>
+        </dl>
+      </div>
+      <!-- End Grid -->
+    </div>
+  </div>
+  <!-- End Flex -->
+</div>
+<!-- End Invoice -->
+
+<!-- Modal -->
+<div
+  id="product-modal"
+  class="hs-overlay hidden size-full fixed top-0 start-0 z-80 overflow-x-hidden overflow-y-auto [--close-when-click-inside:true] pointer-events-none"
+  role="dialog"
+  tabindex="-1"
+  aria-labelledby="product-modal-label"
+>
+  <div
+    class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-4xl sm:w-full m-3 sm:mx-auto h-[calc(100%-56px)] min-h-[calc(100%-56px)] flex items-center"
+  >
+    <div
+      class="w-full max-h-full flex flex-col bg-core-light rounded-xl pointer-events-auto shadow-xl dark:bg-neutral-800"
+    >
+      <!-- Header -->
+      <div
+        class="py-2.5 px-4 flex justify-between border-b border-core-gray dark:border-neutral-700"
+      >
+        <h3
+          id="product-modal-label"
+          class="font-medium text-core-dark dark:text-neutral-200 pt-1"
+        >
+          <span class="inline-flex gap-x-3">
+            <img src="/logos/core/core.svg" class="h-6" />
+            Selección de productos
+          </span>
+        </h3>
+        <button
+          type="button"
+          class="size-8 shrink-0 flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-core-light text-core-dark hover:bg-core-gray disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-gray dark:bg-neutral-700 dark:hover:bg-neutral-600 dark:text-core-gray dark:focus:bg-neutral-600"
+          aria-label="Close"
+          data-hs-overlay="#product-modal"
+        >
+          <span class="sr-only">Close</span>
+          <svg
+            class="shrink-0 size-4"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg
+          >
+        </button>
+      </div>
+      <!-- End Header -->
+
+      <!-- Body -->
+      <div
+        id="hs-modal-upgrade-to-pro-body"
+        class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-core-light [&::-webkit-scrollbar-thumb]:bg-core-gray/50 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500"
+      >
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 overflow-hidden rounded-es-xl sm:rounded-es-none rounded-ee-xl"
+        >
+          <div class="p-4 h-full">
+            <form>
+              <div class="space-y-5">
+                <div
+                  id="search"
+                  class="p-0.5 w-full inline-flex bg-core-light rounded-lg dark:bg-neutral-700"
+                >
+                  <input
+                    id="product-search"
+                    type="text"
+                    placeholder="Buscar producto..."
+                    class="w-full py-2 px-3 border border-core-gray rounded-lg focus:outline-none focus:border-core-primary dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200 dark:placeholder-neutral-400"
+                  />
+                </div>
+
+                <div class="space-y-4">
+                  <label
+                    for="hs-pro-dufbi"
+                    class="block mb-2 text-sm font-medium text-core-dark dark:text-neutral-200"
+                  >
+                    Productos
+                  </label>
+                  <div
+                    class="bg-core-light dark:bg-neutral-950/30 px-2 py-3 rounded-xl"
+                  >
+                    <ul
+                      id="product-list"
+                      class="space-y-2 overflow-y-auto max-h-[250px] sm:max-h-[450px]"
+                    >
+                      <!-- Productos se generarán dinámicamente aquí -->
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- End Col -->
+
+          <div class="p-4 h-full bg-core-light space-y-4 dark:bg-neutral-950/30">
+            <div class="flex flex-wrap justify-between items-center gap-2">
+              <label
+                class="block mb-2 text-sm font-medium text-core-dark dark:text-neutral-200"
+              >
+                Cantidad
+              </label>
+
+              <input
+                id="quantity"
+                type="number"
+                min="1"
+                value="1"
+                class="w-full py-2 px-3 border border-core-gray rounded-lg focus:outline-none focus:border-core-primary dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200"
+              />
+            </div>
+
+            <div class="space-y-2">
+              <label
+                class="block text-sm font-semibold text-core-dark dark:text-neutral-200"
+              >
+                Valor
+              </label>
+
+              <input
+                id="value"
+                type="number"
+                class="w-full py-2 px-3 border border-core-gray rounded-lg focus:outline-none focus:border-core-primary dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200"
+              />
+            </div>
+
+            <div class="p-3 bg-core-light shadow-xs rounded-lg dark:bg-neutral-800">
+              <h4 class="font-semibold text-core-dark dark:text-neutral-200">
+                Resumen del Producto
+              </h4>
+              <div
+                id="product-summary"
+                class="mt-4 p-4 border border-core-gray rounded-lg hidden dark:border-neutral-700"
+              >
+                <ul class="space-y-3">
+                  <li class="flex justify-between items-center">
+                    <span class="text-sm text-core-dark dark:text-neutral-200">
+                      #ID
+                    </span>
+                    <span
+                      class="text-sm font-semibold text-core-dark dark:text-neutral-200"
+                    >
+                      <p id="summary-id"></p>
+                    </span>
+                  </li>
+                  <li class="flex justify-between items-center">
+                    <span class="text-sm text-core-dark dark:text-neutral-200">
+                      SKU:
+                    </span>
+                    <span
+                      class="text-sm font-semibold text-core-dark dark:text-neutral-200"
+                    >
+                      <p id="summary-sku"></p>
+                    </span>
+                  </li>
+                  <li class="flex justify-between items-center">
+                    <span class="text-sm text-core-dark dark:text-neutral-200">
+                      Código:
+                    </span>
+                    <span class="text-sm text-core-dark dark:text-neutral-200">
+                      <p id="summary-codigo"></p>
+                    </span>
+                  </li>
+                  <li class="flex justify-between items-center">
+                    <span class="text-sm text-core-dark dark:text-neutral-200">
+                      Nombre:
+                    </span>
+                    <span
+                      class="text-sm font-semibold text-right text-core-dark dark:text-neutral-200"
+                    >
+                      <p id="summary-nombre"></p>
+                    </span>
+                  </li>
+                  <li class="flex justify-between items-start align-text-top">
+                    <span
+                      class="text-sm text-core-dark dark:text-neutral-200 align-text-top"
+                    >
+                      Descripción:
+                    </span>
+                    <span
+                      class="text-sm text-right text-core-dark dark:text-neutral-200"
+                    >
+                      <p id="summary-descripcion"></p>
+                    </span>
+                  </li>
+                  <li class="flex justify-between items-center">
+                    <span class="text-sm text-core-dark dark:text-neutral-200">
+                      Valor:
+                    </span>
+                    <span
+                      class="text-sm font-semibold text-core-dark dark:text-neutral-200"
+                    >
+                      <p id="summary-valor"></p>
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="flex justify-end">
+              <button
+                id="save-product-btn"
+                type="button"
+                class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-core-primary text-white hover:opacity-80 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:ring-2 focus:ring-core-primary"
+              >
+                Guardar
+              </button>
+            </div>
+
+            <p class="text-xs text-end text-core-gray dark:text-neutral-500">
+              @ci - 2025
+            </p>
+          </div>
+          <!-- End Col -->
+        </div>
+      </div>
+      <!-- End Body -->
+    </div>
+  </div>
+</div>
+<!-- End Modal -->
+
+<script>
+  import Swal from "sweetalert2";
+  // DB
+  import availableProducts from "/public/data/productos.json";
+
+  console.log(availableProducts);
+  // #################################
+  // ELEMENTOS
+  const $productList = document.getElementById("product-list");
+  const $productSearch = document.getElementById("product-search");
+  const $detalle = document.getElementById("detalle");
+
+  const $modal = document.getElementById("product-modal");
+  const $productSumary = document.getElementById("product-summary");
+  const $sumaryId = document.getElementById("summary-id");
+
+  const $sku = document.getElementById("summary-sku");
+  const $codigo = document.getElementById("summary-codigo");
+  const $nombre = document.getElementById("summary-nombre");
+  const $descripcion = document.getElementById("summary-descripcion");
+
+  const $quantity = document.getElementById("quantity");
+  const $value = document.getElementById("value");
+
+  const $guardar = document.getElementById("save-product-btn");
+  const $agregar = document.getElementById("add-product-btn");
+
+  // function GET randoms
+  function random(array, count) {
+    if (count > array.length) {
+      throw new Error("El conteo solicitado excede el tamaño del array");
+    }
+    const shuffled = [...array].sort(() => 0.5 - Math.random());
+    const selected = shuffled.slice(0, count);
+    selected.forEach((item) => {
+      item.cantidad = Math.floor(Math.random() * 5) + 1;
+      item.total = item.valor * item.cantidad;
+    });
+    return selected;
+  }
+
+  // function format currency
+  const formatCurrency = (value) => {
+    return value.toLocaleString("es-CL", {
+      style: "currency",
+      currency: "CLP",
+      minimumFractionDigits: 0,
+    });
+  };
+
+  // Componente reutilizable para SweetAlert
+  function showAlert(options) {
+    const defaults = {
+      title: "¿Estás seguro?",
+      text: "¡No podrás revertir esto!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, eliminar!",
+      cancelButtonText: "Cancelar",
+    };
+    const config = { ...defaults, ...options };
+    return Swal.fire(config);
+  }
+  // #################################
+
+  // INPUT // OUTPUT
+  // inicializo el arreglo con productos ya seleccionados, random agrega cantidad y total a cada uno de los registros
+  //var products = random(availableProducts, 4);
+  var products = [];
+  let currentEditIndex = -1;
+  let selectedProduct = null;
+
+  // chequeo de existencia de datos, para ajustar modo de formulario
+  let mode = "new";
+  if (products && products.length > 0) {
+    mode = "edit";
+    products.forEach((product, index) => {
+      renderRegister(product, index);
+    });
+  }
+
+  document.addEventListener("scanComplete", (event) => {
+    const scannedProducts = event.detail;
+
+    scannedProducts.forEach((scanned) => {
+      const idProducto = scanned.id;
+      const productoExistente = products.find((p) => p.id === idProducto);
+
+      if (productoExistente) {
+        // Actualizar la cantidad y el total si el producto ya existe
+        productoExistente.cantidad =
+          scanned.cantidad + productoExistente.cantidad;
+        productoExistente.total =
+          productoExistente.valor * productoExistente.cantidad;
+      } else {
+        // Agregar el producto si no existe
+        scanned.total = scanned.valor * scanned.cantidad;
+        products.push(scanned);
+      }
+    });
+
+    //limpio y actualizo el detalle del documento
+    $detalle.innerHTML = "";
+    products.forEach((product, index) => {
+      renderRegister(product, index);
+    });
+  });
+
+  // Renderiza cada producto en el detalle
+  function renderRegister(product, index) {
+    const $product = document.createElement("div");
+
+    $product.innerHTML = `
+      <div class="grid grid-cols-3 sm:grid-cols-6 gap-0 hover:bg-core-light hover:cursor-pointer rounded-xl p-2">
+            <div class="col-span-full sm:col-span-3 flex flex-row">
+              <div class="w-1/12 flex justify-start items-center">
+                <button
+                  class="delete-row text-core-dark hover:text-core-dark dark:text-core-dark dark:hover:text-red-400"
+                  data-index=${index}
+                >
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokelinecap="round"
+                      strokelinejoin="round"
+                      strokewidth="2"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div class="w-11/12 edit-row" data-index=${index}> 
+                <h5 class="sm:hidden text-xs font-medium text-core-gray uppercase dark:text-neutral-500">
+                  Item
+                </h5>
+                <p class="font-medium text-core-dark dark:text-neutral-200 leading-tight">
+                  ${product.codigo} - ${product.nombre}
+                </p>
+                <p class="text-sm text-core-gray dark:text-neutral-500 leading-tight">
+                  ${product.descripcion}
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <h5 class="sm:hidden text-xs font-medium text-core-gray uppercase dark:text-neutral-500 text-end">
+                Cant
+              </h5>
+              <p class="text-core-dark dark:text-neutral-200 text-end">
+                ${product.cantidad}
+              </p>
+            </div>
+            <div>
+              <h5 class="sm:hidden text-xs font-medium text-core-gray uppercase dark:text-neutral-500 text-end">
+                Valor
+              </h5>
+              <p class="text-core-dark dark:text-neutral-200 text-end">
+                ${formatCurrency(product.valor)}
+              </p>
+            </div>
+            <div>
+              <h5 class="sm:hidden text-xs font-medium text-core-gray uppercase dark:text-neutral-500 text-end">
+                Total
+              </h5>
+              <p
+                class="sm:text-end text-core-dark dark:text-neutral-200 text-end"
+                data-total
+              >
+                ${formatCurrency(product.total)}
+              </p>
+            </div>
+          </div>  
+          
+          ${
+            index < products.length - 1
+              ? '<div class="sm:hidden border-b border-core-gray dark:border-neutral-700" />'
+              : ""
+          }
+    `;
+
+    $detalle.appendChild($product);
+  }
+
+  // actualiza totales
+  function updateTotals() {
+    // sumar el campo total del array products
+    var neto = products.reduce((acc, cur) => acc + cur.total, 0);
+    // calcula el impuesto del documento
+    var impuesto = neto * 0.19;
+    var total = neto + impuesto;
+
+    // elementos a actualizar
+    const $neto = document.querySelector("#neto") as HTMLElement;
+    const $impuesto = document.querySelector("#impuesto") as HTMLElement;
+    const $total = document.querySelector("#total") as HTMLElement;
+    // actualización de contenidos de los elementos
+    $neto.textContent = `${formatCurrency(neto)}`;
+    $impuesto.textContent = `${formatCurrency(impuesto.toFixed(0))}`;
+    $total.textContent = `${formatCurrency(total)}`;
+  }
+
+  // elimina detalle
+  $detalle.addEventListener("click", async (e) => {
+    if (e.target.closest(".delete-row")) {
+      const button = e.target.closest(".delete-row");
+      const index = button.dataset.index;
+
+      const result = await showAlert({
+        title: "Confirmar eliminación",
+        text: "¿Deseas eliminar este detalle?",
+        icon: "question",
+      });
+
+      if (result.isConfirmed) {
+        const row = button.closest("div.grid");
+        row.remove();
+        products.splice(index, 1);
+        updateTotals();
+        Swal.fire("¡Eliminado!", "El detalle ha sido eliminado.", "success");
+      }
+    }
+
+    // Event delegation para editar filas
+    if (e.target.closest(".edit-row")) {
+      const div = e.target.closest(".edit-row");
+      const index = parseInt(div.dataset.index);
+      const product = products[index];
+
+      window.HSOverlay.open($modal);
+      renderProducts(availableProducts);
+      selectProduct(product, index, true); //segundo y tercer parametro para editar
+    }
+  });
+
+  // Manejo del botón + Agregar para abrir modal
+  $agregar.addEventListener("click", () => {
+    try {
+      window.HSOverlay.open($modal);
+      renderProducts(availableProducts);
+
+      // Limpiar campos de entrada
+      $quantity.value = "";
+      $value.value = "";
+      $productSummary.classList.add("hidden");
+
+      // Cambiar a modo agregar
+      mode = "add";
+    } catch (error) {
+      console.error("Error al abrir modal:", error);
+    }
+  });
+
+  // MODAL
+  // Función para renderizar la lista de productos
+  function renderProducts(filteredProducts) {
+    $productList.innerHTML = "";
+    filteredProducts.forEach((product) => {
+      const li = document.createElement("li");
+      li.classList.add(
+        "p-3",
+        "bg-core-light",
+        "border",
+        "border-core-gray",
+        "text-sm",
+        "rounded-lg",
+        "cursor-pointer",
+        "hover:bg-core-light",
+        "dark:border-neutral-700",
+        "dark:hover:bg-neutral-700",
+        "flex",
+        "items-start",
+        "gap-3",
+      );
+
+      // Crear contenedor para la imagen
+      const imageContainer = document.createElement("div");
+      imageContainer.classList.add("flex-shrink-0");
+
+      const img = document.createElement("img");
+      img.classList.add("p-2");
+      img.src = product.imagen || "/logos/core/core_dot.svg"; // Imagen por defecto si no tiene
+      img.alt = product.nombre;
+      img.classList.add(
+        "w-12",
+        "h-12",
+        "rounded-lg",
+        "object-cover",
+        "border",
+        "border-core-gray",
+      );
+
+      // Manejar error de imagen
+      img.onerror = function () {
+        this.src = "/logos/core/core_dot.svg";
+      };
+
+      imageContainer.appendChild(img);
+
+      // Crear contenedor para el texto
+      const textContainer = document.createElement("div");
+      textContainer.classList.add("flex-1", "min-w-0");
+
+      // Título del producto
+      const title = document.createElement("h4");
+      title.classList.add(
+        "font-medium",
+        "text-core-dark",
+        "dark:text-white",
+        "truncate",
+      );
+      title.textContent = `(${product.codigo}) ${product.nombre}`;
+
+      // Descripción del producto
+      const description = document.createElement("p");
+      description.classList.add(
+        "text-xs",
+        "text-core-gray",
+        "dark:text-core-gray",
+        "mt-1",
+        "line-clamp-2",
+      );
+      description.textContent =
+        product.descripcion || "Sin descripción disponible";
+
+      // Precio (opcional)
+      if (product.precio) {
+        const price = document.createElement("span");
+        price.classList.add(
+          "text-sm",
+          "font-semibold",
+          "text-core-primary",
+          "dark:text-lime-400",
+          "mt-1",
+          "block",
+        );
+        price.textContent = `$${product.precio.toLocaleString()}`;
+        textContainer.appendChild(price);
+      }
+
+      textContainer.appendChild(title);
+      textContainer.appendChild(description);
+
+      // Ensamblar el elemento
+      li.appendChild(imageContainer);
+      li.appendChild(textContainer);
+
+      li.dataset.productId = product.id;
+      li.addEventListener("click", () => selectProduct(product));
+      $productList.appendChild(li);
+    });
+  }
+
+  // Evento para el buscador
+  $productSearch.addEventListener("input", (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+    const filtered = availableProducts.filter(
+      (p) =>
+        p.nombre.toLowerCase().includes(searchTerm) ||
+        p.codigo.includes(searchTerm),
+    );
+    renderProducts(filtered);
+  });
+
+  // Función para seleccionar producto y mostrar resumen
+  function selectProduct(product, index, editMode = false) {
+    $quantity?.focus();
+    $quantity?.select();
+
+    // en caso de que la selección venga con editMode, significa que la selección viene desde algún producto ya seleccionado
+    if (editMode) {
+      currentEditIndex = index;
+      selectedProduct = null;
+    } else {
+      currentEditIndex = -1;
+      selectedProduct = product;
+    }
+
+    // Precarga el resumen
+    $productSumary.classList.remove("hidden");
+    $sumaryId.textContent = product.id;
+    $sku.textContent = product.sku;
+    $codigo.textContent = product.codigo;
+    $nombre.textContent = product.nombre;
+    $descripcion.textContent = product.descripcion;
+    $quantity.value = product.cantidad || 0;
+    $value.value = product.valor;
+  }
+
+  // Evento para Guardar
+  $guardar.addEventListener("click", () => {
+    const quantity = parseInt($quantity.value);
+    const value = parseFloat($value.value);
+    const total = quantity * value;
+
+    if (currentEditIndex >= 0) {
+      products[currentEditIndex].cantidad = quantity;
+      products[currentEditIndex].valor = value;
+      products[currentEditIndex].total = total;
+    } else {
+      if (selectedProduct) {
+        products.push({
+          id: selectedProduct.id,
+          sku: selectedProduct.sku,
+          codigo: selectedProduct.codigo,
+          nombre: selectedProduct.nombre,
+          descripcion: selectedProduct.descripcion,
+          stock: selectedProduct.stock,
+          imagen: selectedProduct.imagen,
+          moneda: selectedProduct.moneda,
+          cantidad: quantity,
+          valor: value,
+          total: total,
+        });
+      }
+    }
+    //limpio el detalle actual, y actualizo con los nuevos valores
+    $detalle.innerHTML = "";
+    products.forEach((product, index) => {
+      renderRegister(product, index);
+    });
+
+    //cerramos y limpiamos el modal
+    HSOverlay.close($modal);
+
+    $productSearch.value = "";
+    $productList.innerHTML = "";
+    $productSumary.classList.add("hidden");
+
+    $quantity.value = 1;
+    $value.value = "";
+
+    updateTotals();
+  });
+
+  // Inicializar HSOverlay cuando el DOM esté listo
+  document.addEventListener("DOMContentLoaded", () => {
+    if (window.HSOverlay) {
+      window.HSOverlay.autoInit();
+      //console.log("HSOverlay inicializado");
+    } else {
+      console.error("HSOverlay no está disponible");
+    }
+  });
+
+  // Actualizar totales
+  updateTotals();
+</script>

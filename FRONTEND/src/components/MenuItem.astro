@@ -1,0 +1,23 @@
+---
+import Icon from "./Icon.jsx";
+const { item, isActive } = Astro.props;
+---
+
+<a
+  class={`flex items-center gap-x-2.5 py-1.5 px-2 text-[13px] rounded-lg focus:outline-hidden ${
+    isActive
+      ? "bg-core-primary text-core-light font-medium rounded-md"
+      : "text-core-dark hover:bg-core-primary/30 hover:opacity-80 focus:bg-core-gray/10 dark:text-neutral-200 dark:hover:bg-neutral-700/50 font-normal"
+  }`}
+  href={item.ruta}
+>
+  <span class="w-4 h-4 flex items-center justify-center">
+    <Icon icon={item.icon} className="w-4 h-4" client:visible />
+  </span>
+
+  <span class="truncate">{item.label}</span>
+
+  <span class="ms-auto">
+    {item.notification > 0 && <span class="text-xs">{item.notification}</span>}
+  </span>
+</a>

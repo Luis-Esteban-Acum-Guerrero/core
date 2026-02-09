@@ -1,0 +1,127 @@
+---
+const ticket = Astro.props.ticket;
+const key = Astro.props.key;
+const {
+  UID,
+  prioridad,
+  titulo,
+  descripcion,
+  estadoTicket,
+  tipoTicket,
+  usuario,
+  createdAt,
+} = ticket;
+const { nombre, email, telefono, empresa, UIDusuario, UIDempresa } = usuario;
+
+const rtf = new Intl.RelativeTimeFormat("es", {
+  localeMatcher: "best fit",
+  numeric: "always",
+  style: "long",
+});
+
+const date = new Date(createdAt);
+const now = new Date();
+const diff = now - date;
+const diffHours = Math.round(diff / (1000 * 60 * 60));
+const relativeTime = rtf.format(-diffHours, "hour");
+---
+
+<div
+  class=`${Astro.props.isFirst ? "active" : ""} hs-tab-active:bg-core-light dark:hs-tab-active:bg-neutral-700/30 relative overflow-hidden group cursor-pointer bg-core-light hover:bg-core-light focus:outline-hidden focus:bg-core-light dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:border-neutral-700`
+  id={`hs-pro-tabs-${key}-tab`}
+  aria-selected={Astro.props.isFirst ? "true" : "false"}
+  data-hs-tab={`#hs-pro-tabs-${key}`}
+  aria-controls={`hs-pro-tabs-${key}`}
+  role="tab"
+  tabindex="0"
+>
+  <div class="py-4 px-5 border-b border-b-gray-100 dark:border-neutral-700">
+    <div class="flex gap-x-2.5">
+      <div class="mt-1 shrink-0">
+        <div class="relative size-8">
+          <img
+            class="shrink-0 size-7 rounded-full"
+            src="https://images.unsplash.com/photo-1679412330254-90cb240038c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2.5&w=320&h=320&q=80"
+            alt="Avatar"
+          />
+          <span
+            class="absolute top-3.5 start-3.5 flex shrink-0 justify-center items-center size-5 bg-core-light rounded-full group-hover:bg-core-light dark:bg-neutral-800 dark:group-hover:bg-neutral-700"
+          >
+            <svg
+              class="shrink-0 size-3.5"
+              width="32"
+              height="33"
+              viewBox="0 0 32 33"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8.42691 28.1051L8.94979 28.3665C11.0818 29.6347 13.5192 30.2975 15.9998 30.2837C23.6364 30.2663 29.9109 23.977 29.9109 16.3404C29.9109 12.6498 28.4451 9.10563 25.8386 6.493C23.2355 3.85337 19.6792 2.3658 15.9728 2.3658C8.37114 2.3658 2.1167 8.62111 2.1167 16.2219C2.1167 16.2821 2.1167 16.3413 2.11757 16.4015C2.14047 18.9857 2.86325 21.5154 4.20907 23.7217L4.55764 24.2445L3.16332 29.3861L8.42691 28.1051Z"
+                fill="#00E676"></path>
+              <path
+                d="M27.3898 4.92441C24.4225 1.89695 20.3519 0.198514 16.1132 0.218497H16.0862C7.35684 0.218524 0.173436 7.40196 0.173436 16.1313C0.173436 16.1722 0.17431 16.2124 0.17431 16.2533C0.20719 19.0287 0.925671 21.7529 2.26581 24.1836L0 32.4624L8.44441 30.2837C10.7772 31.5644 13.3998 32.2246 16.0609 32.2009C24.8225 32.153 32.005 24.9286 31.9998 16.1662C32.0207 11.9562 30.3606 7.90739 27.3898 4.92441ZM16.1132 29.4994C13.7543 29.5117 11.4369 28.8789 9.4117 27.6694L8.88883 27.4079L3.86054 28.7151L5.16771 23.7478L4.81915 23.2249C3.52433 21.1342 2.83835 18.7238 2.83832 16.2646C2.83832 9.01241 8.80606 3.04464 16.0583 3.04464C23.3105 3.04464 29.2782 9.01241 29.2782 16.2646C29.2782 20.8311 26.9123 25.0855 23.0325 27.4951C20.9806 28.8095 18.5936 29.5053 16.1568 29.4994M23.8169 19.8263L22.8583 19.3906C22.8583 19.3906 21.4639 18.7805 20.5925 18.3448C20.5053 18.3448 20.4182 18.2577 20.331 18.2577C20.1162 18.263 19.9062 18.3229 19.721 18.4319C19.5354 18.5409 19.6339 18.5191 18.4138 19.9134C18.3311 20.0764 18.1611 20.1784 17.9781 20.1749H17.891C17.76 20.1529 17.6385 20.0922 17.5424 20.0006L17.1067 19.8263C16.1717 19.4305 15.3157 18.8696 14.5794 18.1705C14.4051 17.9962 14.1437 17.8219 13.9694 17.6476C13.3243 17.0296 12.7671 16.3259 12.3137 15.5561L12.2265 15.3819C12.1508 15.2753 12.092 15.1577 12.0522 15.0333C12.0294 14.8823 12.0603 14.7281 12.1394 14.5976C12.2187 14.4668 12.4879 14.1618 12.7494 13.9004C13.0108 13.639 13.0108 13.4647 13.1851 13.2904C13.2747 13.166 13.3366 13.0238 13.3666 12.8735C13.3967 12.7232 13.3942 12.5682 13.3594 12.4189C12.9533 11.2913 12.4878 10.1859 11.9651 9.10738C11.8249 8.88946 11.6066 8.73352 11.3551 8.67165H10.3964C10.2222 8.67165 10.0479 8.75879 9.87357 8.75879L9.78642 8.84593C9.61214 8.93307 9.43786 9.10738 9.26355 9.19452C9.08927 9.28166 9.00212 9.54312 8.82784 9.7174C8.21862 10.4873 7.88153 11.4372 7.86923 12.4189C7.87888 13.1094 8.02705 13.791 8.30494 14.4233L8.39211 14.6847C9.1746 16.3577 10.2689 17.8661 11.6165 19.1291L11.9651 19.4777C12.2187 19.6878 12.4521 19.9212 12.6622 20.1749C14.4679 21.7461 16.6125 22.879 18.928 23.4864C19.1894 23.5735 19.538 23.5735 19.7994 23.6607H20.6709C21.1264 23.6382 21.5719 23.5194 21.9781 23.3121C22.1916 23.2154 22.3955 23.0986 22.5881 22.9635L22.7624 22.7892C22.9367 22.6149 23.111 22.5278 23.2853 22.3535C23.4556 22.2017 23.6024 22.0255 23.721 21.8306C23.8883 21.4402 24.0059 21.0306 24.0696 20.6106V20.0006C23.9913 19.9302 23.9032 19.8715 23.8081 19.8263"
+                fill="white"></path>
+            </svg>
+          </span>
+        </div>
+        <div class="text-xs font-extralight text-white">{prioridad}</div>
+      </div>
+
+      <div class="grow truncate">
+        <div class="flex justify-between gap-x-1">
+          <span
+            class="block truncate font-medium text-[13px] text-core-dark dark:text-neutral-200"
+            >{nombre}</span
+          >
+          <span
+            class="block text-[10px] leading-5 text-core-gray uppercase dark:text-neutral-500"
+            >{relativeTime}</span
+          >
+        </div>
+
+        <div class="mt-1 flex justify-between items-center gap-x-1">
+          <div class="w-10/12 truncate">
+            <p class="truncate text-xs text-core-gray dark:text-neutral-500">
+              <i class="text-xs">({empresa})</i>
+            </p>
+          </div>
+
+          <div class="hs-tooltip [--placement:left] inline-block">
+            <span
+              class="hs-tooltip-toggle flex shrink-0 justify-center items-center size-4 bg-emerald-500 text-white rounded-full"
+            >
+              <svg
+                class="shrink-0 size-2.5"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+            </span>
+            <span
+              class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 inline-block absolute invisible z-20 py-1 px-1.5 w-auto max-w-56 bg-core-dark text-xs text-white rounded-lg whitespace-nowrap dark:bg-neutral-700"
+              role="tooltip"
+            >
+              {estadoTicket}
+            </span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-x-1.5 mt-1">
+          <div class="w-10/12 truncate">
+            <p class="truncate text-core-gray dark:text-neutral-500 text-xs">
+              {titulo}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

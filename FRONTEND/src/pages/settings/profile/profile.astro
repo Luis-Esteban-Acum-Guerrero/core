@@ -1,0 +1,1090 @@
+---
+// JSON de datos de entrada para precargar el formulario de perfil
+const profileData = {
+  // Información Personal
+  personalInfo: {
+    profileImage: {
+      url: null, // URL de la imagen de perfil actual
+      hasImage: false,
+    },
+    phone: "+56 9 8765 4321",
+    name: "Juan Carlos Pérez González",
+    username: "jcperez",
+    email: "juan.perez@empresa.cl",
+    disableAds: true, // Solo para cuentas PRO
+  },
+
+  // Configuración de Contraseña
+  passwordConfig: {
+    requirePasswordChange: false,
+    lastPasswordChange: "2024-01-15T10:30:00Z",
+    passwordStrength: "strong", // weak, medium, strong
+  },
+
+  // Configuración de Seguridad
+  securitySettings: {
+    twoFactorAuth: {
+      enabled: false,
+      method: null, // "sms", "email", "authenticator"
+      backupCodes: [],
+    },
+    sessions: {
+      active: [
+        {
+          id: "session_001",
+          device: "Mac",
+          browser: "Safari - macOS",
+          location: "Santiago, Chile",
+          ipAddress: "192.168.1.100",
+          lastActivity: "2024-01-20T14:25:00Z",
+          isCurrent: true,
+        },
+      ],
+      expired: [
+        {
+          id: "session_002",
+          device: "iPhone",
+          browser: "Safari - iOS",
+          location: "Valparaíso, Chile",
+          ipAddress: "192.168.1.105",
+          lastActivity: "2024-01-18T09:15:00Z",
+          isCurrent: false,
+          expiredAt: "2024-01-19T09:15:00Z",
+        },
+        {
+          id: "session_003",
+          device: "Windows PC",
+          browser: "Chrome - Windows",
+          location: "Concepción, Chile",
+          ipAddress: "192.168.1.110",
+          lastActivity: "2024-01-16T16:45:00Z",
+          isCurrent: false,
+          expiredAt: "2024-01-17T16:45:00Z",
+        },
+      ],
+    },
+    dangerZone: {
+      accountDeletionRequested: false,
+      accountCreatedAt: "2023-06-15T08:00:00Z",
+      dataRetentionDays: 30,
+    },
+  },
+
+  // Metadatos del usuario
+  metadata: {
+    accountType: "pro", // "free", "pro", "enterprise"
+    createdAt: "2023-06-15T08:00:00Z",
+    updatedAt: "2024-01-20T14:25:00Z",
+    lastLogin: "2024-01-20T14:20:00Z",
+    timezone: "America/Santiago",
+    language: "es-CL",
+  },
+};
+
+console.log(profileData);
+
+// Función para formatear fechas en español
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("es-CL", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+// Función para calcular tiempo relativo
+function getRelativeTime(dateString) {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffInMinutes = Math.floor((now - date) / (1000 * 60));
+
+  if (diffInMinutes < 1) return "Ahora mismo";
+  if (diffInMinutes < 60) return `Hace ${diffInMinutes} minutos`;
+  if (diffInMinutes < 1440)
+    return `Hace ${Math.floor(diffInMinutes / 60)} horas`;
+  return `Hace ${Math.floor(diffInMinutes / 1440)} días`;
+}
+---
+
+<main
+  id="content"
+  class="md:ps-0 lg:ps-40 mainmenu-open:pt-10 2xl:hs-overlay-layout-open:pe-2 xl:ps-80 transition-all duration-300"
+>
+  <div class="max-w-6xl mx-auto py-5 sm:py-10 px-5 md:px-8 2xl:px-5 space-y-8">
+    <div class="mb-8">
+      <h1
+        class="text-2xl md:text-3xl font-semibold text-core-dark dark:text-white"
+      >
+        Gestión de perfíl de usuario
+      </h1>
+      <p class="text-core-gray dark:text-core-gray mt-2">
+        Administra los datos asociados a tu cuenta de sistema
+      </p>
+    </div>
+
+    <!-- Account Card -->
+    <div
+      class="bg-core-light rounded-xl border border-core-gray dark:bg-neutral-800 dark:border-neutral-700"
+    >
+      <!-- Tab Navigation -->
+      <div class="border-b border-core-gray dark:border-neutral-700">
+        <nav class="flex space-x-8 px-6 pt-6" aria-label="Tabs">
+          <button
+            type="button"
+            id="personal-info-tab"
+            class="profile-tab-btn whitespace-nowrap py-2 px-1 border-b-2 border-core-primary font-medium text-sm text-core-primary focus:outline-hidden active"
+            data-tab="personal-info"
+          >
+            Información Personal
+          </button>
+          <button
+            type="button"
+            id="password-tab"
+            class="profile-tab-btn whitespace-nowrap py-2 px-1 border-b-2 border-transparent font-medium text-sm text-core-gray hover:text-core-dark hover:border-core-gray focus:outline-hidden dark:text-core-gray dark:hover:text-neutral-300"
+            data-tab="password"
+          >
+            Contraseña
+          </button>
+          <button
+            type="button"
+            id="security-tab"
+            class="profile-tab-btn whitespace-nowrap py-2 px-1 border-b-2 border-transparent font-medium text-sm text-core-gray hover:text-core-dark hover:border-core-gray focus:outline-hidden dark:text-core-gray dark:hover:text-neutral-300"
+            data-tab="security"
+          >
+            Seguridad
+          </button>
+        </nav>
+      </div>
+
+      <!-- Tab Content -->
+      <div class="p-5 md:p-8">
+        <!-- Personal Info Tab -->
+        <div id="personal-info-content" class="tab-content">
+          <form>
+            <!-- Avatar -->
+            <div
+              class="py-6 sm:py-8 space-y-5 border-t border-core-gray first:border-t-0 dark:border-neutral-700"
+            >
+              <!-- Grid -->
+              <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+                <div class="sm:col-span-4 xl:col-span-3 2xl:col-span-2">
+                  <label
+                    class="sm:mt-2.5 inline-block text-sm text-core-gray dark:text-neutral-500"
+                  >
+                    Imagen de perfil
+                  </label>
+                </div>
+                <!-- End Col -->
+
+                <div class="sm:col-span-8">
+                  <!-- Logo Upload Group -->
+                  <div class="flex flex-wrap items-center gap-3 sm:gap-5">
+                    <span
+                      class="flex shrink-0 justify-center items-center size-20 border-2 border-dotted border-core-gray text-core-gray rounded-full dark:border-neutral-700 dark:text-neutral-600"
+                    >
+                      <svg
+                        class="shrink-0 size-7"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <rect width="18" height="18" x="3" y="3" rx="2" ry="2"
+                        ></rect>
+                        <circle cx="9" cy="9" r="2"></circle>
+                        <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"
+                        ></path>
+                      </svg>
+                    </span>
+
+                    <div class="grow">
+                      <div class="flex items-center gap-x-2">
+                        <button
+                          type="button"
+                          class="py-2 px-3 inline-flex items-center gap-x-2 text-xs font-medium rounded-lg border border-transparent bg-core-primary text-white hover:opacity-80 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:ring-2 focus:ring-core-primary"
+                        >
+                          <svg
+                            class="shrink-0 size-4"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+                            ></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" x2="12" y1="3" y2="15"></line>
+                          </svg>
+                          Subir imagen
+                        </button>
+
+                        <button
+                          type="button"
+                          class="py-2 px-3 inline-flex items-center gap-x-2 text-xs font-medium rounded-lg border border-core-gray bg-core-light text-core-dark shadow-2xs hover:bg-core-light disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-dark dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                          disabled
+                        >
+                          Eliminar
+                        </button>
+                      </div>
+
+                      <p
+                        class="mt-2 text-xs text-core-gray dark:text-neutral-500"
+                      >
+                        Selecciona una imagen de hasta 2MB.
+                      </p>
+                    </div>
+                  </div>
+                  <!-- End Logo Upload Group -->
+                </div>
+                <!-- End Col -->
+              </div>
+              <!-- End Grid -->
+            </div>
+            <!-- End Avatar -->
+
+            <!-- Personal Info Fields -->
+            <div
+              class="py-6 sm:py-8 space-y-5 border-t border-core-gray first:border-t-0 dark:border-neutral-700"
+            >
+              <h2 class="font-semibold text-core-dark dark:text-neutral-200">
+                Información Personal
+              </h2>
+
+              <!-- Phone -->
+              <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+                <div class="sm:col-span-3">
+                  <label
+                    for="hs-pro-dappiph"
+                    class="sm:mt-2.5 inline-block text-sm text-core-gray dark:text-neutral-500"
+                  >
+                    Teléfono
+                  </label>
+                </div>
+                <div class="sm:col-span-9">
+                  <input
+                    id="hs-pro-dappiph"
+                    type="tel"
+                    class="py-1.5 sm:py-2 px-3 block w-full border-core-gray rounded-lg sm:text-sm placeholder:text-core-gray focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:ring-neutral-600"
+                    placeholder="+56 9 1234 5678"
+                  />
+                  <p class="mt-2 text-sm text-core-gray dark:text-neutral-500">
+                    Número de teléfono para contacto y notificaciones
+                    importantes.
+                  </p>
+                </div>
+              </div>
+              <hr class="my-8 border-core-gray dark:border-neutral-700" />
+              <!-- Name -->
+              <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+                <div class="sm:col-span-3">
+                  <label
+                    for="hs-pro-dappinm"
+                    class="sm:mt-2.5 inline-block text-sm text-core-gray dark:text-neutral-500"
+                  >
+                    Nombre
+                  </label>
+                </div>
+                <div class="sm:col-span-9">
+                  <input
+                    id="hs-pro-dappinm"
+                    type="text"
+                    class="py-1.5 sm:py-2 px-3 block w-full border-core-gray rounded-lg sm:text-sm placeholder:text-core-gray focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:ring-neutral-600"
+                    placeholder="Ingresa tu nombre completo"
+                  />
+                  <p class="mt-2 text-sm text-core-gray dark:text-neutral-500">
+                    Nombre con el cual te identificaremos en los documentos y
+                    notificaciones formales.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Username -->
+              <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+                <div class="sm:col-span-3">
+                  <label
+                    for="hs-pro-dappiun"
+                    class="sm:mt-2.5 inline-block text-sm text-core-gray dark:text-neutral-500"
+                  >
+                    Nombre de Usuario
+                  </label>
+                </div>
+                <div class="sm:col-span-9">
+                  <input
+                    id="hs-pro-dappiun"
+                    type="text"
+                    class="py-1.5 sm:py-2 px-3 block w-full border-core-gray rounded-lg sm:text-sm placeholder:text-core-gray focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:ring-neutral-600"
+                    placeholder="Ingresa tu nombre de usuario"
+                  />
+                  <p class="mt-2 text-sm text-core-gray dark:text-neutral-500">
+                    Ingresa tu nombre o nick para identificarte en nuestro
+                    sistema.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Email -->
+              <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+                <div class="sm:col-span-3">
+                  <label
+                    for="hs-pro-dappiem"
+                    class="sm:mt-2.5 inline-block text-sm text-core-gray dark:text-neutral-500"
+                  >
+                    Email
+                  </label>
+                </div>
+                <div class="sm:col-span-9">
+                  <input
+                    id="hs-pro-dappiem"
+                    type="email"
+                    class="py-1.5 sm:py-2 px-3 block w-full border-core-gray rounded-lg sm:text-sm placeholder:text-core-gray focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:ring-neutral-600"
+                    placeholder="Dirección email"
+                  />
+                  <p class="mt-2 text-sm text-core-gray dark:text-neutral-500">
+                    Ingresa tu Email principal. Este será usado para ingresar al
+                    sistema.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Disable Ads -->
+              <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+                <div class="sm:col-span-3">
+                  <label
+                    class="inline-block text-sm text-core-gray dark:text-neutral-500"
+                  >
+                    Deshabilitar Publicidad
+                    <span
+                      class="ms-1 inline-flex items-center gap-x-1.5 px-1.5 text-[10px] font-medium bg-core-primary text-white rounded-full dark:bg-core-primary"
+                    >
+                      PRO
+                    </span>
+                  </label>
+                </div>
+                <div class="sm:col-span-9">
+                  <div class="mt-1.5 flex">
+                    <input
+                      type="checkbox"
+                      class="shrink-0 border-core-gray size-3.5 rounded-sm text-core-primary checked:border-lime-600 focus:ring-offset-0 dark:bg-neutral-800 dark:checked:bg-core-primary dark:border-neutral-700"
+                      id="hs-pro-dapdach"
+                    />
+                    <label
+                      for="hs-pro-dapdach"
+                      class="text-xs text-core-gray ms-2 dark:text-core-gray"
+                    >
+                      Tu cuenta pro, deshabilita la publicidad en todo el sitio.
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Password Tab -->
+        <div id="password-content" class="tab-content hidden">
+          <form>
+            <div
+              class="pt-6 sm:pt-8 space-y-5 border-t border-core-gray first:border-t-0 dark:border-neutral-700"
+            >
+              <div class="inline-flex items-center gap-x-2">
+                <h2 class="font-semibold text-core-dark dark:text-neutral-200">
+                  Contraseña
+                </h2>
+                <!-- Tooltip -->
+                <div class="hs-tooltip inline-block">
+                  <svg
+                    class="hs-tooltip-toggle shrink-0 ms-1 size-3 text-core-gray dark:text-neutral-500"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
+                    ></path>
+                    <path
+                      d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"
+                    ></path>
+                  </svg>
+                  <div
+                    class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-60 p-4 w-96 bg-core-light rounded-xl shadow-xl dark:bg-neutral-900 dark:text-core-gray"
+                    role="tooltip"
+                  >
+                    <p class="font-medium text-core-dark dark:text-neutral-200">
+                      Requisitos de contraseña:
+                    </p>
+                    <p
+                      class="mt-1 text-sm font-normal text-core-gray dark:text-core-gray"
+                    >
+                      Asegúrate de cumplir los requisitos:
+                    </p>
+                    <ul
+                      class="mt-1 ps-3.5 list-disc list-outside text-sm font-normal text-core-gray dark:text-core-gray"
+                    >
+                      <li>Mínimo 8 caracteres - más es mejor</li>
+                      <li>Al menos una letra minúscula</li>
+                      <li>Al menos una letra mayúscula</li>
+                      <li>Al menos un número, simbolo, o espacio</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Current Password -->
+              <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+                <div class="sm:col-span-3">
+                  <label
+                    for="hs-pro-dappcp"
+                    class="sm:mt-2.5 inline-block text-sm text-core-gray dark:text-neutral-500"
+                  >
+                    Contraseña actual
+                  </label>
+                </div>
+                <div class="sm:col-span-9">
+                  <div class="relative">
+                    <input
+                      id="hs-pro-dappcp"
+                      type="password"
+                      class="py-1.5 sm:py-2 px-3 block w-full border-core-gray rounded-lg sm:text-sm placeholder:text-core-gray focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:ring-neutral-600"
+                      placeholder="Ingresa tu contraseña actual"
+                    />
+                    <button
+                      type="button"
+                      data-hs-toggle-password='{
+                          "target": "#hs-pro-dappcp"
+                        }'
+                      class="absolute inset-y-0 end-0 flex items-center z-20 px-3 cursor-pointer text-core-gray rounded-e-md focus:outline-hidden focus:text-core-primary dark:text-neutral-600 dark:focus:text-core-primary"
+                    >
+                      <svg
+                        class="shrink-0 size-3.5"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path
+                          class="hs-password-active:hidden"
+                          d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                        <path
+                          class="hs-password-active:hidden"
+                          d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"
+                        ></path>
+                        <path
+                          class="hs-password-active:hidden"
+                          d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"
+                        ></path>
+                        <line
+                          class="hs-password-active:hidden"
+                          x1="2"
+                          x2="22"
+                          y1="2"
+                          y2="22"></line>
+                        <path
+                          class="hidden hs-password-active:block"
+                          d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"
+                        ></path>
+                        <circle
+                          class="hidden hs-password-active:block"
+                          cx="12"
+                          cy="12"
+                          r="3"></circle>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- New Password -->
+              <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+                <div class="sm:col-span-3">
+                  <label
+                    for="hs-pro-dappnp"
+                    class="sm:mt-2.5 inline-block text-sm text-core-gray dark:text-neutral-500"
+                  >
+                    Nueva Contraseña
+                  </label>
+                </div>
+                <div class="sm:col-span-9">
+                  <div data-hs-toggle-password-group class="space-y-2">
+                    <div class="relative">
+                      <input
+                        id="hs-pro-dappnp"
+                        type="password"
+                        class="py-1.5 sm:py-2 px-3 block w-full border-core-gray rounded-lg sm:text-sm placeholder:text-core-gray focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:ring-neutral-600"
+                        placeholder="Ingresa la nueva contraseña"
+                      />
+                      <button
+                        type="button"
+                        data-hs-toggle-password='{
+                            "target": ["#hs-pro-dappnp", "#hs-pro-dapprnp"]
+                          }'
+                        class="absolute inset-y-0 end-0 flex items-center z-20 px-3 cursor-pointer text-core-gray rounded-e-md focus:outline-hidden focus:text-core-primary dark:text-neutral-600 dark:focus:text-core-primary"
+                      >
+                        <svg
+                          class="shrink-0 size-3.5"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path
+                            class="hs-password-active:hidden"
+                            d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                          <path
+                            class="hs-password-active:hidden"
+                            d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"
+                          ></path>
+                          <path
+                            class="hs-password-active:hidden"
+                            d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"
+                          ></path>
+                          <line
+                            class="hs-password-active:hidden"
+                            x1="2"
+                            x2="22"
+                            y1="2"
+                            y2="22"></line>
+                          <path
+                            class="hidden hs-password-active:block"
+                            d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"
+                          ></path>
+                          <circle
+                            class="hidden hs-password-active:block"
+                            cx="12"
+                            cy="12"
+                            r="3"></circle>
+                        </svg>
+                      </button>
+                    </div>
+
+                    <div class="relative">
+                      <input
+                        id="hs-pro-dapprnp"
+                        type="password"
+                        class="py-1.5 sm:py-2 px-3 block w-full border-core-gray rounded-lg sm:text-sm placeholder:text-core-gray focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:ring-neutral-600"
+                        placeholder="Repite la nueva contraseña"
+                      />
+                      <button
+                        type="button"
+                        data-hs-toggle-password='{
+                            "target": ["#hs-pro-dappnp", "#hs-pro-dapprnp"]
+                          }'
+                        class="absolute inset-y-0 end-0 flex items-center z-20 px-3 cursor-pointer text-core-gray rounded-e-md focus:outline-hidden focus:text-core-primary dark:text-neutral-600 dark:focus:text-core-primary"
+                      >
+                        <svg
+                          class="shrink-0 size-3.5"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path
+                            class="hs-password-active:hidden"
+                            d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                          <path
+                            class="hs-password-active:hidden"
+                            d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"
+                          ></path>
+                          <path
+                            class="hs-password-active:hidden"
+                            d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"
+                          ></path>
+                          <line
+                            class="hs-password-active:hidden"
+                            x1="2"
+                            x2="22"
+                            y1="2"
+                            y2="22"></line>
+                          <path
+                            class="hidden hs-password-active:block"
+                            d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"
+                          ></path>
+                          <circle
+                            class="hidden hs-password-active:block"
+                            cx="12"
+                            cy="12"
+                            r="3"></circle>
+                        </svg>
+                      </button>
+                    </div>
+
+                    <div
+                      data-hs-strong-password='{
+                            "target": "#hs-pro-dappnp",
+                            "stripClasses": "hs-strong-password:opacity-100 hs-strong-password-accepted:bg-teal-500 h-2 flex-auto rounded-full bg-core-primary opacity-50 mx-1"
+                          }'
+                      class="flex mt-2 -mx-1"
+                    >
+                    </div>
+
+                    <p class="text-sm text-core-gray dark:text-core-gray">
+                      Nivel: <span></span>
+                    </p>
+
+                    <div class="flex items-center gap-x-3">
+                      <button
+                        type="button"
+                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-core-primary text-white hover:opacity-80 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:ring-2 focus:ring-core-primary"
+                      >
+                        Cambiar
+                      </button>
+                      <a
+                        class="text-sm text-core-primary decoration-2 hover:underline font-medium focus:outline-hidden focus:underline dark:text-lime-400 dark:hover:text-core-primary"
+                        href="#"
+                      >
+                        Olvidé mi contraseña
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Security Tab -->
+        <div id="security-content" class="tab-content hidden">
+          <form>
+            <!-- Two-Step Verification -->
+            <div
+              class="py-6 sm:py-8 space-y-5 border-t border-core-gray first:border-t-0 dark:border-neutral-700"
+            >
+              <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+                <div class="sm:col-span-3">
+                  <label
+                    class="sm:mt-2.5 inline-block text-sm text-core-gray dark:text-neutral-500"
+                  >
+                    Verificación de 2 Pasos
+                  </label>
+                </div>
+                <div class="sm:col-span-9">
+                  <div
+                    class="p-4 bg-lime-50 text-core-primary rounded-lg bg-core-primary/10"
+                    role="alert"
+                    tabindex="-1"
+                    aria-labelledby="hs-pro-dasfaaoea-label"
+                  >
+                    <div class="flex">
+                      <svg
+                        class="shrink-0 size-5 mt-1"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+                        ></path>
+                        <path d="m9 12 2 2 4-4"></path>
+                      </svg>
+                      <div class="ms-3 space-y-2">
+                        <h3
+                          id="hs-pro-dasfaaoea-label"
+                          class="text-sm text-core-primary dark:text-core-primary"
+                        >
+                          Características de seguridad avanzada, están
+                          disponibles en la versión <b>PRO</b>
+                        </h3>
+                        <button
+                          type="button"
+                          class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-core-primary text-white hover:opacity-80 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:ring-2 focus:ring-core-primary"
+                        >
+                          <svg
+                            class="shrink-0 size-3"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            viewBox="0 0 16 16"
+                          >
+                            <path
+                              d="M7.657 6.247c.11-.33.576-.33.686 0l.645 1.937a2.89 2.89 0 0 0 1.829 1.828l1.936.645c.33.11.33.576 0 .686l-1.937.645a2.89 2.89 0 0 0-1.828 1.829l-.645 1.936a.361.361 0 0 1-.686 0l-.645-1.937a2.89 2.89 0 0 0-1.828-1.828l-1.937-.645a.361.361 0 0 1 0-.686l1.937-.645a2.89 2.89 0 0 0 1.828-1.828l.645-1.937zM3.794 1.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387A1.734 1.734 0 0 0 4.593 5.69l-.387 1.162a.217.217 0 0 1-.412 0L3.407 5.69A1.734 1.734 0 0 0 2.31 4.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387A1.734 1.734 0 0 0 3.407 2.31l.387-1.162zM10.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732L9.1 2.137a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L10.863.1z"
+                            ></path>
+                          </svg>
+                          Subir de nivel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sessions -->
+            <div
+              class="py-6 sm:py-8 space-y-5 border-t border-core-gray first:border-t-0 dark:border-neutral-700"
+            >
+              <div
+                class="grid sm:grid-cols-12 gap-y-1.5 2xl:gap-y-0 sm:gap-x-5"
+              >
+                <div class="sm:col-span-3">
+                  <label
+                    class="inline-block text-sm text-core-gray dark:text-neutral-500"
+                  >
+                    Sesiones
+                  </label>
+                </div>
+                <div class="sm:col-span-9">
+                  <div class="grid xl:grid-cols-2 2xl:grid-cols-3 gap-5">
+                    <!-- Active Sessions -->
+                    {
+                      profileData.securitySettings.sessions.active.map(
+                        (session) => (
+                          <div class="p-5 space-y-4 flex flex-col bg-core-light border border-core-gray rounded-xl dark:bg-neutral-800 dark:border-neutral-700">
+                            <div class="flex justify-between">
+                              <div class="flex flex-col justify-center items-center size-9.5 border border-core-gray rounded-lg dark:border-neutral-700">
+                                <svg
+                                  class="size-5 text-core-gray dark:text-neutral-500"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <path d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.28 2.55a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45L4 16" />
+                                </svg>
+                              </div>
+                              <button
+                                type="button"
+                                class="py-2 px-3 inline-flex items-center gap-x-2 text-xs font-medium rounded-lg border border-core-gray bg-core-light text-core-dark shadow-2xs hover:bg-core-light disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                              >
+                                <svg
+                                  class="shrink-0 size-3"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                                  <polyline points="16 17 21 12 16 7" />
+                                  <line x1="21" x2="9" y1="12" y2="12" />
+                                </svg>
+                                Cerrar sesión
+                              </button>
+                            </div>
+                            <div class="flex flex-wrap justify-between items-center gap-2">
+                              <span class="font-medium text-core-dark dark:text-neutral-200">
+                                {session.device}
+                              </span>
+                              {session.isCurrent && (
+                                <span class="inline-flex items-center gap-1.5 py-px px-2 text-xs font-medium bg-lime-100 text-lime-800 rounded-full dark:bg-core-primary/10 dark:text-core-primary">
+                                  Sesión actual
+                                </span>
+                              )}
+                            </div>
+                            <ul class="space-y-2">
+                              <li class="flex justify-between items-center">
+                                <span class="text-xs uppercase text-core-gray dark:text-neutral-500">
+                                  Ubicación:
+                                </span>
+                                <span class="text-sm text-core-dark dark:text-neutral-200">
+                                  {session.location}
+                                </span>
+                              </li>
+                              <li class="flex justify-between items-center">
+                                <span class="text-xs uppercase text-core-gray dark:text-neutral-500">
+                                  Dispositivo:
+                                </span>
+                                <span class="text-sm text-core-dark dark:text-neutral-200">
+                                  {session.browser}
+                                </span>
+                              </li>
+                              <li class="flex justify-between items-center">
+                                <span class="text-xs uppercase text-core-gray dark:text-neutral-500">
+                                  IP:
+                                </span>
+                                <span class="text-sm text-core-dark dark:text-neutral-200">
+                                  {session.ipAddress}
+                                </span>
+                              </li>
+                              <li class="flex justify-between items-center">
+                                <span class="text-xs uppercase text-core-gray dark:text-neutral-500">
+                                  Actividad:
+                                </span>
+                                <span class="text-sm text-core-dark dark:text-neutral-200">
+                                  {getRelativeTime(session.lastActivity)}
+                                </span>
+                              </li>
+                            </ul>
+                          </div>
+                        )
+                      )
+                    }
+
+                    <!-- Expired Sessions -->
+                    {
+                      profileData.securitySettings.sessions.expired.map(
+                        (session) => (
+                          <div class="p-5 space-y-4 flex flex-col bg-core-light border border-core-gray rounded-xl dark:bg-neutral-800 dark:border-neutral-700">
+                            <div class="flex justify-between">
+                              <div class="flex flex-col justify-center items-center size-9.5 border border-core-gray rounded-lg dark:border-neutral-700">
+                                <svg
+                                  class="size-5 text-core-gray dark:text-neutral-500"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <rect
+                                    width="16"
+                                    height="20"
+                                    x="4"
+                                    y="2"
+                                    rx="2"
+                                    ry="2"
+                                  />
+                                  <line x1="12" x2="12.01" y1="18" y2="18" />
+                                </svg>
+                              </div>
+                              <button
+                                type="button"
+                                class="py-2 px-3 inline-flex items-center gap-x-2 text-xs font-medium rounded-lg border border-core-gray bg-core-light text-core-dark shadow-2xs hover:bg-core-light disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                              >
+                                <svg
+                                  class="shrink-0 size-3"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                                  <polyline points="16 17 21 12 16 7" />
+                                  <line x1="21" x2="9" y1="12" y2="12" />
+                                </svg>
+                                Cerrar sesión
+                              </button>
+                            </div>
+                            <div class="flex flex-wrap justify-between items-center gap-2">
+                              <span class="font-medium text-core-dark dark:text-neutral-200">
+                                {session.device}
+                              </span>
+                              <span class="inline-flex items-center gap-1.5 py-px px-2 text-xs font-medium bg-core-light text-core-dark rounded-full dark:bg-neutral-700 dark:text-neutral-200">
+                                Expirada
+                              </span>
+                            </div>
+                            <ul class="space-y-2">
+                              <li class="flex justify-between items-center">
+                                <span class="text-xs uppercase text-core-gray dark:text-neutral-500">
+                                  Ubicación:
+                                </span>
+                                <span class="text-sm text-core-dark dark:text-neutral-200">
+                                  {session.location}
+                                </span>
+                              </li>
+                              <li class="flex justify-between items-center">
+                                <span class="text-xs uppercase text-core-gray dark:text-neutral-500">
+                                  Dispositivo:
+                                </span>
+                                <span class="text-sm text-core-dark dark:text-neutral-200">
+                                  {session.browser}
+                                </span>
+                              </li>
+                              <li class="flex justify-between items-center">
+                                <span class="text-xs uppercase text-core-gray dark:text-neutral-500">
+                                  IP:
+                                </span>
+                                <span class="text-sm text-core-dark dark:text-neutral-200">
+                                  {session.ipAddress}
+                                </span>
+                              </li>
+                              <li class="flex justify-between items-center">
+                                <span class="text-xs uppercase text-core-gray dark:text-neutral-500">
+                                  Actividad:
+                                </span>
+                                <span class="text-sm text-core-dark dark:text-neutral-200">
+                                  {getRelativeTime(session.lastActivity)}
+                                </span>
+                              </li>
+                            </ul>
+                          </div>
+                        )
+                      )
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Danger Zone -->
+            <div
+              class="py-6 sm:py-8 space-y-5 border-t border-core-gray first:border-t-0 dark:border-neutral-700"
+            >
+              <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+                <div class="sm:col-span-3">
+                  <label
+                    class="inline-block text-sm text-core-gray dark:text-neutral-500"
+                  >
+                    Zona de peligro
+                  </label>
+                </div>
+                <div class="sm:col-span-9">
+                  <button
+                    type="button"
+                    class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-core-gray bg-core-light text-core-dark shadow-2xs hover:bg-core-light disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-core-light dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-dark dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                  >
+                    Eliminar mi cuenta
+                  </button>
+                  <p class="mt-3 text-sm text-core-gray dark:text-neutral-500">
+                    Toda tu información será inmediatamente eliminada.
+                    <br />Esta acción no es reversible. Procede con precaución <a
+                      class="text-sm text-core-primary decoration-2 hover:underline font-medium focus:outline-hidden focus:underline dark:text-lime-400 dark:hover:text-core-primary"
+                      href="#">Leer más</a
+                    >
+                  </p>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="flex justify-end gap-x-3">
+      <button
+        type="button"
+        class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-core-gray bg-core-light text-core-dark shadow-sm hover:bg-core-light focus:outline-hidden focus:bg-core-light disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+      >
+        Cancelar
+      </button>
+      <button
+        type="submit"
+        class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-core-primary text-white hover:bg-core-primary focus:outline-hidden focus:bg-core-primary disabled:opacity-50 disabled:pointer-events-none"
+      >
+        <svg
+          class="shrink-0 size-4"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"
+          ></path>
+          <polyline points="17 21 17 13 7 13 7 21"></polyline>
+          <polyline points="7 3 7 8 15 8"></polyline>
+        </svg>
+        Guardar Empresa
+      </button>
+    </div>
+  </div>
+</main>
+
+<script>
+  // Tab functionality with URL hash support
+  document.addEventListener("DOMContentLoaded", function () {
+    const tabButtons = document.querySelectorAll(".profile-tab-btn");
+    const tabContents = document.querySelectorAll(".tab-content");
+
+    // Function to activate a specific tab
+    function activateTab(targetTab) {
+      // Remove active class from all buttons
+      tabButtons.forEach((btn) => {
+        btn.classList.remove("border-core-primary", "text-core-primary", "active");
+        btn.classList.add("border-transparent", "text-core-gray");
+      });
+
+      // Add active class to target button
+      const targetButton = document.querySelector(`[data-tab="${targetTab}"]`);
+      if (targetButton) {
+        targetButton.classList.remove("border-transparent", "text-core-gray");
+        targetButton.classList.add("border-core-primary", "text-core-primary", "active");
+      }
+
+      // Hide all tab contents
+      tabContents.forEach((content) => {
+        content.classList.add("hidden");
+      });
+
+      // Show target tab content
+      const targetContent = document.getElementById(targetTab + "-content");
+      if (targetContent) {
+        targetContent.classList.remove("hidden");
+      }
+    }
+
+    // Handle tab button clicks
+    tabButtons.forEach((button) => {
+      button.addEventListener("click", function () {
+        const targetTab = this.getAttribute("data-tab");
+        activateTab(targetTab);
+        
+        // Update URL hash without triggering page reload
+        history.pushState(null, null, `#${targetTab}`);
+      });
+    });
+
+    // Handle URL hash on page load and hash changes
+    function handleHashChange() {
+      const hash = window.location.hash.substring(1); // Remove the # symbol
+      const validTabs = ['personal-info', 'password', 'security'];
+      
+      if (hash && validTabs.includes(hash)) {
+        activateTab(hash);
+      } else {
+        // Default to personal-info tab if no valid hash
+        activateTab('personal-info');
+      }
+    }
+
+    // Listen for hash changes (back/forward browser buttons)
+    window.addEventListener('hashchange', handleHashChange);
+    
+    // Handle initial page load
+    handleHashChange();
+  });
+</script>

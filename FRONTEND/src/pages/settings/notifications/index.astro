@@ -1,0 +1,10 @@
+---
+import Layout from "../../../layouts/LayoutMenu.astro";
+import Notifications from "./notifications.astro";
+
+import { menuData } from "../menu.js";
+---
+
+<Layout menuData={menuData}>
+  <Notifications />
+</Layout>

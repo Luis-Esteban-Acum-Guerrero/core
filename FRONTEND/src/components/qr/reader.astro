@@ -1,0 +1,249 @@
+---
+import { QrCode } from "lucide-react";
+---
+
+<button
+  id="scanNow"
+  type="button"
+  class="p-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-core-gray bg-orange-600 text-white shadow-lg hover:bg-orange-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-orange-500"
+>
+  <QrCode className="w-5 h-5" />
+</button>
+
+<!-- Audio para el sonido de escaneo -->
+<audio id="audioScaner" src="/sounds/sonido.mp3" preload="auto"></audio>xw
+
+<div
+  id="hs-scanner"
+  class="hs-overlay hidden fixed inset-0 z-[90] overflow-hidden bg-core-dark bg-opacity-80"
+>
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div
+      class="relative bg-core-light rounded-lg shadow-xl max-w-sm w-full p-4 md:max-w-lg"
+    >
+      <button
+        id="closeScanner"
+        type="button"
+        class="absolute top-3 right-3 text-core-gray hover:bg-core-gray/30 hover:text-core-dark rounded-full p-1.5"
+        style="z-index: 1001;"
+      >
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+      <div class="flex flex-col items-center">
+        <div class="mb-4">
+          <video
+            id="scan"
+            class="w-full max-h-60 border border-core-gray rounded-lg"></video>
+        </div>
+        <div class="w-full mt-4">
+          <div id="scanStats" class="space-y-2 mb-4">
+            <!-- Contenedor para los resultados escaneados -->
+          </div>
+          <button
+            id="terminateScan"
+            type="button"
+            class="w-full mb-2 inline-flex justify-center rounded-md border border-transparent shadow-md px-4 py-2 bg-core-dark text-base font-medium text-white hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-core-dark"
+            style="z-index: 1001;"
+          >
+            Terminar Escaneo
+          </button>
+          <button
+            id="continueScanning"
+            type="button"
+            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-md px-4 py-2 bg-core-primary text-base font-medium text-core-dark hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-core-primary"
+            style="z-index: 1001;"
+          >
+            Continuar Escaneo
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import QrScanner from "/js/qr-scanner.min.js";
+
+  // Variable global para almacenar la guía de códigos y sus cantidades permitidas
+  let guia = [];
+
+  const handleData = (event) => {
+    const data = event.detail;
+    console.log("Datos recibidos en QRScanner:", data);
+    guia = data; // Actualizar la guía con los datos recibidos
+  };
+
+  // Agregar el listener al evento 'dataUpdated'
+  document.addEventListener("dataUpdated", handleData);
+
+  let codigoobtenido = {}; // Mantenemos el objeto globalmente
+  let scanner;
+
+  const iniciarEscaneo = () => {
+    // No limpiar el contenedor de resultados para acumular los datos
+    const scanStats = document.getElementById("scanStats");
+
+    // Inicializar el escáner y configurar la función de callback
+    scanner = new QrScanner(document.getElementById("scan"), (result) => {
+      activarSonido();
+      procesarResultado(result);
+      // Detener el escáner después de un escaneo exitoso
+      scanner.stop();
+    });
+    scanner.start();
+    document.getElementById("hs-scanner").classList.remove("hidden");
+  };
+
+  const activarSonido = () => {
+    const audio = document.getElementById("audioScaner");
+    if (audio) {
+      audio.play();
+    }
+  };
+
+  const cerrarEscaneo = () => {
+    if (scanner) {
+      scanner.stop();
+    }
+    document.getElementById("hs-scanner").classList.add("hidden");
+    limpiarEscaner();
+  };
+
+  const limpiarEscaner = () => {
+    const scan = document.getElementById("scan");
+    scan.srcObject = null; // Limpia el stream del video
+    scan.load(); // Reinicia el video
+  };
+
+  const procesarResultado = (result) => {
+    const scanStats = document.getElementById("scanStats");
+
+    // Buscar el código en la guía
+    const codigoGuia = guia.find((item) => item.codigo === result);
+    if (!codigoGuia) {
+      alert(`El código ${result} no está en la guía`);
+      return;
+    }
+
+    // Verificar si la cantidad de escaneos no supera la cantidad permitida en la guía
+    const cantidadEscaneada = codigoobtenido[result] || 0;
+    if (cantidadEscaneada >= codigoGuia.cantidad) {
+      alert(
+        `La cantidad de escaneos para el código ${result} ha alcanzado el límite de ${codigoGuia.cantidad}`
+      );
+      return;
+    }
+
+    // Mostrar resultado en la interfaz
+    const existingEntry = scanStats.querySelector(`[data-code="${result}"]`);
+
+    if (existingEntry) {
+      const countElement = existingEntry.querySelector(".count");
+      countElement.textContent = parseInt(countElement.textContent) + 1;
+    } else {
+      const newEntry = document.createElement("div");
+      newEntry.className =
+        "flex justify-between items-center p-2 border-b border-core-gray";
+      newEntry.setAttribute("data-code", result);
+
+      const title = document.createElement("span");
+      title.className = "font-medium text-core-dark";
+      title.textContent = result;
+
+      const countWrapper = document.createElement("div");
+      countWrapper.className = "flex items-center gap-x-2";
+
+      const decreaseButton = document.createElement("button");
+      decreaseButton.className =
+        "bg-red-600 text-white px-2 py-1 rounded-md hover:bg-red-700";
+      decreaseButton.textContent = "-";
+      decreaseButton.addEventListener("click", () => {
+        const countElement = newEntry.querySelector(".count");
+        let count = parseInt(countElement.textContent);
+        if (count > 1) {
+          countElement.textContent = count - 1;
+          codigoobtenido[result]--;
+        }
+      });
+
+      const count = document.createElement("span");
+      count.className =
+        "count bg-core-gray/30 rounded-full px-2 py-1 text-sm text-core-dark/80";
+      count.textContent = "1";
+
+      const increaseButton = document.createElement("button");
+      increaseButton.className =
+        "bg-green-600 text-white px-2 py-1 rounded-md hover:bg-green-700";
+      increaseButton.textContent = "+";
+      increaseButton.addEventListener("click", () => {
+        const countElement = newEntry.querySelector(".count");
+        let count = parseInt(countElement.textContent);
+        if (count < codigoGuia.cantidad) {
+          // Validar que no exceda la cantidad permitida
+          countElement.textContent = count + 1;
+          codigoobtenido[result] = (codigoobtenido[result] || 0) + 1;
+        } else {
+          alert(
+            `La cantidad de escaneos para el código ${result} ya alcanzó el límite de ${codigoGuia.cantidad}`
+          );
+        }
+      });
+
+      countWrapper.appendChild(decreaseButton);
+      countWrapper.appendChild(count);
+      countWrapper.appendChild(increaseButton);
+
+      newEntry.appendChild(title);
+      newEntry.appendChild(countWrapper);
+      scanStats.appendChild(newEntry);
+    }
+
+    // Agregar el código escaneado al objeto
+    codigoobtenido[result] = (codigoobtenido[result] || 0) + 1;
+  };
+
+  const enviarDatos = () => {
+    // Crear un array de objetos con los códigos escaneados y sus cantidades
+    const datos = Object.entries(codigoobtenido).map(([codigo, cantidad]) => ({
+      codigo,
+      cantidad,
+    }));
+
+    // Asigna los datos al objeto global `window.obtenercantidadcodigo`
+    window.obtenercantidadcodigo = datos;
+    console.log(
+      "Datos asignados a window.obtenercantidadcodigo:",
+      window.obtenercantidadcodigo
+    );
+
+    // Opcional: Crear el evento con los datos
+    const event = new Event("codigoobtenido", {
+      detail: datos,
+    });
+    window.dispatchEvent(event);
+  };
+
+  document.getElementById("scanNow").onclick = iniciarEscaneo;
+  document.getElementById("closeScanner").onclick = cerrarEscaneo;
+  document.getElementById("terminateScan").onclick = () => {
+    console.log("Escaneo terminado");
+    enviarDatos();
+    cerrarEscaneo();
+  };
+  document.getElementById("continueScanning").onclick = () => {
+    console.log("Continuar escaneo");
+    iniciarEscaneo();
+  };
+</script>

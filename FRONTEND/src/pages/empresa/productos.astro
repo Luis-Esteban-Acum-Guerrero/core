@@ -1,0 +1,680 @@
+---
+import Layout from "../../layouts/LayoutMenu.astro";
+import { menuData } from "./menu.js";
+import DataTable from "./components/DataTable.astro";
+import SkeletonCard from "./components/SkeletonCard.astro";
+
+// Datos de ejemplo para productos
+const productosData = {
+  "stats": {
+    "total_productos": 45,
+    "activos": 42,
+    "inactivos": 3,
+    "bajo_stock": 5,
+    "servicios": 15,
+    "productos_fisicos": 30,
+    "valor_total_inventario": 28450000,
+    "margen_promedio": 35.5
+  },
+  "productos": [
+    {
+      "id": 1,
+      "empresa_id": 1,
+      "codigo": "PROD-001",
+      "nombre": "Licencia Software ERP",
+      "descripcion": "Licencia anual de sistema ERP completo con todas las funcionalidades",
+      "tipo": "servicio",
+      "categoria": "Software",
+      "precio_venta": 150000,
+      "costo_unitario": 45000,
+      "margen_utilidad": 70.0,
+      "stock_actual": 0,
+      "stock_minimo": 0,
+      "unidad_medida": "UN",
+      "activo": true,
+      "fecha_creacion": "2024-01-15T10:30:00Z",
+      "fecha_actualizacion": "2024-01-20T14:45:00Z"
+    },
+    {
+      "id": 2,
+      "empresa_id": 1,
+      "codigo": "PROD-002",
+      "nombre": "Capacitación Equipo",
+      "descripcion": "Capacitación personalizada para 10 usuarios del sistema",
+      "tipo": "servicio",
+      "categoria": "Capacitación",
+      "precio_venta": 85000,
+      "costo_unitario": 25000,
+      "margen_utilidad": 70.6,
+      "stock_actual": 0,
+      "stock_minimo": 0,
+      "unidad_medida": "UN",
+      "activo": true,
+      "fecha_creacion": "2024-01-14T09:15:00Z",
+      "fecha_actualizacion": "2024-01-18T16:20:00Z"
+    },
+    {
+      "id": 3,
+      "empresa_id": 1,
+      "codigo": "PROD-003",
+      "nombre": "Soporte Técnico Mensual",
+      "descripcion": "Soporte técnico prioritario 24/7 para clientes premium",
+      "tipo": "servicio",
+      "categoria": "Soporte",
+      "precio_venta": 120000,
+      "costo_unitario": 60000,
+      "margen_utilidad": 50.0,
+      "stock_actual": 0,
+      "stock_minimo": 0,
+      "unidad_medida": "UN",
+      "activo": true,
+      "fecha_creacion": "2024-01-13T11:00:00Z",
+      "fecha_actualizacion": "2024-01-19T13:30:00Z"
+    },
+    {
+      "id": 4,
+      "empresa_id": 2,
+      "codigo": "PROD-004",
+      "nombre": "Laptop Notebook",
+      "descripcion": "Notebook i5 8GB RAM 256GB SSD",
+      "tipo": "producto",
+      "categoria": "Hardware",
+      "precio_venta": 450000,
+      "costo_unitario": 350000,
+      "margen_utilidad": 22.2,
+      "stock_actual": 25,
+      "stock_minimo": 10,
+      "unidad_medida": "UN",
+      "activo": true,
+      "fecha_creacion": "2024-01-12T14:20:00Z",
+      "fecha_actualizacion": "2024-01-17T09:45:00Z"
+    },
+    {
+      "id": 5,
+      "empresa_id": 2,
+      "codigo": "PROD-005",
+      "nombre": "Monitor 24 pulgadas",
+      "descripcion": "Monitor LED 24 pulgadas Full HD",
+      "tipo": "producto",
+      "categoria": "Hardware",
+      "precio_venta": 95000,
+      "costo_unitario": 65000,
+      "margen_utilidad": 31.6,
+      "stock_actual": 50,
+      "stock_minimo": 20,
+      "unidad_medida": "UN",
+      "activo": true,
+      "fecha_creacion": "2024-01-11T10:10:00Z",
+      "fecha_actualizacion": "2024-01-16T15:30:00Z"
+    },
+    {
+      "id": 6,
+      "empresa_id": 2,
+      "codigo": "PROD-006",
+      "nombre": "Teclado Mecánico RGB",
+      "descripcion": "Teclado gaming mecánico con iluminación RGB",
+      "tipo": "producto",
+      "categoria": "Accesorios",
+      "precio_venta": 45000,
+      "costo_unitario": 28000,
+      "margen_utilidad": 37.8,
+      "stock_actual": 8,
+      "stock_minimo": 15,
+      "unidad_medida": "UN",
+      "activo": true,
+      "fecha_creacion": "2024-01-10T16:45:00Z",
+      "fecha_actualizacion": "2024-01-15T11:20:00Z"
+    }
+  ]
+};
+
+// Definición de columnas para la tabla
+const tableColumns = [
+  {
+    key: "codigo",
+    label: "Código",
+    sortable: true,
+    visible: true,
+    width: "120px"
+  },
+  {
+    key: "nombre",
+    label: "Nombre",
+    sortable: true,
+    visible: true,
+    width: "200px"
+  },
+  {
+    key: "tipo",
+    label: "Tipo",
+    sortable: true,
+    visible: true,
+    width: "100px",
+    type: "badge",
+    badgeColors: (value) => value === "servicio" 
+      ? "bg-core-primary/20 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+      : "bg-core-primary/20 text-core-dark dark:bg-green-900 dark:text-green-200"
+  },
+  {
+    key: "categoria",
+    label: "Categoría",
+    sortable: true,
+    visible: true,
+    width: "120px"
+  },
+  {
+    key: "precio_venta",
+    label: "Precio Venta",
+    sortable: true,
+    visible: true,
+    width: "130px",
+    type: "number",
+    format: (value) => new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(value)
+  },
+  {
+    key: "stock_actual",
+    label: "Stock Actual",
+    sortable: true,
+    visible: true,
+    width: "100px",
+    type: "number"
+  },
+  {
+    key: "margen_utilidad",
+    label: "Margen (%)",
+    sortable: true,
+    visible: true,
+    width: "100px",
+    type: "number",
+    format: (value) => `${value.toFixed(1)}%`
+  },
+  {
+    key: "activo",
+    label: "Estado",
+    sortable: true,
+    visible: true,
+    width: "100px",
+    type: "badge",
+    badgeColors: (value) => value 
+      ? "bg-core-primary/20 text-core-dark dark:bg-green-900 dark:text-green-200"
+      : "bg-core-dark/10 text-core-dark dark:bg-red-900 dark:text-red-200"
+  }
+];
+
+const actionButtons = [
+  {
+    label: "Editar",
+    icon: "M11 17H9a1 1 0 01-1-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1zm0 6H9a1 1 0 01-1-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1zm6-6h-2a1 1 0 01-1-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1zm0 6h-2a1 1 0 01-1-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1z"
+  },
+  {
+    label: "Eliminar",
+    icon: "M6 18L18 6M6 6l12 12",
+    class: "text-core-dark hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+  }
+];
+---
+
+<Layout menuData={menuData}>
+  <div id="content" class="md:ps-0 lg:ps-40 mainmenu-open:pt-10 2xl:hs-overlay-layout-open:pe-2 xl:ps-80 transition-all duration-300">
+    <div class="max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto">
+      <div class="py-2 sm:pb-0 sm:pt-5 space-y-5">
+        <!-- Header -->
+        <div class="flex flex-wrap justify-between items-center gap-2">
+          <div>
+            <h1 class="text-lg md:text-xl font-semibold text-core-dark dark:text-neutral-200">
+              Gestión de Productos y Servicios
+            </h1>
+            <p class="text-sm text-core-gray dark:text-core-gray">
+              Administra el catálogo de productos y servicios de tu empresa
+            </p>
+          </div>
+          <div class="flex gap-2">
+            <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-core-gray bg-core-light text-core-dark shadow-2xs hover:bg-core-light focus:outline-hidden focus:bg-core-light disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
+              <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
+              </svg>
+              Auditoría
+            </button>
+            <button 
+              type="button" 
+              onclick="openModal('productoModal')"
+              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-core-primary text-white hover:opacity-80 focus:outline-hidden focus:opacity-80 disabled:opacity-50 disabled:pointer-events-none"
+            >
+              <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v14M5 12l7 7 7-7"/>
+              </svg>
+              Nuevo Producto
+            </button>
+          </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          <div class="p-4 bg-core-light border border-core-gray rounded-xl shadow-2xs dark:bg-neutral-800 dark:border-neutral-700">
+            <div class="flex items-center gap-3">
+              <div class="flex-shrink-0 w-12 h-12 bg-core-primary/20 rounded-lg flex items-center justify-center dark:bg-blue-900">
+                <svg class="w-6 h-6 text-core-primary dark:text-blue-300" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-core-dark/80 dark:text-core-gray">Total</p>
+                <p class="text-2xl font-bold text-core-dark dark:text-white">{productosData.stats.total_productos}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="p-4 bg-core-light border border-core-gray rounded-xl shadow-2xs dark:bg-neutral-800 dark:border-neutral-700">
+            <div class="flex items-center gap-3">
+              <div class="flex-shrink-0 w-12 h-12 bg-core-primary/20 rounded-lg flex items-center justify-center dark:bg-green-900">
+                <svg class="w-6 h-6 text-core-primary dark:text-green-300" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                  <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-core-dark/80 dark:text-core-gray">Activos</p>
+                <p class="text-2xl font-bold text-core-dark dark:text-white">{productosData.stats.activos}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="p-4 bg-core-light border border-core-gray rounded-xl shadow-2xs dark:bg-neutral-800 dark:border-neutral-700">
+            <div class="flex items-center gap-3">
+              <div class="flex-shrink-0 w-12 h-12 bg-core-gray/20 rounded-lg flex items-center justify-center dark:bg-yellow-900">
+                <svg class="w-6 h-6 text-core-gray dark:text-yellow-300" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 8v4m0 4h.01"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-core-dark/80 dark:text-core-gray">Bajo Stock</p>
+                <p class="text-2xl font-bold text-core-dark dark:text-white">{productosData.stats.bajo_stock}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="p-4 bg-core-light border border-core-gray rounded-xl shadow-2xs dark:bg-neutral-800 dark:border-neutral-700">
+            <div class="flex items-center gap-3">
+              <div class="flex-shrink-0 w-12 h-12 bg-core-dark/10 rounded-lg flex items-center justify-center dark:bg-purple-900">
+                <svg class="w-6 h-6 text-core-dark dark:text-purple-300" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5"/>
+                  <polyline points="21 15 16 10 5 21"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-core-dark/80 dark:text-core-gray">Servicios</p>
+                <p class="text-2xl font-bold text-core-dark dark:text-white">{productosData.stats.servicios}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 bg-core-light border border-core-gray rounded-xl shadow-2xs dark:bg-neutral-800 dark:border-neutral-700">
+            <div class="flex items-center gap-3">
+              <div class="flex-shrink-0 w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center dark:bg-indigo-900">
+                <svg class="w-6 h-6 text-indigo-600 dark:text-indigo-300" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-core-dark/80 dark:text-core-gray">Productos</p>
+                <p class="text-2xl font-bold text-core-dark dark:text-white">{productosData.stats.productos_fisicos}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 bg-core-light border border-core-gray rounded-xl shadow-2xs dark:bg-neutral-800 dark:border-neutral-700">
+            <div class="flex items-center gap-3">
+              <div class="flex-shrink-0 w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center dark:bg-emerald-900">
+                <svg class="w-6 h-6 text-emerald-600 dark:text-emerald-300" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="1" x2="12" y2="23"/>
+                  <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-core-dark/80 dark:text-core-gray">Inventario</p>
+                <p class="text-lg font-bold text-core-dark dark:text-white">$28.5M</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filtros rápidos -->
+        <div class="flex flex-wrap gap-2">
+          <button class="px-3 py-1.5 text-sm rounded-full bg-core-primary/20 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+            Todos ({productosData.stats.total_productos})
+          </button>
+          <button class="px-3 py-1.5 text-sm rounded-full border border-core-gray text-core-dark/80 hover:bg-core-light dark:border-neutral-700 dark:text-core-gray dark:hover:bg-neutral-700">
+            Servicios ({productosData.stats.servicios})
+          </button>
+          <button class="px-3 py-1.5 text-sm rounded-full border border-core-gray text-core-dark/80 hover:bg-core-light dark:border-neutral-700 dark:text-core-gray dark:hover:bg-neutral-700">
+            Productos ({productosData.stats.productos_fisicos})
+          </button>
+          <button class="px-3 py-1.5 text-sm rounded-full border border-core-gray text-core-dark/80 hover:bg-core-light dark:border-neutral-700 dark:text-core-gray dark:hover:bg-neutral-700">
+            Bajo Stock ({productosData.stats.bajo_stock})
+          </button>
+          <button class="px-3 py-1.5 text-sm rounded-full border border-core-gray text-core-dark/80 hover:bg-core-light dark:border-neutral-700 dark:text-core-gray dark:hover:bg-neutral-700">
+            Inactivos ({productosData.stats.inactivos})
+          </button>
+        </div>
+
+        <!-- Tabla de productos -->
+        <DataTable 
+          data={productosData.productos} 
+          columns={tableColumns} 
+          title="Catálogo de Productos"
+          searchPlaceholder="Buscar productos..."
+          actionButtons={actionButtons}
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para crear/editar producto -->
+  <div id="productoModal" class="hs-overlay hidden w-full h-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto">
+    <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto">
+      <div class="bg-core-light border border-core-gray rounded-xl shadow-2xs dark:bg-neutral-800 dark:border-neutral-700">
+        <div class="py-3 px-5 border-b border-core-gray dark:border-neutral-700">
+          <h3 class="font-semibold text-core-dark dark:text-neutral-200">
+            Nuevo Producto
+          </h3>
+        </div>
+        <div class="p-5">
+          <form id="productoForm" class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Código *</label>
+                <input 
+                  type="text" 
+                  name="codigo" 
+                  required
+                  class="py-2 px-3 border-core-gray rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 w-full dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray"
+                  placeholder="PROD-001"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Tipo *</label>
+                <select 
+                  name="tipo" 
+                  required
+                  onchange="toggleStockFields(this.value)"
+                  class="py-2 px-3 border-core-gray rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 w-full dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray"
+                >
+                  <option value="">Seleccionar tipo</option>
+                  <option value="producto">Producto</option>
+                  <option value="servicio">Servicio</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Nombre *</label>
+              <input 
+                type="text" 
+                name="nombre" 
+                required
+                class="py-2 px-3 border-core-gray rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 w-full dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray"
+                placeholder="Nombre del producto o servicio"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Descripción</label>
+              <textarea 
+                name="descripcion" 
+                rows="3"
+                class="py-2 px-3 border-core-gray rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 w-full dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray"
+                placeholder="Descripción detallada del producto/servicio"
+              ></textarea>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Categoría *</label>
+                <input 
+                  type="text" 
+                  name="categoria" 
+                  required
+                  class="py-2 px-3 border-core-gray rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 w-full dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray"
+                  placeholder="Ej: Hardware, Software"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Unidad Medida</label>
+                <input 
+                  type="text" 
+                  name="unidad_medida" 
+                  value="UN"
+                  class="py-2 px-3 border-core-gray rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 w-full dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray"
+                  placeholder="UN, KG, L, etc."
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Precio Venta *</label>
+                <input 
+                  type="number" 
+                  name="precio_venta" 
+                  required
+                  min="0"
+                  step="0.01"
+                  class="py-2 px-3 border-core-gray rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 w-full dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray"
+                  placeholder="0.00"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Costo Unitario</label>
+                <input 
+                  type="number" 
+                  name="costo_unitario" 
+                  min="0"
+                  step="0.01"
+                  class="py-2 px-3 border-core-gray rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 w-full dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray"
+                  placeholder="0.00"
+                />
+              </div>
+            </div>
+
+            <!-- Campos de stock (solo para productos) -->
+            <div id="stockFields" class="hidden space-y-4">
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Stock Actual</label>
+                  <input 
+                    type="number" 
+                    name="stock_actual" 
+                    min="0"
+                    class="py-2 px-3 border-core-gray rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 w-full dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray"
+                    placeholder="0"
+                  />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Stock Mínimo</label>
+                  <input 
+                    type="number" 
+                    name="stock_minimo" 
+                    min="0"
+                    class="py-2 px-3 border-core-gray rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 w-full dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray"
+                    placeholder="0"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label class="flex items-center gap-x-2 text-sm">
+                <input type="checkbox" name="activo" checked class="shrink-0 border-stone-300 rounded text-core-primary focus:ring-blue-500 dark:bg-neutral-800 dark:border-neutral-600">
+                <span class="text-stone-700 dark:text-neutral-300">Producto activo</span>
+              </label>
+            </div>
+          </form>
+        </div>
+        <div class="py-3 px-5 border-t border-core-gray dark:border-neutral-700">
+          <div class="flex justify-end gap-2">
+            <button 
+              type="button" 
+              onclick="closeModal('productoModal')"
+              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-core-gray bg-core-light text-core-dark shadow-2xs hover:bg-core-light focus:outline-hidden focus:bg-core-light disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+            >
+              Cancelar
+            </button>
+            <button 
+              type="button"
+              onclick="saveProducto()"
+              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-core-primary text-white hover:opacity-80 focus:outline-hidden focus:opacity-80 disabled:opacity-50 disabled:pointer-events-none"
+            >
+              Guardar Producto
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    import { FormValidator, validationRules } from './components/ValidationUtils.js';
+
+    // Variables globales
+    let productoValidator;
+    let currentEditId = null;
+
+    // Inicializar validación
+    document.addEventListener('DOMContentLoaded', () => {
+      productoValidator = new FormValidator(validationRules.producto);
+    });
+
+    // Toggle stock fields based on product type
+    function toggleStockFields(tipo) {
+      const stockFields = document.getElementById('stockFields');
+      const stockActual = document.querySelector('input[name="stock_actual"]');
+      const stockMinimo = document.querySelector('input[name="stock_minimo"]');
+      
+      if (tipo === 'producto') {
+        stockFields.classList.remove('hidden');
+        stockActual.value = '0';
+        stockMinimo.value = '10';
+      } else {
+        stockFields.classList.add('hidden');
+        stockActual.value = '0';
+        stockMinimo.value = '0';
+      }
+    }
+
+    // Modal functions
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.classList.remove('hidden');
+      modal.classList.add('hs-overlay-open');
+      document.body.style.overflow = 'hidden';
+      
+      // Reset form
+      if (modalId === 'productoModal') {
+        document.getElementById('productoForm').reset();
+        document.querySelector('select[name="tipo"]').value = 'producto';
+        toggleStockFields('producto');
+        currentEditId = null;
+      }
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.classList.add('hidden');
+      modal.classList.remove('hs-overlay-open');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Save producto
+    function saveProducto() {
+      const form = document.getElementById('productoForm');
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      
+      // Convert checkbox to boolean
+      data.activo = formData.has('activo');
+      
+      // Numeric conversions
+      data.precio_venta = parseFloat(data.precio_venta) || 0;
+      data.costo_unitario = parseFloat(data.costo_unitario) || 0;
+      data.stock_actual = parseInt(data.stock_actual) || 0;
+      data.stock_minimo = parseInt(data.stock_minimo) || 0;
+
+      // Validate
+      if (productoValidator) {
+        productoValidator.clearErrors(form);
+        const validation = productoValidator.validate(data);
+        
+        if (!validation.isValid) {
+          productoValidator.showErrors(form);
+          return;
+        }
+      }
+
+      // Simulate API call
+      console.log('Saving producto:', data);
+      
+      // Close modal and refresh
+      closeModal('productoModal');
+      showToast('Producto guardado exitosamente', 'success');
+      
+      // In real app: refresh data or update table
+      setTimeout(() => location.reload(), 1000);
+    }
+
+    // Show toast notification
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      const bgColor = type === 'success' ? 'bg-core-primary' : type === 'error' ? 'bg-red-500' : 'bg-blue-500';
+      
+      toast.className = `fixed top-4 right-4 z-50 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300`;
+      toast.textContent = message;
+      
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.classList.remove('translate-x-full');
+      }, 100);
+      
+      setTimeout(() => {
+        toast.classList.add('translate-x-full');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // Handle actions
+    function handleAction(action, item) {
+      if (action === 'Editar') {
+        currentEditId = item.id;
+        openModal('productoModal');
+        // Fill form with item data
+        setTimeout(() => {
+          document.getElementById('productoForm').elements.codigo.value = item.codigo;
+          document.getElementById('productoForm').elements.nombre.value = item.nombre;
+          document.getElementById('productoForm').elements.tipo.value = item.tipo;
+          document.getElementById('productoForm').elements.descripcion.value = item.descripcion || '';
+          document.getElementById('productoForm').elements.categoria.value = item.categoria;
+          document.getElementById('productoForm').elements.unidad_medida.value = item.unidad_medida || 'UN';
+          document.getElementById('productoForm').elements.precio_venta.value = item.precio_venta;
+          document.getElementById('productoForm').elements.costo_unitario.value = item.costo_unitario || '';
+          document.getElementById('productoForm').elements.stock_actual.value = item.stock_actual || 0;
+          document.getElementById('productoForm').elements.stock_minimo.value = item.stock_minimo || 0;
+          document.getElementById('productoForm').elements.activo.checked = item.activo;
+          
+          toggleStockFields(item.tipo);
+        }, 100);
+      } else if (action === 'Eliminar') {
+        if (confirm(`¿Estás seguro de eliminar "${item.nombre}"?`)) {
+          console.log('Deleting producto:', item.id);
+          showToast('Producto eliminado exitosamente', 'success');
+          setTimeout(() => location.reload(), 1000);
+        }
+      }
+    }
+
+    // Override global action handler
+    window.handleAction = handleAction;
+  </script>
+</Layout>

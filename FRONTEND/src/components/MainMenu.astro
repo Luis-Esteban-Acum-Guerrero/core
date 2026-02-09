@@ -1,0 +1,34 @@
+---
+import MainMenuItem from "./MainMenuItem.astro";
+import UserPop from "./UserPop.astro";
+const { items, userPop } = Astro.props;
+
+// revisar:
+// https://icons.pqoqubbw.dev/
+---
+
+<div class="relative z-10 w-16 flex flex-col h-full max-h-full pb-5">
+  <header class="w-16 py-2.5 flex justify-center">
+    <img src="/logos/core/core_mini.svg" alt="logo" class="w-12 m-2 h-auto" />
+  </header>
+
+  <div class="w-16 h-full flex flex-col pt-2 pb-4">
+    <ul class="text-center space-y-4">
+      {
+        items.map((item) => {
+          const currentPath = Astro.url.pathname;
+          const isActive =
+            item.ruta === "/" || item.ruta === "/#" || item.ruta === "#"
+              ? currentPath === item.ruta
+              : currentPath.startsWith(item.ruta);
+
+          return <MainMenuItem key={item.key} {...item} isActive={isActive} />;
+        })
+      }
+    </ul>
+  </div>
+
+  <footer class="w-16 space-y-3 pt-4">
+    <UserPop {...userPop} />
+  </footer>
+</div>

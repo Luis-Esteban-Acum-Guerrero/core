@@ -1,0 +1,23 @@
+---
+const { pagos } = Astro.props;
+---
+
+<div class="pagos-container mt-8 font-mono">
+  <div style="margin-top: -40px;">
+    <h2 class="mod-title">{pagos.condiciones.nombre}</h2>
+    <div set:html={pagos.condiciones.texto} /><br />
+
+    <small class="block mt-4 p-4 bg-gray-50 rounded text-sm">
+      {pagos.banco.tipoCuenta}
+      <b>{pagos.banco.nombre}</b><br />
+      <b>num:</b>
+      {pagos.banco.numeroCuenta}<br />
+      <b>nombre:</b>
+      {pagos.banco.titular}<br />
+      <b>rut:</b>
+      {pagos.banco.rut}<br />
+      <b>email:</b>
+      {pagos.banco.email}
+    </small>
+  </div>
+</div>

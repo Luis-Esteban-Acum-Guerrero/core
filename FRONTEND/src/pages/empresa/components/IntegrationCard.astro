@@ -1,0 +1,216 @@
+---
+const { service } = Astro.props;
+
+// Helper for colors/icons
+const getServiceConfig = (type: string) => {
+  switch (type) {
+    case "sii_empresas":
+    case "boletas_sii":
+      return {
+        label: "SII",
+        bg: "bg-core-primary/20",
+        text: "text-core-primary",
+        darkBg: "dark:bg-core-primary/20",
+        darkText: "dark:text-core-primary",
+      };
+    case "bci":
+      return {
+        label: "BCI",
+        bg: "bg-core-gray/20",
+        text: "text-core-dark",
+        darkBg: "dark:bg-core-gray/20",
+        darkText: "dark:text-core-light",
+      };
+    case "santander":
+      return {
+        label: "SAN",
+        bg: "bg-core-gray/20",
+        text: "text-core-dark",
+        darkBg: "dark:bg-core-gray/20",
+        darkText: "dark:text-core-light",
+      };
+    default:
+      return {
+        label: "N/A",
+        bg: "bg-core-light",
+        text: "text-core-gray",
+        darkBg: "dark:bg-neutral-800",
+        darkText: "dark:text-neutral-300",
+      };
+  }
+};
+
+const config = getServiceConfig(service.tipo_servicio);
+---
+
+<div
+  class="p-5 bg-white border border-core-gray rounded-xl shadow-2xs dark:bg-neutral-800 dark:border-neutral-700 relative group transition-all hover:shadow-md"
+>
+  <div class="flex justify-between items-start mb-4">
+    <div class="flex items-center gap-3">
+      <div
+        class={`w-10 h-10 ${config.bg} rounded-lg flex items-center justify-center ${config.darkBg}`}
+      >
+        <span class={`font-bold ${config.text} ${config.darkText}`}
+          >{config.label}</span
+        >
+      </div>
+      <div>
+        <h3
+          class="font-semibold text-core-dark dark:text-neutral-200 text-sm md:text-base"
+        >
+          {service.nombre_cuenta}
+        </h3>
+        <span
+          class={`text-xs font-medium inline-flex items-center gap-1 ${service.estado === "activa" ? "text-core-primary" : service.estado === "error" ? "text-core-dark" : "text-core-gray"}`}
+        >
+          <span
+            class={`size-2 rounded-full ${service.estado === "activa" ? "bg-core-primary" : service.estado === "error" ? "bg-core-dark" : "bg-core-gray"}`}
+          ></span>
+          {
+            service.estado === "activa"
+              ? "Conectado"
+              : service.estado === "error"
+                ? "Error"
+                : "Pendiente"
+          }
+        </span>
+      </div>
+    </div>
+
+    <!-- Actions Dropdown -->
+    <div class="hs-dropdown relative inline-flex">
+      <button
+        id={`hs-dropdown-${service.id}`}
+        type="button"
+        class="hs-dropdown-toggle p-2 inline-flex justify-center items-center gap-2 rounded-lg text-core-dark/60 hover:bg-core-light border border-transparent font-medium dark:text-core-gray dark:hover:bg-neutral-700"
+      >
+        <svg
+          class="size-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          ><path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+          ></path></svg
+        >
+      </button>
+      <div
+        class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 w-48 hidden z-10 bg-white shadow-xl rounded-lg p-1 dark:bg-neutral-800 border border-core-gray/30 dark:border-neutral-700"
+        aria-labelledby={`hs-dropdown-${service.id}`}
+      >
+        <a
+          class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-core-dark hover:bg-core-gray/10 focus:outline-none focus:bg-core-gray/10 dark:text-core-gray dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+          href="javascript:;"
+          onclick={`window.handleServiceAction('check', '${service.id}')`}
+        >
+          <svg
+            class="size-4"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline
+              points="22 4 12 14.01 9 11.01"></polyline></svg
+          >
+          Checkear estado
+        </a>
+        <a
+          class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-core-dark hover:bg-core-gray/10 focus:outline-none focus:bg-core-gray/10 dark:text-core-gray dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+          href="javascript:;"
+          onclick={`window.handleServiceAction('toggle', '${service.id}')`}
+        >
+          <svg
+            class="size-4"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line
+              x1="12"
+              y1="2"
+              x2="12"
+              y2="12"></line></svg
+          >
+          {service.estado === "activa" ? "Desactivar" : "Activar"}
+        </a>
+        <div class="border-t border-core-gray/20 dark:border-neutral-700 my-1">
+        </div>
+        <a
+          class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-core-dark hover:bg-core-gray/10 focus:outline-none focus:bg-core-gray/10 dark:text-red-500 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+          href="javascript:;"
+          onclick={`window.handleServiceAction('delete', '${service.id}')`}
+        >
+          <svg
+            class="size-4"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path d="M3 6h18"></path><path
+              d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path
+              d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg
+          >
+          Eliminar
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <p
+    class="text-sm text-core-dark/60 mb-4 h-10 overflow-hidden text-ellipsis line-clamp-2 dark:text-core-gray"
+  >
+    {service.detalle || "Sin descripción disponible."}
+  </p>
+
+  <div
+    class="flex justify-between items-center text-xs text-stone-400 border-t pt-3 dark:border-neutral-700"
+  >
+    <span
+      >{
+        service.ultima_sincronizacion
+          ? `Sinc: ${new Date(service.ultima_sincronizacion).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`
+          : "Sinc: --"
+      }</span
+    >
+    <button
+      class="text-core-primary font-medium hover:underline cursor-pointer flex items-center gap-1"
+      onclick={`window.handleServiceAction('config', '${service.id}')`}
+    >
+      <svg
+        class="size-3"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        ><path
+          d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
+        ></path><circle cx="12" cy="12" r="3"></circle></svg
+      >
+      Configurar
+    </button>
+  </div>
+</div>

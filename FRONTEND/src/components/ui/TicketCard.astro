@@ -1,0 +1,39 @@
+---
+const { id, titulo, cliente, estado, prioridad, fecha_creacion, asignado_a } =
+  Astro.props;
+
+const estadoColor =
+  {
+    Abierto: "bg-core-dark/10 text-core-dark",
+    "En Progreso": "bg-core-gray/20 text-core-dark",
+    Resuelto: "bg-core-primary/20 text-core-dark",
+  }[estado] ?? "bg-core-light text-core-dark";
+
+const prioridadColor =
+  {
+    Alta: "text-core-dark",
+    Media: "text-core-gray",
+    Baja: "text-core-primary",
+  }[prioridad] ?? "text-core-dark";
+---
+
+<div
+  class="p-3 border-b border-core-gray dark:border-neutral-700 hover:bg-core-light dark:hover:bg-neutral-800 transition"
+>
+  <div class="flex justify-between items-center">
+    <h3 class="font-semibold text-sm text-core-dark dark:text-white truncate">
+      {titulo}
+    </h3>
+    <span class={`text-xs px-2 py-0.5 rounded ${estadoColor}`}>{estado}</span>
+  </div>
+  <p class="text-xs text-core-gray dark:text-core-gray truncate">
+    Cliente: {cliente}
+  </p>
+  <p class="text-xs text-core-gray dark:text-core-gray truncate">
+    Asignado: {asignado_a}
+  </p>
+  <p class="text-xs {prioridadColor} truncate">Prioridad: {prioridad}</p>
+  <p class="text-[10px] text-core-gray mt-1">
+    {new Date(fecha_creacion).toLocaleDateString()}
+  </p>
+</div>

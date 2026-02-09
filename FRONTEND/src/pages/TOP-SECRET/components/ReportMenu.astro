@@ -1,0 +1,258 @@
+---
+import PdfButton from "./PdfButton.astro";
+const { data } = Astro.props;
+---
+
+<!-- Toggle Button for Mobile -->
+<button id="menu-toggle" class="menu-toggle no-print" aria-label="Abrir menú">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <line x1="3" y1="12" x2="21" y2="12"></line>
+    <line x1="3" y1="6" x2="21" y2="6"></line>
+    <line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+</button>
+
+<!-- Overlay -->
+<div id="menu-overlay" class="menu-overlay no-print"></div>
+
+<!-- Drawer Menu -->
+<div id="drawer-menu" class="floating-menu no-print">
+  <div class="menu-header">
+    <h3>Navegación</h3>
+    <button id="menu-close" class="close-btn" aria-label="Cerrar menú">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+
+  <ul>
+    <li><a href="#cover" class="menu-link"><b>#</b> Portada</a></li>
+    {
+      data.paginas.map((p, i) => (
+        <li>
+          <a href={`#page-${i}`} class="menu-link">
+            <b>#</b> {p.titulo}
+          </a>
+        </li>
+      ))
+    }
+    <li>
+      <a href="#details" class="menu-link"><b>#</b> Propuesta Económica</a>
+    </li>
+  </ul>
+
+  <div class="menu-divider"></div>
+  <PdfButton />
+</div>
+
+<script>
+  const toggleBtn = document.getElementById("menu-toggle");
+  const closeBtn = document.getElementById("menu-close");
+  const menu = document.getElementById("drawer-menu");
+  const overlay = document.getElementById("menu-overlay");
+  const links = document.querySelectorAll(".menu-link");
+
+  function openMenu() {
+    menu.classList.add("open");
+    overlay.classList.add("active");
+    toggleBtn.style.opacity = "0";
+  }
+
+  function closeMenu() {
+    menu.classList.remove("open");
+    overlay.classList.remove("active");
+    toggleBtn.style.opacity = "1";
+  }
+
+  if (toggleBtn) toggleBtn.addEventListener("click", openMenu);
+  if (closeBtn) closeBtn.addEventListener("click", closeMenu);
+  if (overlay) overlay.addEventListener("click", closeMenu);
+
+  // Close menu when clicking a link
+  links.forEach((link) => {
+    link.addEventListener("click", () => {
+      if (window.innerWidth <= 1024) {
+        closeMenu();
+      }
+    });
+  });
+</script>
+
+<style>
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Toggle Button */
+  .menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 60;
+    background: white;
+    border: 1px solid #eee;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: none; /* Hidden by default on desktop */
+    transition: opacity 0.3s;
+  }
+
+  .menu-toggle:hover {
+    background: var(--color-bg, #f0f0f0);
+  }
+
+  /* Overlay */
+  .menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 49;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+    backdrop-filter: blur(2px);
+  }
+
+  .menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Drawer / Menu */
+  .floating-menu {
+    position: fixed;
+    top: 100px;
+    left: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    z-index: 50;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: var(--color-muted);
+    display: none; /* Hidden on desktop */
+  }
+
+  .close-btn:hover {
+    color: var(--color-dark);
+  }
+
+  /* Mobile Styles */
+  @media (max-width: 1024px) {
+    .menu-toggle {
+      display: block;
+    }
+
+    .floating-menu {
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 280px;
+      border-radius: 0;
+      transform: translateX(-100%); /* Hidden off-screen */
+      box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1);
+      overflow-y: auto;
+    }
+
+    .floating-menu.open {
+      transform: translateX(0);
+    }
+
+    .close-btn {
+      display: block;
+    }
+
+    /* Hide the default header underline since we have a custom header row now */
+    .floating-menu h3 {
+      border-bottom: none;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  .menu-divider {
+    height: 1px;
+    background-color: #eee;
+    margin: 15px 0;
+  }
+
+  .floating-menu h3 {
+    margin-top: 0;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .floating-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .floating-menu li {
+    margin-bottom: 8px;
+  }
+
+  .floating-menu a {
+    text-decoration: none;
+    color: var(--color-dark);
+    font-size: 13px;
+    display: block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background 0.2s;
+  }
+
+  .floating-menu a:hover {
+    background: var(--color-bg);
+    color: var(--color-primary-dark);
+  }
+
+  .floating-menu b {
+    color: var(--color-primary);
+  }
+</style>

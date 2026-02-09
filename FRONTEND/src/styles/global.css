@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@theme {
+  --color-core-primary: #bcca25;
+  --color-core-secundary: #44403c;
+  --color-core-light: #fafafa;
+  --color-core-gray: #c6c6c6;
+  --color-core-dark: #131313;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@import "../../node_modules/preline/variants.css";
+@import "../../node_modules/preline/src/plugins/datepicker/styles.css";
+
+@plugin "@tailwindcss/forms";
+
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

@@ -1,0 +1,10 @@
+---
+import Layout from "../../layouts/LayoutMenu.astro";
+
+import { menuData } from "./menu.js";
+import Dashboard from "./dashboard.astro";
+---
+
+<Layout menuData={menuData}>
+  <Dashboard />
+</Layout>

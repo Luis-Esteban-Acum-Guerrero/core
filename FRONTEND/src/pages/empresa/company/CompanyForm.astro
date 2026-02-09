@@ -1,0 +1,1432 @@
+---
+// importo base de datos de clientes/proveedores
+import clients from "../../../../public/data/clientes_proveedores.json";
+let company = {};
+
+const randomIndex = Math.floor(Math.random() * clients.length);
+const randomClient = clients[randomIndex];
+
+//company = randomClient;
+console.log("[BACK] company ->", company);
+
+---
+
+<main
+  id="content"
+  class="md:ps-0 lg:ps-40 mainmenu-open:pt-10 2xl:hs-overlay-layout-open:pe-2 xl:ps-80 transition-all duration-300"
+>
+  <div class="max-w-6xl mx-auto py-5 sm:py-10 px-5 md:px-8 2xl:px-5">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1
+        class="text-2xl md:text-3xl font-semibold text-core-dark dark:text-white"
+      >
+        Gestión de Empresas
+      </h1>
+      <p class="text-core-dark dark:text-core-gray mt-2">
+        Gestión de clientes y proveedores
+      </p>
+    </div>
+
+    <!-- Main Form -->
+    <form id="company-form" class="space-y-8">
+      <!-- RUT Search Section -->
+      <div
+        class="bg-white rounded-xl border border-core-gray p-6 dark:bg-core-dark dark:border-core-gray/20"
+      >
+        <h3 class="text-lg font-semibold text-core-dark dark:text-white mb-4">
+          Identificación de la Empresa
+        </h3>
+
+        <!-- Modo Edición: Cabecera de Empresa -->
+        {
+          company && company.id && (
+            <div class="mb-6 p-4 bg-core-light dark:bg-neutral-700 rounded-lg border border-core-gray dark:border-neutral-600">
+              <div class="flex items-center gap-4">
+                <div class="flex-shrink-0">
+                  {company.datosBasicos.logo ? (
+                    <img
+                      src={company.datosBasicos.logo}
+                      alt={`Logo de ${company.datosBasicos.razonSocial}`}
+                      class="w-16 h-16 rounded-lg object-cover border border-core-gray dark:border-neutral-600"
+                    />
+                  ) : (
+                    <div class="w-16 h-16 bg-core-gray dark:bg-neutral-600 rounded-lg flex items-center justify-center">
+                      <svg
+                        class="w-8 h-8 text-core-gray dark:text-neutral-500"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+                <div class="flex-grow">
+                  <h4 class="text-lg font-semibold text-core-dark dark:text-white">
+                    {company.datosBasicos.razonSocial}
+                  </h4>
+                  <p class="text-sm text-core-dark dark:text-core-gray">
+                    RUT: { company.datosBasicos.rut }
+                  </p>
+                  <p class="text-sm text-core-dark dark:text-core-gray">
+                    {company.datosBasicos.giro}
+                  </p>
+                </div>
+                <div class="flex-shrink-0">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-core-primary/20 text-core-dark dark:bg-lime-900 dark:text-lime-200">
+                    Editando empresa
+                  </span>
+                </div>
+              </div>
+            </div>
+          )
+        }
+
+        <div class="grid sm:grid-cols-12 gap-y-3 sm:gap-y-0 sm:gap-x-5">
+          <div class="sm:col-span-3">
+            <label
+              for="company-rut"
+              class="sm:mt-2.5 inline-block text-sm font-medium text-core-gray dark:text-neutral-500"
+            >
+              RUT de la Empresa
+            </label>
+          </div>
+          <div class="sm:col-span-9">
+            <div class="relative">
+              <div
+                class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-3.5"
+              >
+                <svg
+                  class="shrink-0 size-4 text-core-dark dark:text-neutral-200"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.3-4.3"></path>
+                </svg>
+              </div>
+              <div class="flex items-center gap-x-2">
+                <div class="grow relative">
+                  <input
+                    type="text"
+                    id="company-rut"
+                    class={`py-3 ps-10 pe-12 text-xl font-bold block w-full border-core-gray rounded-lg placeholder:text-core-gray focus:border-core-primary focus:ring-core-primary dark:bg-transparent dark:border-core-gray/20 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:border-neutral-600 ${
+                      company && company.id
+                        ? "disabled:opacity-50 disabled:pointer-events-none bg-core-light dark:bg-neutral-700"
+                        : ""
+                    }`}
+                    placeholder="12.345.678-9"
+                    maxlength="12"
+                    required
+                    disabled={company && company.id ? true : false}
+                    value={company && company.id
+                      ? company.datosBasicos.rut
+                      : ""}
+                  />
+                  {/* Botones de búsqueda solo en modo creación */}
+                  {
+                    !(company && company.id) && (
+                      <div class="absolute inset-y-0 end-0 flex items-center z-20 pe-3">
+                        <div class="flex items-center gap-x-1">
+                          <button
+                            type="button"
+                            id="clear-rut-btn"
+                            class="hidden flex shrink-0 justify-center items-center size-7 rounded-full text-core-gray hover:text-red-600 focus:outline-hidden focus:text-red-600 dark:text-neutral-500 dark:hover:text-red-500"
+                          >
+                            <svg
+                              class="shrink-0 size-4"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <circle cx="12" cy="12" r="10" />
+                              <path d="m15 9-6 6" />
+                              <path d="m9 9 6 6" />
+                            </svg>
+                          </button>
+                          <button
+                            type="button"
+                            id="search-rut-btn"
+                            class="inline-flex shrink-0 justify-center items-center size-7 text-sm font-medium rounded-full text-white bg-core-primary hover:opacity-80 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden"
+                          >
+                            <svg
+                              class="shrink-0 size-4"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <path d="M5 12h14" />
+                              <path d="m12 5 7 7-7 7" />
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    )
+                  }
+                </div>
+              </div>
+            </div>
+            <div id="rut-status" class="mt-2 text-sm hidden">
+              <div id="rut-loading" class="text-core-primary hidden">
+                <div class="inline-flex items-center gap-x-2">
+                  <div
+                    class="animate-spin inline-block size-4 border-[3px] border-current border-t-transparent text-core-primary rounded-full"
+                  >
+                  </div>
+                  Buscando información...
+                </div>
+              </div>
+              <div id="rut-found" class="text-core-primary hidden">
+                ✓ Empresa encontrada - Datos precargados
+              </div>
+              <div id="rut-not-found" class="text-orange-600 hidden">
+                ⚠ Empresa no encontrada - Complete los datos manualmente
+              </div>
+              <div id="rut-error" class="text-red-600 hidden">
+                ✗ Error al buscar la empresa
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Proveedor / cliente Grid -->
+      <div class="grid lg:grid-cols-2 gap-3 lg:gap-5">
+        <!-- Checkbox Cliente -->
+        <label for="is-cliente" class="py-3 px-4 flex text-sm bg-white text-core-dark cursor-pointer rounded-xl ring-1 ring-gray-200 has-checked:ring-2 has-checked:ring-lime-500 dark:bg-core-dark dark:text-neutral-200 dark:ring-neutral-700 dark:has-checked:ring-lime-500">
+          <input type="checkbox" id="is-cliente" name="isCliente" class="bg-transparent border-core-gray text-core-primary rounded-full checked:bg-core-primary checked:border-core-primary focus:ring-white focus:ring-offset-0 dark:text-core-primary dark:border-core-gray/20 dark:focus:ring-neutral-800" value="true" checked>
+          <span class="grow px-4">
+            <span class="block font-medium">
+              Cliente
+            </span>
+            <span class="block text-sm/6 text-core-dark/60 dark:text-neutral-500">
+              La empresa queda disponible para realizar OT y DTE de venta.
+            </span>
+          </span>
+          <span class="ms-auto">
+            <span class="block font-medium">
+              [x]
+            </span>
+          </span>
+        </label>
+        <!-- End Checkbox -->
+
+        <!-- Checkbox Proveedor -->
+        <label for="is-proveedor" class="py-3 px-4 flex text-sm bg-white text-core-dark cursor-pointer rounded-xl ring-1 ring-gray-200 has-checked:ring-2 has-checked:ring-lime-500 dark:bg-core-dark dark:text-neutral-200 dark:ring-neutral-700 dark:has-checked:ring-lime-500">
+          <input type="checkbox" id="is-proveedor" name="isProveedor" class="bg-transparent border-core-gray text-core-primary rounded-full checked:bg-core-primary checked:border-core-primary focus:ring-white focus:ring-offset-0 dark:text-core-primary dark:border-core-gray/20 dark:focus:ring-neutral-800" value="true">
+          <span class="grow px-4">
+            <span class="block font-medium">
+              Proveedor
+            </span>
+            <span class="block text-sm/6 text-core-dark/60 dark:text-neutral-500">
+              La empresa queda disponible para realizar OC y DTE de compra.
+            </span>
+          </span>
+          <span class="ms-auto">
+            <span class="block font-medium">
+              [x]
+            </span>
+          </span>
+        </label>
+        <!-- End Checkbox -->
+      </div>
+
+      <!-- Company Data Tabs -->
+      <div
+        class="bg-white rounded-xl border border-core-gray dark:bg-core-dark dark:border-core-gray/20"
+      >
+        <!-- Tab Navigation -->
+        <div class="border-b border-core-gray dark:border-core-gray/20">
+          <nav class="flex space-x-8 px-6 pt-6" aria-label="Tabs">
+            <button
+              type="button"
+              id="basic-data-tab"
+              class="data-tab-btn whitespace-nowrap py-2 px-1 border-b-2 border-core-primary font-medium text-sm text-core-primary focus:outline-hidden active"
+              data-tab="basic-data"
+            >
+              Datos Básicos
+            </button>
+            <button
+              type="button"
+              id="accounting-data-tab"
+              class="data-tab-btn whitespace-nowrap py-2 px-1 border-b-2 border-transparent font-medium text-sm text-core-gray hover:text-core-dark hover:border-core-gray focus:outline-hidden dark:text-core-gray dark:hover:text-neutral-300"
+              data-tab="accounting-data"
+            >
+              Datos Contables
+            </button>
+            <button
+              type="button"
+              id="contract-data-tab"
+              class="data-tab-btn whitespace-nowrap py-2 px-1 border-b-2 border-transparent font-medium text-sm text-core-gray hover:text-core-dark hover:border-core-gray focus:outline-hidden dark:text-core-gray dark:hover:text-neutral-300 client-only"
+              data-tab="contract-data"
+            >
+              Contratos
+            </button>
+            <button
+              type="button"
+              id="history-tab"
+              class="data-tab-btn whitespace-nowrap py-2 px-1 border-b-2 border-transparent font-medium text-sm text-core-gray hover:text-core-dark hover:border-core-gray focus:outline-hidden dark:text-core-gray dark:hover:text-neutral-300"
+              data-tab="history"
+            >
+              Historial
+            </button>
+          </nav>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="p-6">
+          <!-- Basic Data Tab -->
+          <div id="basic-data-content" class="tab-content space-y-6">
+            <h3 class="text-lg font-semibold text-core-dark dark:text-white">
+              Información Básica de la Empresa
+            </h3>
+
+            <!-- Logo Upload -->
+            <div class="grid sm:grid-cols-12 gap-y-3 sm:gap-y-0 sm:gap-x-5">
+              <div class="sm:col-span-3">
+                <label
+                  class="sm:mt-2.5 inline-block text-sm font-medium text-core-gray dark:text-neutral-500"
+                >
+                  Logo
+                </label>
+              </div>
+              <div class="sm:col-span-9">
+                <div class="flex flex-wrap items-center gap-3 sm:gap-5">
+                  <img
+                    class="shrink-0 w-20 h-20 rounded-full border-2 border-core-gray dark:border-core-gray/20"
+                    src="/logos/core/core_dot.svg"
+                    alt="Company Logo"
+                    id="company-logo"
+                  />
+                  <div class="grow">
+                    <div class="flex items-center gap-x-2">
+                      <button
+                        type="button"
+                        class="py-2 px-3 inline-flex items-center gap-x-2 text-xs font-medium rounded-lg border border-transparent bg-core-primary text-white hover:opacity-80 focus:outline-hidden focus:ring-2 focus:ring-core-primary"
+                      >
+                        <svg
+                          class="shrink-0 size-4"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+                          ></path>
+                          <polyline points="17 8 12 3 7 8"></polyline>
+                          <line x1="12" x2="12" y1="3" y2="15"></line>
+                        </svg>
+                        Subir Logo
+                      </button>
+                      <button
+                        type="button"
+                        class="py-2 px-3 inline-flex items-center gap-x-2 text-xs font-medium rounded-lg border border-core-gray bg-white text-red-500 hover:bg-core-light focus:outline-hidden dark:bg-core-dark dark:border-core-gray/20 dark:hover:bg-neutral-700"
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Company Name -->
+            <div class="grid sm:grid-cols-12 gap-y-3 sm:gap-y-0 sm:gap-x-5">
+              <div class="sm:col-span-3">
+                <label
+                  for="company-name"
+                  class="sm:mt-2.5 inline-block text-sm font-medium text-core-gray dark:text-neutral-500"
+                >
+                  Razón Social *
+                </label>
+              </div>
+              <div class="sm:col-span-9">
+                <input
+                  id="company-name"
+                  type="text"
+                  class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm placeholder:text-core-gray focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-core-gray/20 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:ring-neutral-600"
+                  placeholder="Nombre completo de la empresa"
+                  required
+                />
+              </div>
+            </div>
+
+            <!-- Business Activity -->
+            <div class="grid sm:grid-cols-12 gap-y-3 sm:gap-y-0 sm:gap-x-5">
+              <div class="sm:col-span-3">
+                <label
+                  for="company-activity"
+                  class="sm:mt-2.5 inline-block text-sm font-medium text-core-gray dark:text-neutral-500"
+                >
+                  Giro Comercial *
+                </label>
+              </div>
+              <div class="sm:col-span-9">
+                <input
+                  id="company-activity"
+                  type="text"
+                  class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm placeholder:text-core-gray focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-core-gray/20 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:ring-neutral-600"
+                  placeholder="Actividad principal del negocio"
+                  required
+                />
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="grid sm:grid-cols-12 gap-y-3 sm:gap-y-0 sm:gap-x-5">
+              <div class="sm:col-span-3">
+                <label
+                  for="company-email"
+                  class="sm:mt-2.5 inline-block text-sm font-medium text-core-gray dark:text-neutral-500"
+                >
+                  Email Corporativo *
+                </label>
+              </div>
+              <div class="sm:col-span-9">
+                <input
+                  id="company-email"
+                  type="email"
+                  class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm placeholder:text-core-gray focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-core-gray/20 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:ring-neutral-600"
+                  placeholder="contacto@empresa.com"
+                  required
+                />
+              </div>
+            </div>
+
+            <!-- Phone -->
+            <div class="grid sm:grid-cols-12 gap-y-3 sm:gap-y-0 sm:gap-x-5">
+              <div class="sm:col-span-3">
+                <label
+                  for="company-phone"
+                  class="sm:mt-2.5 inline-block text-sm font-medium text-core-gray dark:text-neutral-500"
+                >
+                  Teléfono
+                </label>
+              </div>
+              <div class="sm:col-span-9">
+                <input
+                  id="company-phone"
+                  type="tel"
+                  class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm placeholder:text-core-gray focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-core-gray/20 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:ring-neutral-600"
+                  placeholder="+56 9 1234 5678"
+                />
+              </div>
+            </div>
+
+            <!-- Address -->
+            <div class="grid sm:grid-cols-12 gap-y-3 sm:gap-y-0 sm:gap-x-5">
+              <div class="sm:col-span-3">
+                <label
+                  for="company-address"
+                  class="sm:mt-2.5 inline-block text-sm font-medium text-core-gray dark:text-neutral-500"
+                >
+                  Dirección
+                </label>
+              </div>
+              <div class="sm:col-span-9 space-y-3">
+                <input
+                  id="company-address"
+                  type="text"
+                  class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm placeholder:text-core-gray focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-core-gray/20 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:ring-neutral-600"
+                  placeholder="Dirección completa"
+                />
+                <div class="grid grid-cols-2 gap-x-3">
+                  <input
+                    id="company-city"
+                    type="text"
+                    class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm placeholder:text-core-gray focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-core-gray/20 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:ring-neutral-600"
+                    placeholder="Ciudad"
+                  />
+                  <input
+                    id="company-commune"
+                    type="text"
+                    class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm placeholder:text-core-gray focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-core-gray/20 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:ring-neutral-600"
+                    placeholder="Comuna"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accounting Data Tab -->
+          <div
+            id="accounting-data-content"
+            class="tab-content space-y-6 hidden"
+          >
+            <h3 class="text-lg font-semibold text-core-dark dark:text-white">
+              Información Contable
+            </h3>
+
+            <!-- Account Type -->
+            <div class="grid sm:grid-cols-12 gap-y-3 sm:gap-y-0 sm:gap-x-5">
+              <div class="sm:col-span-3">
+                <label
+                  for="account-type"
+                  class="sm:mt-2.5 inline-block text-sm font-medium text-core-gray dark:text-neutral-500"
+                >
+                  Tipo de Cuenta
+                </label>
+              </div>
+              <div class="sm:col-span-9">
+                <select
+                  id="account-type"
+                  class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-core-gray/20 dark:text-core-gray dark:focus:ring-neutral-600"
+                >
+                  <option value="">Seleccionar tipo</option>
+                  <option value="corriente">Cuenta Corriente</option>
+                  <option value="vista">Cuenta Vista</option>
+                  <option value="ahorro">Cuenta de Ahorro</option>
+                  <option value="rut">Cuenta RUT</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Information Email -->
+            <div class="grid sm:grid-cols-12 gap-y-3 sm:gap-y-0 sm:gap-x-5">
+              <div class="sm:col-span-3">
+                <label
+                  for="info-email"
+                  class="sm:mt-2.5 inline-block text-sm font-medium text-core-gray dark:text-neutral-500"
+                >
+                  Email de Información
+                </label>
+              </div>
+              <div class="sm:col-span-9">
+                <input
+                  id="info-email"
+                  type="email"
+                  class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm placeholder:text-core-gray focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-core-gray/20 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:ring-neutral-600"
+                  placeholder="info@empresa.com"
+                />
+              </div>
+            </div>
+
+            <!-- Bank Account -->
+            <div class="grid sm:grid-cols-12 gap-y-3 sm:gap-y-0 sm:gap-x-5">
+              <div class="sm:col-span-3">
+                <label
+                  for="bank-account"
+                  class="sm:mt-2.5 inline-block text-sm font-medium text-core-gray dark:text-neutral-500"
+                >
+                  Cuenta Corriente
+                </label>
+              </div>
+              <div class="sm:col-span-9">
+                <div class="grid grid-cols-2 gap-x-3">
+                  <select
+                    id="bank-name"
+                    class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-core-gray/20 dark:text-core-gray dark:focus:ring-neutral-600"
+                  >
+                    <option value="">Seleccionar Banco</option>
+                    <option value="banco-chile">Banco de Chile</option>
+                    <option value="banco-estado">Banco Estado</option>
+                    <option value="santander">Santander</option>
+                    <option value="bci">BCI</option>
+                    <option value="scotiabank">Scotiabank</option>
+                  </select>
+                  <input
+                    id="account-number"
+                    type="text"
+                    class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm placeholder:text-core-gray focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-core-gray/20 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:ring-neutral-600"
+                    placeholder="Número de cuenta"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- DTE Contact (Provider only) -->
+            <div
+              class="provider-only grid sm:grid-cols-12 gap-y-3 sm:gap-y-0 sm:gap-x-5"
+            >
+              <div class="sm:col-span-3">
+                <label
+                  for="dte-contact"
+                  class="sm:mt-2.5 inline-block text-sm font-medium text-core-gray dark:text-neutral-500"
+                >
+                  Contacto DTE
+                </label>
+              </div>
+              <div class="sm:col-span-9 space-y-3">
+                <input
+                  id="dte-contact-name"
+                  type="text"
+                  class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm placeholder:text-core-gray focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-core-gray/20 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:ring-neutral-600"
+                  placeholder="Nombre del contacto"
+                />
+                <input
+                  id="dte-contact-email"
+                  type="email"
+                  class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm placeholder:text-core-gray focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-core-gray/20 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:ring-neutral-600"
+                  placeholder="Email para notificaciones DTE"
+                />
+              </div>
+            </div>
+
+            <!-- Payment Terms -->
+            <div class="grid sm:grid-cols-12 gap-y-3 sm:gap-y-0 sm:gap-x-5">
+              <div class="sm:col-span-3">
+                <label
+                  for="payment-terms"
+                  class="sm:mt-2.5 inline-block text-sm font-medium text-core-gray dark:text-neutral-500"
+                >
+                  Condiciones de Pago
+                </label>
+              </div>
+              <div class="sm:col-span-9">
+                <select
+                  id="payment-terms"
+                  class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-core-gray/20 dark:text-core-gray dark:focus:ring-neutral-600"
+                >
+                  <option value="">Seleccionar condición</option>
+                  <option value="contado">Contado</option>
+                  <option value="30-dias">30 días</option>
+                  <option value="60-dias">60 días</option>
+                  <option value="90-dias">90 días</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contract Data Tab (Client only) -->
+          <div
+            id="contract-data-content"
+            class="tab-content space-y-6 hidden client-only"
+          >
+            <h3 class="text-lg font-semibold text-core-dark dark:text-white">
+              Información del Contrato
+            </h3>
+
+            <div class="grid sm:grid-cols-12">
+              <div class="sm:col-span-8 space-y-6 sm:pr-6">
+                <!-- Contract Start Date -->
+                <div class="grid sm:grid-cols-12 gap-y-3 sm:gap-y-0 sm:gap-x-5">
+                  <div class="sm:col-span-4">
+                    <label
+                      for="contract-start-date"
+                      class="sm:mt-2.5 inline-block text-sm font-medium text-core-gray dark:text-neutral-500"
+                    >
+                      Fecha Inicio Contrato
+                    </label>
+                  </div>
+                  <div class="sm:col-span-8">
+                    <input
+                      id="contract-start-date"
+                      type="date"
+                      class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-core-gray/20 dark:text-core-gray dark:focus:ring-neutral-600"
+                    />
+                  </div>
+                </div>
+
+                <!-- Client Status -->
+                <div class="grid sm:grid-cols-12 gap-y-3 sm:gap-y-0 sm:gap-x-5">
+                  <div class="sm:col-span-4">
+                    <label
+                      for="client-status"
+                      class="sm:mt-2.5 inline-block text-sm font-medium text-core-gray dark:text-neutral-500"
+                    >
+                      Estado del Cliente
+                    </label>
+                  </div>
+                  <div class="sm:col-span-8">
+                    <select
+                      id="client-status"
+                      class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-core-gray/20 dark:text-core-gray dark:focus:ring-neutral-600"
+                    >
+                      <option value="activo">Activo</option>
+                      <option value="inactivo">Inactivo</option>
+                      <option value="suspendido">Suspendido</option>
+                      <option value="prospecto">Prospecto</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Contract Type -->
+                <div class="grid sm:grid-cols-12 gap-y-3 sm:gap-y-0 sm:gap-x-5">
+                  <div class="sm:col-span-4">
+                    <label
+                      for="contract-type"
+                      class="sm:mt-2.5 inline-block text-sm font-medium text-core-gray dark:text-neutral-500"
+                    >
+                      Tipo de Contrato
+                    </label>
+                  </div>
+                  <div class="sm:col-span-8">
+                    <select
+                      id="contract-type"
+                      class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-core-gray/20 dark:text-core-gray dark:focus:ring-neutral-600"
+                    >
+                      <option value="mensual">Mensual</option>
+                      <option value="trimestral">Trimestral</option>
+                      <option value="semestral">Semestral</option>
+                      <option value="anual">Anual</option>
+                      <option value="por-proyecto">Por Proyecto</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Billing Frequency -->
+                <div class="grid sm:grid-cols-12 gap-y-3 sm:gap-y-0 sm:gap-x-5">
+                  <div class="sm:col-span-4">
+                    <label
+                      for="billing-frequency"
+                      class="sm:mt-2.5 inline-block text-sm font-medium text-core-gray dark:text-neutral-500"
+                    >
+                      Frecuencia de Facturación
+                    </label>
+                  </div>
+                  <div class="sm:col-span-8">
+                    <select
+                      id="billing-frequency"
+                      class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-core-gray/20 dark:text-core-gray dark:focus:ring-neutral-600"
+                    >
+                      <option value="mensual">Mensual</option>
+                      <option value="quincenal">Quincenal</option>
+                      <option value="semanal">Semanal</option>
+                      <option value="por-entrega">Por Entrega</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Document Type -->
+                <div class="grid sm:grid-cols-12 gap-y-3 sm:gap-y-0 sm:gap-x-5">
+                  <div class="sm:col-span-4">
+                    <label
+                      for="document-type"
+                      class="sm:mt-2.5 inline-block text-sm font-medium text-core-gray dark:text-neutral-500"
+                    >
+                      Tipo de Documento
+                    </label>
+                  </div>
+                  <div class="sm:col-span-8">
+                    <select
+                      id="document-type"
+                      class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-core-gray/20 dark:text-core-gray dark:focus:ring-neutral-600"
+                    >
+                      <option value="factura">Factura</option>
+                      <option value="boleta">Boleta</option>
+                      <option value="factura-exenta">Factura Exenta</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Billing Amount with Currency and History -->
+                <div class="grid sm:grid-cols-12 gap-y-3 sm:gap-y-0 sm:gap-x-5">
+                  <div class="sm:col-span-4">
+                    <label
+                      for="billing-amount"
+                      class="sm:mt-2.5 inline-block text-sm font-medium text-core-gray dark:text-neutral-500"
+                      required
+                    >
+                      Monto de Facturación
+                    </label>
+                  </div>
+                  <div class="sm:col-span-8">
+                    <div class="space-y-3">
+                      <div class="grid grid-cols-3 gap-x-2">
+                        <input
+                          id="billing-amount"
+                          type="number"
+                          class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm placeholder:text-core-gray focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-core-gray/20 dark:text-neutral-300 dark:placeholder:text-white/60 dark:focus:ring-neutral-600"
+                          placeholder="Monto"
+                        />
+                        <select
+                          id="billing-currency"
+                          class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-core-gray/20 dark:text-core-gray dark:focus:ring-neutral-600"
+                        >
+                          <option value="peso">Peso</option>
+                          <option value="uf">UF</option>
+                          <option value="dolar">Dólar</option>
+                        </select>
+                        <select
+                          id="billing-type"
+                          class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-core-gray/20 dark:text-core-gray dark:focus:ring-neutral-600"
+                        >
+                          <option value="neto">Neto</option>
+                          <option value="bruto">Bruto</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="sm:col-span-4">
+                <!-- Right Column: Change History -->
+                <div class="bg-core-light rounded-lg p-4 dark:bg-neutral-700">
+                  <h4
+                    class="text-sm font-medium text-core-dark dark:text-white mb-3"
+                  >
+                    Historial de Cambios
+                  </h4>
+                  <div class="space-y-2 max-h-32 overflow-y-auto">
+                    <div
+                      class="text-xs text-core-dark dark:text-core-gray p-2 bg-white rounded border-l-2 border-core-primary dark:bg-core-dark"
+                    >
+                      <div class="font-medium">15/01/2024 - 10:30</div>
+                      <div>Monto inicial: $500.000 CLP (Neto)</div>
+                      <div class="text-core-gray">Usuario: admin</div>
+                    </div>
+                    <div
+                      class="text-xs text-core-dark dark:text-core-gray p-2 bg-white rounded border-l-2 border-core-primary dark:bg-core-dark"
+                    >
+                      <div class="font-medium">20/01/2024 - 14:15</div>
+                      <div>Cambio a: $750.000 CLP (Neto)</div>
+                      <div class="text-core-gray">Usuario: manager</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- History Tab -->
+          <div id="history-content" class="tab-content space-y-6 hidden">
+            <h3 class="text-lg font-semibold text-core-dark dark:text-white">
+              Historial de Transacciones
+            </h3>
+
+            <div
+              class="bg-core-light rounded-lg p-6 text-center dark:bg-neutral-700"
+            >
+              <svg
+                class="w-12 h-12 mx-auto mb-4 text-core-gray dark:text-neutral-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                ></path>
+              </svg>
+              <h4
+                class="text-lg font-medium text-core-dark dark:text-white mb-2"
+              >
+                Sin historial disponible
+              </h4>
+              <p class="text-core-dark dark:text-core-gray">
+                Una vez creada la empresa, aquí aparecerá el historial de
+                transacciones.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="flex justify-end gap-x-3">
+        <button
+          type="button"
+          class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-core-gray bg-white text-core-dark shadow-sm hover:bg-core-light focus:outline-hidden focus:bg-core-light disabled:opacity-50 disabled:pointer-events-none dark:bg-core-dark dark:border-core-gray/20 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-core-primary text-white hover:opacity-80 focus:outline-hidden focus:bg-core-primary disabled:opacity-50 disabled:pointer-events-none"
+        >
+          <svg
+            class="shrink-0 size-4"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"
+            ></path>
+            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+            <polyline points="7 3 7 8 15 8"></polyline>
+          </svg>
+          Guardar Empresa
+        </button>
+      </div>
+    </form>
+  </div>
+</main>
+
+{company && company.id && (
+  <script type="application/json" id="company-data" set:html={JSON.stringify(company)}>
+  </script>
+)}
+
+<script>
+  // Variables globales
+  let currentCompanyType = "cliente";
+  let companyData = {};
+
+  // Función para validar RUT chileno
+  function validateRut(rut) {
+    if (!rut || rut.length < 8) return false;
+
+    // Remover puntos y guión
+    const cleanRut = rut.replace(/[.-]/g, "");
+    const rutBody = cleanRut.slice(0, -1);
+    const rutDv = cleanRut.slice(-1).toLowerCase();
+
+    // Calcular dígito verificador
+    let sum = 0;
+    let multiplier = 2;
+
+    for (let i = rutBody.length - 1; i >= 0; i--) {
+      sum += parseInt(rutBody[i]) * multiplier;
+      multiplier = multiplier === 7 ? 2 : multiplier + 1;
+    }
+
+    const expectedDv = 11 - (sum % 11);
+    const dv =
+      expectedDv === 11 ? "0" : expectedDv === 10 ? "k" : expectedDv.toString();
+
+    return dv === rutDv;
+  }
+
+  // Función para formatear RUT
+  function formatRut(rut) {
+    const cleanRut = rut.replace(/[^0-9kK]/g, "");
+    if (cleanRut.length <= 1) return cleanRut;
+
+    const rutBody = cleanRut.slice(0, -1);
+    const rutDv = cleanRut.slice(-1);
+
+    // Formatear con puntos
+    const formattedBody = rutBody.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    return `${formattedBody}-${rutDv}`;
+  }
+
+  // Función para buscar empresa en endpoint
+  async function searchCompanyByRut(rut) {
+    const statusDiv = document.getElementById("rut-status");
+    const loadingDiv = document.getElementById("rut-loading");
+    const foundDiv = document.getElementById("rut-found");
+    const notFoundDiv = document.getElementById("rut-not-found");
+    const errorDiv = document.getElementById("rut-error");
+
+    // Mostrar loading
+    statusDiv.classList.remove("hidden");
+    loadingDiv.classList.remove("hidden");
+    foundDiv.classList.add("hidden");
+    notFoundDiv.classList.add("hidden");
+    errorDiv.classList.add("hidden");
+
+    try {
+      // Simular llamada a API (reemplazar con endpoint real)
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      // Simular respuesta (reemplazar con lógica real)
+      const mockResponse = Math.random() > 0.5;
+
+      if (mockResponse) {
+        // Empresa encontrada
+        const mockData = {
+          rut: rut,
+          name: "Empresa Ejemplo S.A.",
+          activity: "Servicios de consultoría",
+          email: "contacto@empresa.com",
+          phone: "+56 9 1234 5678",
+          address: "Av. Principal 123",
+          city: "Santiago",
+          commune: "Las Condes",
+        };
+
+        populateForm(mockData);
+
+
+        loadingDiv.classList.add("hidden");
+        foundDiv.classList.remove("hidden");
+
+        // Focus en el primer campo después del RUT
+        document.getElementById("company-name").focus();
+      } else {
+        // Empresa no encontrada
+        loadingDiv.classList.add("hidden");
+        notFoundDiv.classList.remove("hidden");
+
+        // Focus en el primer campo del formulario
+        document.getElementById("company-name").focus();
+      }
+    } catch (error) {
+      console.error("Error searching company:", error);
+      loadingDiv.classList.add("hidden");
+      errorDiv.classList.remove("hidden");
+    }
+  }
+
+  // Función para precargar el formulario con datos de la empresa
+  function preloadCompanyData(companyData) {
+
+    if (!companyData || !companyData.id) return;
+
+    // Precargar datos básicos
+    if (companyData.datosBasicos) {
+      const { datosBasicos } = companyData;
+      document.getElementById("company-rut").value = formatRut(datosBasicos.rut) || "";
+      document.getElementById("company-name").value =
+        datosBasicos.razonSocial || "";
+      document.getElementById("company-activity").value =
+        datosBasicos.giro || "";
+      document.getElementById("company-email").value = datosBasicos.email || "";
+      document.getElementById("company-phone").value =
+        datosBasicos.telefono || "";
+
+      if (datosBasicos.direccion) {
+        document.getElementById("company-address").value =
+          datosBasicos.direccion.calle || "";
+        document.getElementById("company-city").value =
+          datosBasicos.direccion.ciudad || "";
+        document.getElementById("company-commune").value =
+          datosBasicos.direccion.comuna || "";
+      }
+    }
+
+    // Precargar datos contables
+    if (companyData.datosContables) {
+      const { datosContables } = companyData;
+      document.getElementById("account-type").value =
+        datosContables.tipoCuenta || "";
+      document.getElementById("info-email").value =
+        datosContables.emailInformacion || "";
+      document.getElementById("bank-name").value = datosContables.banco || "";
+      document.getElementById("account-number").value =
+        datosContables.numeroCuenta || "";
+      document.getElementById("payment-terms").value =
+        datosContables.condicionesPago || "";
+
+      // Contacto DTE (solo para proveedores)
+      if (datosContables.contactoDte) {
+        document.getElementById("dte-contact-name").value =
+          datosContables.contactoDte.nombre || "";
+        document.getElementById("dte-contact-email").value =
+          datosContables.contactoDte.email || "";
+      }
+    }
+
+    // Precargar datos de contrato (solo para clientes)
+    if (companyData.contrato && companyData.tipo === "cliente") {
+      const { contrato } = companyData;
+      document.getElementById("contract-start-date").value =
+        contrato.fechaInicio || "";
+      document.getElementById("client-status").value =
+        contrato.estado || "activo";
+      document.getElementById("contract-type").value =
+        contrato.tipoContrato || "";
+      document.getElementById("billing-frequency").value =
+        contrato.frecuenciaFacturacion || "";
+      document.getElementById("document-type").value =
+        contrato.tipoDocumento || "";
+
+      if (contrato.montoFacturacion) {
+        document.getElementById("billing-amount").value =
+          contrato.montoFacturacion.monto || "";
+        document.getElementById("billing-currency").value =
+          contrato.montoFacturacion.moneda || "peso";
+        document.getElementById("billing-type").value =
+          contrato.montoFacturacion.tipo || "neto";
+      }
+    }
+
+    // Cambiar el texto del botón si estamos en modo edición
+    const submitButton = document.querySelector('button[type="submit"]');
+    if (submitButton) {
+      submitButton.innerHTML = `
+        <svg
+          class="shrink-0 size-4"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"
+          ></path>
+          <polyline points="17 21 17 13 7 13 7 21"></polyline>
+          <polyline points="7 3 7 8 15 8"></polyline>
+        </svg>
+        Actualizar Empresa
+      `;
+    }
+
+    // Mostrar estado de empresa encontrada
+    const statusDiv = document.getElementById("rut-status");
+    const foundDiv = document.getElementById("rut-found");
+    if (statusDiv && foundDiv) {
+      statusDiv.classList.remove("hidden");
+      foundDiv.classList.remove("hidden");
+      foundDiv.textContent = "✓ Empresa cargada - Modo edición";
+    }
+  }
+
+  // Función para cambiar tipo de empresa
+  function switchCompanyType(type) {
+    currentCompanyType = type;
+
+    // Actualizar botones - Remover todas las clases de estado
+    document.querySelectorAll(".company-type-btn").forEach((btn) => {
+      btn.classList.remove(
+        "active",
+        "text-core-dark",
+        "font-medium",
+        "dark:bg-core-dark",
+        "dark:text-white",
+        "dark:after:bg-neutral-200"
+      );
+      btn.classList.add("text-core-gray");
+      // Remover el indicador after
+      btn.classList.remove("after:bg-core-dark");
+    });
+
+    // Activar el botón seleccionado
+    const activeBtn = document.querySelector(`[data-company-type="${type}"]`);
+    if (activeBtn) {
+      activeBtn.classList.remove("text-core-gray");
+      activeBtn.classList.add(
+        "active",
+        "text-core-dark",
+        "font-medium",
+        "dark:bg-core-dark",
+        "dark:text-white",
+        "dark:after:bg-neutral-200",
+        "after:bg-core-dark"
+      );
+    }
+
+    // Mostrar/ocultar solo los BOTONES de pestañas, no el contenido
+    if (type === "cliente") {
+      document
+        .querySelectorAll(".client-only:not(.tab-content)")
+        .forEach((el) => el.classList.remove("hidden"));
+      document
+        .querySelectorAll(".provider-only:not(.tab-content)")
+        .forEach((el) => el.classList.add("hidden"));
+    } else {
+      document
+        .querySelectorAll(".client-only:not(.tab-content)")
+        .forEach((el) => el.classList.add("hidden"));
+      document
+        .querySelectorAll(".provider-only:not(.tab-content)")
+        .forEach((el) => el.classList.remove("hidden"));
+    }
+
+    // Asegurar que solo la pestaña "Datos Básicos" esté activa
+    switchTab("basic-data");
+  }
+
+  // Función para cambiar pestañas
+  function switchTab(tabName) {
+    // Ocultar todos los contenidos
+    document.querySelectorAll(".tab-content").forEach((content) => {
+      content.classList.add("hidden");
+    });
+
+    // Actualizar botones de pestañas
+    document.querySelectorAll(".data-tab-btn").forEach((btn) => {
+      btn.classList.remove("border-core-primary", "text-core-primary");
+      btn.classList.add("border-transparent", "text-core-gray");
+    });
+
+    // Mostrar contenido activo
+    document.getElementById(`${tabName}-content`).classList.remove("hidden");
+
+    // Activar botón
+    const activeBtn = document.querySelector(`[data-tab="${tabName}"]`);
+    activeBtn.classList.remove("border-transparent", "text-core-gray");
+    activeBtn.classList.add("border-core-primary", "text-core-primary");
+  }
+
+  // Función para generar JSON final
+  function generateCompanyJSON() {
+    const isCliente = document.getElementById("is-cliente")?.checked || false;
+    const isProveedor = document.getElementById("is-proveedor")?.checked || false;
+    
+    const data = {
+      isCliente: isCliente,
+      isProveedor: isProveedor,
+      datosBasicos: {
+        rut: document.getElementById("company-rut").value,
+        razonSocial: document.getElementById("company-name").value,
+        giro: document.getElementById("company-activity").value,
+        email: document.getElementById("company-email").value,
+        telefono: document.getElementById("company-phone").value,
+        logo: "/logos/cliente.png", // o "/logos/proveedor.png" según corresponda
+        direccion: {
+          calle: document.getElementById("company-address").value,
+          ciudad: document.getElementById("company-city").value,
+          comuna: document.getElementById("company-commune").value,
+        },
+      },
+      datosContables: {
+        tipoCuenta: document.getElementById("account-type").value,
+        emailInformacion: document.getElementById("info-email").value,
+        banco: document.getElementById("bank-name").value,
+        numeroCuenta: document.getElementById("account-number").value,
+        condicionesPago: document.getElementById("payment-terms").value,
+      },
+      historial: {
+        fechaCreacion: new Date().toISOString(),
+        fechaUltimaModificacion: new Date().toISOString(),
+        usuarioCreacion: "admin",
+        usuarioUltimaModificacion: "admin"
+      }
+    };
+
+    // Agregar contrato solo si es cliente
+    if (isCliente) {
+      data.contrato = {
+        fechaInicio: document.getElementById("contract-start-date").value,
+        estado: document.getElementById("client-status").value,
+        tipoContrato: document.getElementById("contract-type").value,
+        frecuenciaFacturacion: document.getElementById("billing-frequency").value,
+        tipoDocumento: document.getElementById("document-type").value,
+        montoFacturacion: {
+          monto: parseInt(document.getElementById("billing-amount").value) || 0,
+          moneda: document.getElementById("billing-currency").value || "clp",
+          tipo: document.getElementById("billing-type").value || "neto"
+        },
+        historialCambios: [{
+          fecha: new Date().toISOString(),
+          usuario: "admin",
+          accion: "creacion",
+          detalle: {
+            estado: document.getElementById("client-status").value,
+            tipoContrato: document.getElementById("contract-type").value,
+            frecuenciaFacturacion: document.getElementById("billing-frequency").value,
+            montoFacturacion: {
+              monto: parseInt(document.getElementById("billing-amount").value) || 0,
+              moneda: document.getElementById("billing-currency").value || "clp",
+              tipo: document.getElementById("billing-type").value || "neto"
+            }
+          }
+        }]
+      };
+    } else {
+      data.contrato = null;
+    }
+
+    // Agregar contacto DTE si es proveedor
+    if (isProveedor) {
+      data.datosContables.contactoDte = {
+        nombre: document.getElementById("dte-contact-name").value,
+        email: document.getElementById("dte-contact-email").value,
+      };
+    }
+
+    return data;
+  }
+
+  // Event Listeners
+  document.addEventListener("DOMContentLoaded", function () {
+    // RUT input formatting
+    const rutInput = document.getElementById("company-rut");
+    const searchBtn = document.getElementById("search-rut-btn");
+    const clearBtn = document.getElementById("clear-rut-btn");
+
+    // Checkboxes de Cliente/Proveedor
+    const clienteCheckbox = document.getElementById("is-cliente");
+    const proveedorCheckbox = document.getElementById("is-proveedor");
+
+    if (clienteCheckbox) {
+      clienteCheckbox.addEventListener("change", function() {
+        updateTabsVisibility();
+      });
+    }
+
+    if (proveedorCheckbox) {
+      proveedorCheckbox.addEventListener("change", function() {
+        updateTabsVisibility();
+      });
+    }
+
+    // Función para actualizar la visibilidad de los tabs
+    function updateTabsVisibility() {
+      const isCliente = clienteCheckbox ? clienteCheckbox.checked : false;
+      const isProveedor = proveedorCheckbox ? proveedorCheckbox.checked : false;
+      
+      // Mostrar/ocultar tab de Contrato según si es cliente
+      const contractTab = document.getElementById("contract-data-tab");
+      if (contractTab) {
+        if (isCliente) {
+          contractTab.classList.remove("hidden");
+        } else {
+          contractTab.classList.add("hidden");
+          // Si estamos en el tab de contrato y se desmarca cliente, cambiar a datos básicos
+          if (contractTab.classList.contains("border-core-primary")) {
+            switchTab("basic-data");
+          }
+        }
+      }
+      
+      // Actualizar contenido específico de proveedor en datos contables
+      const dteContactSection = document.querySelector(".provider-only");
+      if (dteContactSection) {
+        if (isProveedor) {
+          dteContactSection.classList.remove("hidden");
+        } else {
+          dteContactSection.classList.add("hidden");
+        }
+      }
+    }
+
+    // Solo agregar event listeners si los elementos existen
+    if (rutInput) {
+      rutInput.addEventListener("input", function (e) {
+        const formatted = formatRut(e.target.value);
+        e.target.value = formatted;
+
+        // Mostrar/ocultar botón clear solo si existe
+        if (clearBtn) {
+          if (formatted.length > 0) {
+            clearBtn.classList.remove("hidden");
+          } else {
+            clearBtn.classList.add("hidden");
+          }
+        }
+
+        // Ocultar status cuando se modifica el RUT
+        const rutStatus = document.getElementById("rut-status");
+        if (rutStatus) {
+          rutStatus.classList.add("hidden");
+        }
+      });
+
+      rutInput.addEventListener("keypress", function (e) {
+        if (e.key === "Enter" && searchBtn) {
+          e.preventDefault();
+          searchBtn.click();
+        }
+      });
+    }
+
+    if (searchBtn) {
+      searchBtn.addEventListener("click", function () {
+        const rut = rutInput.value.trim();
+        if (validateRut(rut)) {
+          searchCompanyByRut(rut);
+        } else {
+          alert("RUT inválido. Por favor, ingrese un RUT válido.");
+        }
+      });
+    }
+
+    if (clearBtn) {
+      clearBtn.addEventListener("click", function () {
+        if (rutInput) {
+          rutInput.value = "";
+        }
+        clearBtn.classList.add("hidden");
+        const rutStatus = document.getElementById("rut-status");
+        if (rutStatus) {
+          rutStatus.classList.add("hidden");
+        }
+
+        // Limpiar formulario
+        const form = document.getElementById("company-form");
+        if (form) {
+          form.reset();
+        }
+      });
+    }
+
+    // Company type buttons
+    document.querySelectorAll(".company-type-btn").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        switchCompanyType(this.dataset.companyType);
+      });
+    });
+
+    // Tab buttons
+    document.querySelectorAll(".data-tab-btn").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        switchTab(this.dataset.tab);
+      });
+    });
+
+    // Form submission
+    document
+      .getElementById("company-form")
+      .addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const jsonData = generateCompanyJSON();
+        console.log("Company Data JSON:", jsonData);
+
+        // Aquí enviarías los datos al endpoint
+        // fetch('/api/companies', {
+        //   method: 'POST',
+        //   headers: {
+        //     'Content-Type': 'application/json'
+        //   },
+        //   body: JSON.stringify(jsonData)
+        // })
+
+        alert("Empresa guardada correctamente (ver consola para JSON)");
+      });
+
+    // Inicializar vista
+    switchCompanyType("cliente");
+    switchTab("basic-data");
+    updateTabsVisibility();
+
+    // Obtener datos de la empresa desde el HTML
+    const companyDataElement = document.getElementById('company-data');
+    let companyData = null;
+    
+    if (companyDataElement) {
+      try {
+        companyData = JSON.parse(companyDataElement.textContent);
+      } catch (e) {
+        console.error('Error parsing company data:', e);
+      }
+    }
+
+    // Precargar datos si la empresa existe
+    if (companyData && companyData.id) {  
+      // Establecer el tipo de empresa correcto
+      if (companyData.tipo) {
+        switchCompanyType(companyData.tipo);
+      }
+      // Precargar los datos del formulario
+      preloadCompanyData(companyData);
+    }
+
+  });
+</script>

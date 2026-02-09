@@ -1,0 +1,27 @@
+---
+import MainMenu from "../components/ui/MainMenu.astro";
+
+import Submenu from "../components/ui/Submenu.astro";
+import Ticket from "../components/ui/Ticket.astro";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>LOGIN core</title>
+    <link rel="stylesheet" href="/src/styles/global.css" />
+  </head>
+
+  <body>
+    <MainMenu />
+    <Submenu />
+    <Ticket />
+    <slot />
+  </body>
+</html>
+
+<script src="../../node_modules/preline/preline.js"></script>

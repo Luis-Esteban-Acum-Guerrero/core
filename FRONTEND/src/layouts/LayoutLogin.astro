@@ -1,0 +1,63 @@
+---
+import Logo from "../components/Logo.astro";
+import LoginForm from "../components/login/LoginForm.astro";
+import LoginOTP from "../components/login/OTP.astro";
+import Footer from "../components/login/Footer.astro";
+---
+
+<!doctype html>
+<html lang="en" dir="" class="relative min-h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>LOGIN c0re</title>
+    <link rel="stylesheet" href="/src/styles/global.css" />
+  </head>
+  <body>
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="flex min-h-full">
+      <!-- Sidebar -->
+      <div
+        class="hidden min-h-screen lg:w-100 xl:w-107.5 bg-core-light lg:flex flex-col justify-between p-6"
+      >
+        <!-- Header -->
+        <div class="flex flex-wrap justify-between items-center gap-2">
+          <Logo />
+        </div>
+        <!-- End Header -->
+
+        <!-- Body -->
+        <div>
+          <span class="text-2xl font-medium text-core-dark">
+            The simplest way to manage your workforce
+          </span>
+
+          <img
+            class=""
+            src="/images/authentication-charts.svg"
+            alt="Charts Mockups"
+          />
+          <img
+            class="hidden"
+            src="/images/authentication-charts-dark.svg"
+            alt="Charts Mockups"
+          />
+        </div>
+        <!-- End Body -->
+
+        <Footer />
+      </div>
+      <!-- End Sidebar -->
+
+      <LoginForm />
+      <LoginOTP />
+    </main>
+    <!-- ========== END MAIN CONTENT ========== -->
+
+    <slot />
+  </body>
+</html>
+
+<script src="../../node_modules/preline/preline.js"></script>

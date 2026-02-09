@@ -1,0 +1,38 @@
+---
+const { placeholder } = Astro.props;
+---
+
+<div class="p-2 pb-0">
+  <div class="relative">
+    <input
+      type="text"
+      class="py-2 px-2.5 block w-full bg-core-gray/10 rounded-lg sm:text-sm text-base border-core-gray hover:bg-core-light placeholder:text-core-dark/60 focus:bg-core-light focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-700/50 dark:hover:bg-neutral-800 dark:hover:border-neutral-700 dark:text-neutral-300 dark:placeholder:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800 dark:focus:ring-neutral-600 dark:focus:border-neutral-600"
+      placeholder="Buscar ..."
+    />
+    <div class="absolute inset-y-0 end-0 flex items-center z-20 pe-1">
+      <button
+        type="button"
+        class="inline-flex shrink-0 justify-center items-center size-6 rounded-full text-core-dark/60 hover:text-core-primary focus:outline-hidden focus:text-core-primary dark:text-neutral-500 dark:hover:text-core-primary dark:focus:text-core-primary"
+        aria-label="Close"
+      >
+        <span class="sr-only">Cerrar</span>
+        <svg
+          class="shrink-0 size-4"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="m15 9-6 6"></path>
+          <path d="m9 9 6 6"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>

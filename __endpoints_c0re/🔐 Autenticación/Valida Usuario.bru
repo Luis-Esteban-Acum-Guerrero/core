@@ -1,0 +1,21 @@
+meta {
+  name: Valida Usuario
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{base_url}}/auth/getUser
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "telefono": "56950995487"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

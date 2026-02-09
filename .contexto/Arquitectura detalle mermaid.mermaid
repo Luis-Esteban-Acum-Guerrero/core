@@ -1,0 +1,32 @@
+flowchart TB
+    Client[Cliente] -->|Autenticación JWT| API[API Gateway]
+    
+    subgraph "API Layer"
+        API --> AuthService[Servicio de Autenticación]
+        API --> CartolaService[Servicio de Cartolas]
+        API --> MonitorService[Servicio de Monitoreo]
+        API --> ConfigService[Servicio de Configuración]
+    end
+    
+    subgraph "Processing Layer"
+        CartolaService -->|Encola trabajos| Queue[Cola de Procesamiento]
+        Queue --> ScrapingWorkers[Workers de Scraping]
+        ScrapingWorkers --> BancoAdapter1[Adaptador Banco 1]
+        ScrapingWorkers --> BancoAdapter2[Adaptador Banco 2]
+        ScrapingWorkers --> BancoAdapterN[Adaptador Banco N]
+        
+        BancoAdapter1 & BancoAdapter2 & BancoAdapterN -->|Utiliza| PlaywrightPool[Pool de Navegadores]
+        ScrapingWorkers -->|Guarda resultados| Database[(MySQL)]
+    end
+    
+    subgraph "Monitoring Layer"
+        MonitorCron[Tarea Programada] --> MonitorService
+        MonitorService -->|Verifica estados| BancoStatusCheck[Verificador de Bancos]
+        BancoStatusCheck -->|Actualiza| Database
+        
+        Prometheus[Prometheus] -->|Recolecta métricas| MetricsExporter[Exportador de Métricas]
+        Grafana[Grafana] -->|Visualiza| Prometheus
+    end
+    
+    Client -->|Consulta resultados| API
+    API -->|Obtiene datos| Database

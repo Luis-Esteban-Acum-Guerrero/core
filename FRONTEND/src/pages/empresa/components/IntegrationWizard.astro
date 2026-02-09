@@ -1,0 +1,448 @@
+---
+
+---
+
+<div
+  id="integrationWizardModal"
+  class="hs-overlay hidden w-full h-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none"
+>
+  <div
+    class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-2xl sm:w-full m-3 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center"
+  >
+    <div
+      class="w-full flex flex-col bg-core-light border border-core-gray shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70"
+    >
+      <!-- Header -->
+      <div
+        class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700"
+      >
+        <h3 id="wizard-title" class="font-bold text-core-dark dark:text-white">
+          Nueva Integración
+        </h3>
+        <button
+          type="button"
+          class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-core-dark hover:bg-core-light disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700"
+          onclick="closeWizard()"
+        >
+          <span class="sr-only">Cerrar</span>
+          <svg
+            class="flex-shrink-0 size-4"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg
+          >
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="p-4 overflow-y-auto min-h-[400px]">
+        <!-- Step 1: Service Selection -->
+        <div id="step-1" class="wizard-step">
+          <h4 class="text-lg font-medium mb-4 text-core-dark dark:text-gray-200">
+            Seleccione un servicio
+          </h4>
+          <!-- Search -->
+          <div class="relative mb-6">
+            <input
+              type="text"
+              id="service-search"
+              onkeyup="filterServices(this.value)"
+              class="py-3 px-4 ps-11 block w-full border-core-gray rounded-lg text-sm focus:border-core-primary focus:ring-core-primary disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-core-gray dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+              placeholder="Buscar servicio (ej: SII, Banco...)"
+            />
+            <div
+              class="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-4"
+            >
+              <svg
+                class="size-4 text-core-gray"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                ><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"
+                ></path></svg
+              >
+            </div>
+          </div>
+
+          <!-- Grid -->
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="service-grid">
+            <!-- SII -->
+            <button
+              class="service-item p-4 border border-core-gray rounded-xl hover:border-core-primary hover:shadow-md transition-all text-center group bg-core-light dark:bg-neutral-800 dark:border-neutral-700"
+              data-name="sii servicio impuestos internos"
+              onclick="selectService('sii')"
+            >
+              <div
+                class="w-12 h-12 mx-auto bg-core-primary/20 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform dark:bg-core-primary/20"
+              >
+                <span class="font-bold text-core-primary dark:text-core-primary"
+                  >SII</span
+                >
+              </div>
+              <span class="block font-medium text-core-dark dark:text-gray-200"
+                >SII</span
+              >
+            </button>
+
+            <!-- Banco BCI -->
+            <button
+              class="service-item p-4 border border-core-gray rounded-xl hover:border-core-primary hover:shadow-md transition-all text-center group bg-core-light dark:bg-neutral-800 dark:border-neutral-700"
+              data-name="banco bci"
+              onclick="selectService('bci')"
+            >
+              <div
+                class="w-12 h-12 mx-auto bg-green-100 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform dark:bg-green-900"
+              >
+                <span class="font-bold text-green-600 dark:text-green-300"
+                  >BCI</span
+                >
+              </div>
+              <span class="block font-medium text-core-dark dark:text-gray-200"
+                >Banco BCI</span
+              >
+            </button>
+
+            <!-- Banco Santander -->
+            <button
+              class="service-item p-4 border border-core-gray rounded-xl hover:border-core-primary hover:shadow-md transition-all text-center group bg-core-light dark:bg-neutral-800 dark:border-neutral-700"
+              data-name="banco santander"
+              onclick="selectService('santander')"
+            >
+              <div
+                class="w-12 h-12 mx-auto bg-core-gray/20 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform dark:bg-red-900"
+              >
+                <span class="font-bold text-core-dark dark:text-red-300">SAN</span
+                >
+              </div>
+              <span class="block font-medium text-core-dark dark:text-gray-200"
+                >Santander</span
+              >
+            </button>
+
+            <!-- Tesorería -->
+            <button
+              class="service-item p-4 border border-core-gray rounded-xl hover:border-core-primary hover:shadow-md transition-all text-center group bg-core-light dark:bg-neutral-800 dark:border-neutral-700"
+              data-name="tesoreria general republica tgr"
+              onclick="selectService('tgr')"
+            >
+              <div
+                class="w-12 h-12 mx-auto bg-yellow-100 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform dark:bg-yellow-900"
+              >
+                <span class="font-bold text-yellow-600 dark:text-yellow-300"
+                  >TGR</span
+                >
+              </div>
+              <span class="block font-medium text-core-dark dark:text-gray-200"
+                >Tesorería</span
+              >
+            </button>
+
+            <!-- Banco de Chile -->
+            <button
+              class="service-item p-4 border border-core-gray rounded-xl hover:border-core-primary hover:shadow-md transition-all text-center group bg-core-light dark:bg-neutral-800 dark:border-neutral-700"
+              data-name="banco chile bch"
+              onclick="selectService('chile')"
+            >
+              <div
+                class="w-12 h-12 mx-auto bg-core-primary/20 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform dark:bg-blue-900"
+              >
+                <span class="font-bold text-blue-800 dark:text-blue-300"
+                  >BCH</span
+                >
+              </div>
+              <span class="block font-medium text-core-dark dark:text-gray-200"
+                >Banco de Chile</span
+              >
+            </button>
+
+            <!-- Estado -->
+            <button
+              class="service-item p-4 border border-core-gray rounded-xl hover:border-core-primary hover:shadow-md transition-all text-center group bg-core-light dark:bg-neutral-800 dark:border-neutral-700"
+              data-name="banco estado"
+              onclick="selectService('estado')"
+            >
+              <div
+                class="w-12 h-12 mx-auto bg-orange-100 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform dark:bg-orange-900"
+              >
+                <span class="font-bold text-orange-600 dark:text-orange-300"
+                  >BE</span
+                >
+              </div>
+              <span class="block font-medium text-core-dark dark:text-gray-200"
+                >Banco Estado</span
+              >
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: Configuration -->
+        <div id="step-2" class="wizard-step hidden">
+          <div id="config-form-container" class="space-y-4">
+            <!-- Form will be injected here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div
+        class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700"
+      >
+        <button
+          type="button"
+          class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-core-gray bg-core-light text-core-dark shadow-sm hover:bg-core-light disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
+          onclick="prevStep()"
+          id="btn-back"
+          style="display:none;"
+        >
+          Atrás
+        </button>
+        <button
+          type="button"
+          class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-core-primary text-white hover:opacity-80 disabled:opacity-50 disabled:pointer-events-none"
+          onclick="nextStep()"
+          id="btn-next"
+          disabled
+        >
+          Siguiente
+        </button>
+        <button
+          type="button"
+          class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-core-primary text-white hover:opacity-80 disabled:opacity-50 disabled:pointer-events-none hidden"
+          onclick="finishWizard()"
+          id="btn-finish"
+        >
+          Conectar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  let currentStep = 1;
+  let selectedService = null;
+  let formData = {};
+
+  // Initialize Wizard functions
+  window.openWizard = function () {
+    const modal = document.getElementById("integrationWizardModal");
+    modal.classList.remove("hidden");
+    setTimeout(() => {
+      modal.querySelector("div").classList.remove("opacity-0", "mt-0");
+      modal
+        .querySelector("div")
+        .classList.add("hs-overlay-open:opacity-100", "hs-overlay-open:mt-7");
+    }, 10);
+
+    // Reset
+    resetWizard();
+  };
+
+  window.closeWizard = function () {
+    const modal = document.getElementById("integrationWizardModal");
+    modal
+      .querySelector("div")
+      .classList.remove("hs-overlay-open:opacity-100", "hs-overlay-open:mt-7");
+    modal.querySelector("div").classList.add("opacity-0", "mt-0");
+    setTimeout(() => {
+      modal.classList.add("hidden");
+    }, 500);
+  };
+
+  window.filterServices = function (query) {
+    const items = document.querySelectorAll(".service-item");
+    const term = query.toLowerCase();
+    items.forEach((item) => {
+      const name = item.dataset.name;
+      if (name.includes(term)) {
+        item.style.display = "block";
+      } else {
+        item.style.display = "none";
+      }
+    });
+  };
+
+  function resetWizard() {
+    currentStep = 1;
+    selectedService = null;
+    document.getElementById("wizard-title").innerText = "Nueva Integración";
+    document.getElementById("step-1").classList.remove("hidden");
+    document.getElementById("step-2").classList.add("hidden");
+    document.getElementById("btn-back").style.display = "none";
+    document.getElementById("btn-next").classList.remove("hidden");
+    document.getElementById("btn-next").disabled = true;
+    document.getElementById("btn-finish").classList.add("hidden");
+    document
+      .querySelectorAll(".service-item")
+      .forEach((el) =>
+        el.classList.remove("border-blue-500", "ring-2", "ring-blue-500"),
+      );
+    document.getElementById("service-search").value = "";
+    window.filterServices("");
+  }
+
+  window.selectService = function (service) {
+    selectedService = service;
+    // Highlight selection
+    document
+      .querySelectorAll(".service-item")
+      .forEach((el) =>
+        el.classList.remove("border-blue-500", "ring-2", "ring-blue-500"),
+      );
+    // Find the button with the onclick handler that matches
+    const btn = Array.from(document.querySelectorAll(".service-item")).find(
+      (el) => el.getAttribute("onclick").includes(`'${service}'`),
+    );
+    if (btn) btn.classList.add("border-blue-500", "ring-2", "ring-blue-500");
+
+    document.getElementById("btn-next").disabled = false;
+  };
+
+  window.renderForm = function (service, initialData = {}) {
+    const container = document.getElementById("config-form-container");
+    container.innerHTML = ""; // Clear
+
+    let html = "";
+
+    if (service === "sii") {
+      const isPersona =
+        initialData.sii_type === "persona" || !initialData.sii_type;
+
+      html = `
+            <div>
+                <label class="block text-sm font-medium text-core-dark dark:text-gray-300 mb-2">Tipo de Contribuyente</label>
+                <div class="flex gap-4 mb-4">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" name="sii_type" value="persona" class="form-radio text-core-primary" ${isPersona ? "checked" : ""} onchange="toggleSiiFields(this.value)">
+                        <span class="text-sm text-core-dark dark:text-gray-200">Persona Natural</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" name="sii_type" value="empresa" class="form-radio text-core-primary" ${!isPersona ? "checked" : ""} onchange="toggleSiiFields(this.value)">
+                        <span class="text-sm text-core-dark dark:text-gray-200">Empresa</span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="common-fields">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-core-dark dark:text-gray-300 mb-1">RUT</label>
+                    <input type="text" name="rut" value="${initialData.rut || ""}" class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm focus:border-core-primary focus:ring-core-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray" placeholder="12.345.678-9">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-core-dark dark:text-gray-300 mb-1">Clave SII</label>
+                    <input type="password" name="password" value="${initialData.password || ""}" class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm focus:border-core-primary focus:ring-core-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray">
+                </div>
+            </div>
+
+            <div id="cert-field" class="mb-4" style="display: ${isPersona ? "block" : "none"}">
+                <label class="block text-sm font-medium text-core-dark dark:text-gray-300 mb-1">Clave Certificado Digital</label>
+                <input type="password" name="cert_password" value="${initialData.cert_password || ""}" class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm focus:border-core-primary focus:ring-core-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray" placeholder="Contraseña del certificado">
+                <p class="text-xs text-core-gray mt-1">Requerido para firmar documentos electrónicos como Persona.</p>
+            </div>
+        `;
+    } else {
+      // Default generic form (Banks, etc)
+      html = `
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-core-dark dark:text-gray-300 mb-1">RUT / Usuario</label>
+                <input type="text" name="rut" value="${initialData.rut || ""}" class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm focus:border-core-primary focus:ring-core-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray">
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-core-dark dark:text-gray-300 mb-1">Contraseña</label>
+                <input type="password" name="password" value="${initialData.password || ""}" class="py-2 px-3 block w-full border-core-gray rounded-lg text-sm focus:border-core-primary focus:ring-core-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-core-gray">
+            </div>
+        `;
+    }
+
+    container.innerHTML = html;
+  };
+
+  window.toggleSiiFields = function (type) {
+    const certField = document.getElementById("cert-field");
+    if (type === "persona") {
+      certField.style.display = "block";
+    } else {
+      certField.style.display = "none";
+    }
+  };
+
+  window.configureIntegration = function (serviceType, data = {}) {
+    window.openWizard();
+    document.getElementById("wizard-title").innerText =
+      "Configurar Integración";
+
+    // Select service internally
+    selectedService = serviceType;
+
+    // Skip to step 2
+    window.renderForm(selectedService, data);
+
+    document.getElementById("step-1").classList.add("hidden");
+    document.getElementById("step-2").classList.remove("hidden");
+    document.getElementById("btn-back").style.display = "none"; // No back in edit mode usually, or allow?
+    document.getElementById("btn-next").classList.add("hidden");
+    document.getElementById("btn-finish").classList.remove("hidden");
+
+    currentStep = 2;
+  };
+
+  window.nextStep = function () {
+    if (currentStep === 1) {
+      if (!selectedService) return;
+
+      // Prepare Step 2
+      window.renderForm(selectedService);
+
+      // Transition
+      document.getElementById("step-1").classList.add("hidden");
+      document.getElementById("step-2").classList.remove("hidden");
+      document.getElementById("btn-back").style.display = "inline-flex";
+      document.getElementById("btn-next").classList.add("hidden");
+      document.getElementById("btn-finish").classList.remove("hidden");
+
+      currentStep = 2;
+    }
+  };
+
+  window.prevStep = function () {
+    if (currentStep === 2) {
+      document.getElementById("step-2").classList.add("hidden");
+      document.getElementById("step-1").classList.remove("hidden");
+      document.getElementById("btn-back").style.display = "none";
+      document.getElementById("btn-next").classList.remove("hidden");
+      document.getElementById("btn-finish").classList.add("hidden");
+
+      currentStep = 1;
+    }
+  };
+
+  window.finishWizard = function () {
+    // Collect data
+    const inputs = document.querySelectorAll("#config-form-container input");
+    const data = {};
+    inputs.forEach((input) => {
+      if (input.type === "radio" && !input.checked) return;
+      data[input.name] = input.value;
+    });
+
+    console.log("Wizard Finished:", selectedService, data);
+
+    // Close and Toast
+    window.closeWizard();
+    if (window.showToast)
+      window.showToast("Integración configurada exitosamente", "success");
+  };
+</script>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Previsualización de Plantillas de Correo</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+      }
+      #controls {
+        max-width: 600px;
+        margin: 0 auto 20px auto;
+        padding: 15px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      #controls label {
+        font-weight: bold;
+        margin-right: 10px;
+      }
+      #template-select {
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        min-width: 200px;
+      }
+      #email-container {
+        max-width: 600px;
+        margin: auto;
+        background: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="controls">
+      <label for="template-select">Selecciona una plantilla:</label>
+      <select id="template-select">
+        <option value="receipt">Recibo (Receipt)</option>
+        <option value="alert">Alerta (Alert)</option>
+        <option value="otp">OTP</option>
+        <option value="notification">Notificación (Notification)</option>
+        <option value="receiptAlreadyPaid">Recibo Pagado (Already Paid)</option>
+      </select>
+    </div>
+
+    <div id="email-container">
+      <!-- El correo electrónico se renderizará aquí -->
+    </div>
+
+    <script type="module">
+      import { createReceiptEmail } from "./ReceiptEmail.js";
+      import { createAlertEmail } from "./AlertEmail.js";
+      import { createOtpEmail } from "./OtpEmail.js";
+      import { createNotificationEmail } from "./NotificationEmail.js";
+      import { createReceiptAlreadyPaidEmail } from "./ReceiptAlreadyPaidEmail.js";
+
+      const LOGO = "https://creceideas.cl/logo.png";
+      const FROM = "creceideas ltda";
+
+      const sampleProps = {
+        receipt: {
+          header: {
+            from: FROM,
+            logo: LOGO,
+            backgroundColor: "null",
+            email: "boris@creceideas.cl",
+            razonSocial: "Empresa de Clientes ltda",
+            contacto: "boris cabezas",
+
+            fechaFacturacion: "2023-01-01",
+            tipoDocumento: "Factura",
+            numeroFactura: "35578",
+            moneda: "CLP",
+            pago: {
+              metodo: "Transferencia",
+              cuenta: "1234567890",
+              tipoCuenta: "Corriente",
+              banco: "XYZ Bank",
+              email: "transferencias@creceideas.cl",
+            },
+          },
+          observation:
+            "Observaciones del cliente, que se añaden al envío automatizado",
+          items: [
+            {
+              name: "Producto 1",
+              description: "Descripción breve del producto 1",
+              price: "$190.990",
+              img: "https://creceideas.cl/logo.png",
+            },
+            {
+              name: "Servicio 1",
+              description: "Descripción breve del servicio 1",
+              price: "$29.990",
+            },
+          ],
+          totals: {
+            subtotal: "49.980",
+            tax: "4.990",
+            total: "54.970",
+          },
+        },
+        alert: {
+          header: {
+            from: FROM,
+            logo: LOGO,
+            backgroundColor: "null",
+          },
+          title: "Alerta de Seguridad",
+          message:
+            "Hemos detectado un inicio de sesión desde un dispositivo no reconocido. Si no has sido tú, por favor, asegura tu cuenta.",
+        },
+        otp: {
+          header: {
+            from: FROM,
+            logo: LOGO,
+            backgroundColor: "null",
+          },
+          otpCode: "123456",
+        },
+        notification: {
+          header: {
+            from: FROM,
+            logo: LOGO,
+            backgroundColor: "null",
+          },
+          title: "Error del Sistema",
+          message:
+            "Te informamos que realizaremos una actualización programada el próximo sábado.",
+          notificationType: "error", // Puede ser 'info', 'alerta', o 'error'
+        },
+        receiptAlreadyPaid: {
+          header: {
+            from: FROM,
+            logo: LOGO,
+            backgroundColor: "null",
+          },
+          userName: "Jane Doe",
+          receiptNumber: "2024-08-CD",
+          paymentDate: "20 de Julio, 2024",
+          amount: "$75.000",
+          paymentMethod: "Tarjeta de Crédito",
+        },
+      };
+
+      const templateFunctions = {
+        receipt: createReceiptEmail,
+        alert: createAlertEmail,
+        otp: createOtpEmail,
+        notification: createNotificationEmail,
+        receiptAlreadyPaid: createReceiptAlreadyPaidEmail,
+      };
+
+      const select = document.getElementById("template-select");
+      const container = document.getElementById("email-container");
+
+      function renderTemplate(templateName) {
+        const createFunction = templateFunctions[templateName];
+        const props = sampleProps[templateName];
+        if (createFunction && props) {
+          container.innerHTML = createFunction(props);
+        } else {
+          container.innerHTML = `<p style='padding: 20px;'>Error: Plantilla no encontrada.</p>`;
+        }
+      }
+
+      select.addEventListener("change", (e) => renderTemplate(e.target.value));
+      renderTemplate(select.value);
+    </script>
+  </body>
+</html>

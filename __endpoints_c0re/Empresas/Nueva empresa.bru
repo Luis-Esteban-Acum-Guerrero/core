@@ -1,0 +1,35 @@
+meta {
+  name: Nueva empresa
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/empresa/
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:json {
+  {
+    "nombre": "Mi Empresa",
+    "tipo": 1, // 1:empresa - 2:persona natural ...
+    "rut": "12345678-9",
+    "razonSocial": "Mi Empresa SpA",
+    "direccion": "Calle Principal 123",
+    "giro": "Servicios Informáticos",
+    "email": "contacto@miempresa.cl",
+    "idComuna": "",
+    "logo":"default.png",
+    "fono": "",
+    "web": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+}

@@ -1,0 +1,36 @@
+gantt
+    title Cronograma de Implementación
+    dateFormat  YYYY-MM-DD
+    
+    section Planificación
+    Análisis de requerimientos       :a1, 2025-03-20, 10d
+    Diseño de arquitectura           :a2, after a1, 15d
+    Configuración de entorno         :a3, after a2, 5d
+    
+    section Desarrollo
+    Implementación de API Core       :b1, after a3, 20d
+    Sistema de autenticación         :b2, after a3, 10d
+    Integración con MySQL            :b3, after a3, 10d
+    Sistema de colas                 :b4, after b2, 10d
+    
+    section Bancos
+    Implementación Banco 1           :c1, after b1, 10d
+    Implementación Banco 2           :c2, after c1, 10d
+    Implementación Banco 3           :c3, after c2, 10d
+    Implementación Banco 4           :c4, after c3, 10d
+    Implementación Banco 5           :c5, after c4, 10d
+    
+    section Monitoreo
+    Sistema de verificación          :d1, after b1, 15d
+    Dashboard de monitoreo           :d2, after d1, 15d
+    Integración de alertas           :d3, after d2, 5d
+    
+    section Pruebas y Despliegue
+    Pruebas de integración           :e1, after c5, 10d
+    Pruebas de carga                 :e2, after e1, 5d
+    Despliegue en producción         :e3, after e2, 5d
+    
+    section Entrega
+    Documentación final              :f1, after e3, 10d
+    Capacitación                     :f2, after f1, 5d
+    Soporte inicial                  :f3, after f2, 90d

@@ -1,0 +1,45 @@
+---
+import Bubble from "../chat/Bubble.astro";
+
+// const UIDticket = Astro.props.ticket;
+// console.log(UIDticket);
+
+// mando a buscar el chat, relacionado al ticket
+// import chat from "../../../public/data/chat.js";
+
+import getRandomChat, { generarChatJSON } from "../../../public/data/chat.js";
+const chat = getRandomChat(Math.floor(Math.random() * 40) + 1);
+---
+
+<div
+  class="h-full p-2 pb-8 sm:p-4 overflow-y-auto overflow-x-hidden flex flex-col-reverse [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-core-light [&::-webkit-scrollbar-thumb]:bg-core-gray/50 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500"
+>
+  <div class="relative">
+    <div class="sticky top-0 inset-x-0 z-8 max-w-lg mx-auto text-center">
+      <span
+        class="py-0.5 px-1.5 bg-core-light text-xs text-core-gray rounded-full dark:bg-neutral-900 dark:text-neutral-500"
+        >Hoy</span
+      >
+    </div>
+    <div class="w-full space-y-5">
+      {
+        chat.map((chat) => {
+          return (
+            <Bubble
+              key={chat.key}
+              from={chat.from}
+              nombre={chat.nombre}
+              to={chat.to}
+              message={chat.message}
+              isMe={chat.isMe}
+              avatarFrom={chat.avatarFrom}
+              timestamp={chat.timestamp}
+              estado={chat.estado}
+              type={chat.type}
+            />
+          );
+        })
+      }
+    </div>
+  </div>
+</div>
