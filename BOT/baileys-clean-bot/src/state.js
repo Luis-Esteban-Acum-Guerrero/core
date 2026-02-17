@@ -1,0 +1,1 @@
+export const consultasActivas = new Map()

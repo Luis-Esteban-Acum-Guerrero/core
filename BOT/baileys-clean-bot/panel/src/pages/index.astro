@@ -1,0 +1,137 @@
+---
+const res = await fetch("http://localhost:3000/api/consultas");
+const consultas = await res.json();
+---
+
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Panel de Consultas</title>
+
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				background: #ffffff;
+				color: rgb(17, 15, 15);
+				padding: 40px;
+			}
+
+			h1 {
+				margin-bottom: 20px;
+			}
+
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				background: #e3b375;
+			}
+
+			th,
+			td {
+				padding: 12px;
+				border-bottom: 1px solid #554433;
+				text-align: left;
+			}
+
+			th {
+				background: #cf720f;
+			}
+
+			tr:hover {
+				background: #fdd9b4;
+				transition: background 0.5s;
+				transition: scale 0.5s;
+				scale: 1.02;
+			}
+			.boton {
+				background: #cf720f;
+				color: white;
+				padding: 8px 12px;
+				border-radius: 5px;
+				text-decoration: none;
+				font-weight: bold;
+			}
+			.boton:hover {
+				background: #e3b375;
+				color: #554433;
+				transition:
+					background 0.3s,
+					color 0.3s;
+			}
+			.cerrar {
+				background: #22c55e;
+				border: none;
+				color: white;
+				padding: 6px 10px;
+				border-radius: 6px;
+				cursor: pointer;
+				font-weight: bold;
+			}
+
+			.cerrar:hover {
+				background: #16a34a;
+			}
+		</style>
+	</head>
+
+	<body>
+		<h1>Consultas</h1>
+
+		<table>
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Nombre</th>
+					<th>Número</th>
+					<th>Fecha</th>
+					<th>Comcluir consulta</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				{
+					consultas.map((c) => (
+						<tr>
+							<td>
+								<a class="boton" href={`/ticket/${c.id}`}>
+									{c.id}
+								</a>
+							</td>
+							<td>{c.nombre}</td>
+							<td>{c.numero}</td>
+							<td>
+								{new Date(c.fecha_creacion).toLocaleString()}
+							</td>
+							<td>
+								<button
+									onclick={`cerrarConsulta(${c.id})`}
+									class="cerrar"
+								>
+									✔
+								</button>
+							</td>
+						</tr>
+					))
+				}
+			</tbody>
+		</table>
+	</body>
+</html>
+
+<script is:inline>
+  async function cerrarConsulta(id) {
+    if (!confirm("¿Marcar consulta como respondida y eliminarla?")) return;
+
+    const res = await fetch(`http://localhost:3000/api/consultas/${id}`, {
+      method: "DELETE",
+    });
+
+    if (res.ok) {
+      location.reload();
+    } else {
+      alert("Error al cerrar la consulta");
+    }
+  }
+
+  window.cerrarConsulta = cerrarConsulta;
+</script>

@@ -1,0 +1,111 @@
+---
+export const prerender = false;
+
+const { id } = Astro.params;
+
+let mensajes = [];
+
+try {
+  const res = await fetch(`http://localhost:3000/api/ticket/${id}`);
+
+  if (!res.ok) throw new Error("Respuesta no válida");
+
+  const data = await res.json();
+
+  mensajes = Array.isArray(data) ? data : [];
+} catch (err) {
+  console.error("Error cargando ticket:", err);
+  mensajes = [];
+}
+---
+
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ticket #{id}</title>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f5f5f5;
+        margin: 0;
+        padding: 20px;
+      }
+
+      h1 {
+        margin-bottom: 20px;
+      }
+
+      .mensaje {
+        background: white;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      }
+
+      .mensaje img {
+        max-width: 300px;
+        display: block;
+        margin-top: 8px;
+        border-radius: 6px;
+      }
+
+      .fecha {
+        font-size: 12px;
+        color: #666;
+        margin-top: 6px;
+      }
+
+      .vacio {
+        color: #888;
+        font-style: italic;
+      }
+
+      a {
+        display: inline-block;
+        margin-bottom: 20px;
+        padding: 8px 12px;
+        background: #ff8c00;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+      }
+      a:hover {
+        background: #ff9e28;
+        color: white;
+        transition: background 0.3s;
+        transform: scale(1.1);
+        transition-transform: 0.3s;
+      }
+    </style>
+  </head>
+
+  <body>
+    <a href="/">← Volver</a>
+
+    <h1>Ticket #{id}</h1>
+
+    {
+      mensajes.length === 0 && (
+        <p class="vacio">No hay mensajes en este ticket.</p>
+      )
+    }
+
+    {
+      mensajes.map(m => (
+        <div class="mensaje">
+          {m.mensaje && <p>{m.mensaje}</p>}
+
+          {m.archivo && (
+            <img src={`http://localhost:3000/uploads/${m.archivo}`} alt="imagen del ticket" />
+          )}
+
+          <div class="fecha">
+            {new Date(m.fecha).toLocaleString()}
+          </div>
+        </div>
+      ))
+    }
+  </body>
+</html>

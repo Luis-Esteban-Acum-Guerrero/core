@@ -1,0 +1,66 @@
+//----------------------------------------//
+//          ACTIVAR PAGINA WEB            //
+//----------------------------------------//
+
+1.- ACTIVAR SERVIDOR 
+
+- cd .\BOT\baileys-clean-bot\src
+- node server.js
+
+2.- ACTIVAR INDEX.ASTRO (desde otra terminal)
+
+- cd .\BOT\baileys-clean-bot\panel\src\
+-npm run dev
+
+(ES NECESARIO QUE AMBOS SISTEMAS ESTEN ACTIVOS PARA EL CORRECTO FUNCIONAMIENTO DE LA PAGINA)
+
+//-------  Que puede hacer la pagina actualmente  -------//
+
+1.- recibir datos de la DB
+2.-integrar los datos de manera ordenada en una tabla
+3.-crear una tabla De consultas que muestre todas las que existen actualmente
+4.-Cuando el operador desee ver el contenido de una consulta, presiona la ID de la tabla y esta
+ lo redirecciona a un sitio donde verá todo el contenido del ticket que este relacionado a la
+ consulta seleccionada
+
+//-------  Que NO puede hacer la pagina actualmente  -------//
+
+1.-El boton para cerrar consulta aún no puede borrar los datos de la DB ni borrar
+ la consulta de la tabla (el sistema incompleto se encuentra en \core\BOT\baileys-clean-bot\src> server.js)
+2.-no puede ordenar la consultas de la más antigua a la más reciente
+
+CONCLUSIÓN FINAL: La pagina esta funcional, sin embargo incompleta. Se puede usar, pero algunos sistemas no funcionarán.
+
+
+
+//----------------------------------------//
+//          ACTIVAR BOT WHATSAPP          //
+//----------------------------------------//
+
+-cd .\BOT\baileys-clean-bot\
+-npm start
+
+//-------  Que puede hacer el bot actualmente  -------//
+
+1.-Puede recibir mensajes del usuario
+2.-Activar comandos cuando el usaurio envia mensajes clave (hola, info, consulta, fin)
+3.-Dar un tutorial basico del funcionamiento del bot al usuario una vez este escribe "info"
+4.-Guardar mensajes de texto en una DB una vez se activa la palabra clave "consulta"
+5.-Guardar mensajes tipo imagen en una DB una vez se activa la palabra clave "consulta"
+6.-Una vez el usaurio escribe "fin" el bot cierra cualquier consulta que este en curso
+ y le da un ticket de espera (si existe consulta)  
+7.-Mostrar los mensajes de texto recibidos en tiempo real a travez de la terminal
+8.-cuando el usaurio envía un mensaje no relacionado a ninguna palabra clave (y no esta en una consulta)
+ el bot no responde con temas ajenos a su sistema y da el mensaje 'Si no estas en una consulta, utiliza
+ *SOLO* palabras clave como *hola*, *info* o *consulta*.'
+
+//-------  Que NO puede hacer el bot actualmente  -------// 
+
+1.-Guardar mensajes tipo video
+2.-Bloquearse y quedar en modo espera una vez el usuario creo una consulta que no se
+ responde aún por un operador
+3.-Si el usuario no esta registrado en la DB de la empresa el bot no bloquea todas sus
+ funciones, ni tampoco envia los detalles de los presios para acceder al servicio
+4.-No existe DB de usuarios vinculados en la empresa que el bot pueda revisar
+
+CONCLUSIÓN FINAL: La bot esta operativo, sin embargo incompleto. Se puede usar, pero las funciones que faltan se deben integrar lo antes posible.
